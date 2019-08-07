@@ -11,7 +11,7 @@ An android app designed to managing multiple authenticators for many platforms.
 ## Getting Started
 ```bash
 git clone https://github.com/ogtega/ghostotp.git
-cd ghostauth
+cd ghostotp
 ./gradlew build
 ```
 
