@@ -8,7 +8,7 @@ import org.junit.Test
 
 class OneTimePasswordTest {
 
-    val secret = "3132333435363738393031323334353637383930"
+    private val secret = "3132333435363738393031323334353637383930"
 
     @Test
     fun rfc4226AppendixDTest() {
