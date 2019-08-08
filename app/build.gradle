@@ -74,6 +74,8 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
+    implementation 'commons-codec:commons-codec:1.13'
+
     /**
      * Test Dependencies
      */
