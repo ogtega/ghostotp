@@ -2,10 +2,23 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <com.google.android.material.navigation.NavigationView
-    android:id="@+id/navigation"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:menu="@menu/new_account_menu"/>
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+      android:scrollbarStyle="insideOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:fillViewport="true"
+      android:scrollbars="vertical">
+
+      <com.google.android.material.navigation.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:menu="@menu/new_account_menu"/>
+    </androidx.core.widget.NestedScrollView>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

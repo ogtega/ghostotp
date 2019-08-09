@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/nav_graph"
   app:startDestination="@+id/account_list_dest">
 
@@ -28,22 +27,10 @@
 
   <dialog
     android:id="@+id/new_account_sheet_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet">
-    <action
-      android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
-      app:destination="@id/new_account_dest"/>
-  </dialog>
+    android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"/>
 
   <dialog
     android:id="@+id/option_menu_sheet_dest"
-    android:name="com.google.android.material.bottomsheet.BottomSheetDialogFragment"/>
-  <dialog
-    android:id="@+id/new_account_dest"
-    android:label="NewAccountDialog"
-    android:name="de.tolunla.ghostotp.view.fragment.dialog.NewAccountDialog">
-    <action
-      android:id="@+id/action_new_account_dest_to_account_list_dest2"
-      app:destination="@id/account_list_dest"/>
-  </dialog>
+    android:name="de.tolunla.ghostotp.view.fragment.sheet.OptionMenuSheet"/>
 
 </navigation>
