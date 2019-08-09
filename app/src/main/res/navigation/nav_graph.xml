@@ -37,13 +37,13 @@
   <dialog
     android:id="@+id/option_menu_sheet_dest"
     android:name="com.google.android.material.bottomsheet.BottomSheetDialogFragment"/>
-  <fragment
+  <dialog
     android:id="@+id/new_account_dest"
     android:label="NewAccountDialog"
     android:name="de.tolunla.ghostotp.view.fragment.dialog.NewAccountDialog">
     <action
       android:id="@+id/action_new_account_dest_to_account_list_dest2"
       app:destination="@id/account_list_dest"/>
-  </fragment>
+  </dialog>
 
 </navigation>

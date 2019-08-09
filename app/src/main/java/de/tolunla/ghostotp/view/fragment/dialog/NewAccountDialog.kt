@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.tolunla.ghostotp.databinding.DialogNewAccountBinding
 
-class NewAccountDialog : DialogFragment() {
+class NewAccountDialog : BottomSheetDialogFragment() {
 
     lateinit var binding: DialogNewAccountBinding
 
@@ -23,9 +24,12 @@ class NewAccountDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setOnShowListener {
+            dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+
         return dialog
     }
 }
