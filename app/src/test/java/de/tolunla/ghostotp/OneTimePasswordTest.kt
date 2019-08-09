@@ -1,7 +1,7 @@
 package de.tolunla.ghostotp
 
 import android.text.format.DateUtils
-import de.tolunla.ghostotp.model.OneTimePassword
+import de.tolunla.ghostotp.otp.OneTimePassword
 import org.apache.commons.codec.binary.Hex
 import org.junit.Assert.assertEquals
 import org.junit.Test

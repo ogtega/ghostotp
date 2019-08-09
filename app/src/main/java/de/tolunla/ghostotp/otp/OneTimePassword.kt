@@ -1,4 +1,4 @@
-package de.tolunla.ghostotp.model
+package de.tolunla.ghostotp.otp
 
 import android.text.format.DateUtils
 import java.nio.ByteBuffer
