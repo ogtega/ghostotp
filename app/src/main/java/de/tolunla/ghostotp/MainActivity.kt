@@ -22,13 +22,16 @@ class MainActivity : AppCompatActivity() {
 
     // Called once the host fragment switches to a new destination
     private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
+        // Check if the destination is on the "top level" (this includes dialogs)
         if (appBarConfig.topLevelDestinations.contains(destination.id)) {
-            binding.toolbar.visibility = View.GONE
-            binding.appbar.visibility = View.VISIBLE
+            // Hide the toolbar and make the bottom appbar visible
+            binding.topAppbar.visibility = View.GONE
+            binding.bottomAppbar.visibility = View.VISIBLE
             binding.fab.visibility = View.VISIBLE
         } else {
-            binding.toolbar.visibility = View.VISIBLE
-            binding.appbar.visibility = View.GONE
+            // Show the toolbar and make the bottom appbar hidden
+            binding.topAppbar.visibility = View.VISIBLE
+            binding.bottomAppbar.visibility = View.GONE
             binding.fab.visibility = View.GONE
         }
     }
@@ -39,23 +42,23 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.nav_host_fragment)
 
-        // Used to know when we are at a top level destination
+        // Used to know when we are at a "top level" destination
         appBarConfig = AppBarConfiguration(
             setOf(
-                R.id.otp_list_dest,
-                R.id.create_otp_sheet_dest,
-                R.id.menu_sheet_dest
+                R.id.account_list_dest,
+                R.id.new_account_sheet_dest,
+                R.id.option_menu_sheet_dest
             )
         )
 
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfig)
-        binding.appbar.setOnMenuItemClickListener(this::onOptionsItemSelected)
+        binding.bottomAppbar.setOnMenuItemClickListener(this::onOptionsItemSelected)
 
         navController.addOnDestinationChangedListener(onDestinationChanged)
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.action_otp_list_dest_to_create_otp_sheet_dest)
+            navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
         }
     }
 

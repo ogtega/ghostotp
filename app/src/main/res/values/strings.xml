@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">Ghost OTP</string>
+
+  <string name="action_manually_enter_key">Enter a provided key</string>
 </resources>

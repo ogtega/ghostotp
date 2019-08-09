@@ -9,6 +9,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/top_appbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
@@ -30,37 +31,30 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="?attr/actionBarSize"
-      app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
       <fragment
         android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"/>
 
-    </androidx.core.widget.NestedScrollView>
-
     <com.google.android.material.bottomappbar.BottomAppBar
-      android:id="@+id/appbar"
+      android:id="@+id/bottom_appbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       android:minHeight="?attr/actionBarSize"
       app:hideOnScroll="true"
-      app:menu="@menu/bottom_menu"/>
+      app:menu="@menu/appbar_menu"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/fab"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_add_24dp"
-      app:layout_anchor="@id/appbar"/>
+      app:layout_anchor="@id/bottom_appbar"/>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import de.tolunla.ghostotp.databinding.OtpListFragmentBinding
+import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 
-class OTPListFragment : Fragment() {
+class AccountListFragment : Fragment() {
 
-    lateinit var binding: OtpListFragmentBinding
+    lateinit var binding: FragmentAccountListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -17,7 +17,7 @@ class OTPListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        binding = OtpListFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentAccountListBinding.inflate(inflater, container, false)
         return binding.root
     }
 }
