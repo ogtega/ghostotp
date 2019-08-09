@@ -2,12 +2,35 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/nav_graph"
-  app:startDestination="@+id/otplist">
+  app:startDestination="@+id/otp_list_dest">
 
   <fragment
-    android:id="@+id/otplist"
+    android:id="@+id/otp_list_dest"
     android:label="@string/app_name"
-    android:name="de.tolunla.ghostotp.view.fragment.OTPListFragment"/>
-  <fragment android:id="@+id/placeholder"/>
+    android:name="de.tolunla.ghostotp.view.fragment.OTPListFragment">
+    <action
+      android:id="@+id/action_otp_list_dest_to_otp_detail_dest"
+      app:destination="@id/otp_detail_dest"/>
+    <action
+      android:id="@+id/action_otp_list_dest_to_menu_sheet_dest"
+      app:destination="@id/menu_sheet_dest"/>
+    <action
+      android:id="@+id/action_otp_list_dest_to_create_otp_sheet_dest"
+      app:destination="@id/create_otp_sheet_dest"/>
+  </fragment>
+
+  <fragment
+    android:id="@+id/otp_detail_dest"
+    android:label="@string/app_name"
+    android:name="androidx.fragment.app.Fragment">
+  </fragment>
+
+  <dialog
+    android:id="@+id/create_otp_sheet_dest"
+    android:name="com.google.android.material.bottomsheet.BottomSheetDialogFragment"/>
+
+  <dialog
+    android:id="@+id/menu_sheet_dest"
+    android:name="com.google.android.material.bottomsheet.BottomSheetDialogFragment"/>
 
 </navigation>

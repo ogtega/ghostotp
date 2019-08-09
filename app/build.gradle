@@ -26,6 +26,9 @@ android {
     dataBinding {
         enabled true
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
     testOptions {
         unitTests {
             includeAndroidResources true
@@ -40,7 +43,7 @@ dependencies {
      * Kotlin Standard Library JDK 8 extension
      */
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     /**
      * Support Library Packages
