@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/nav_graph"
-  app:startDestination="@+id/account_list_dest">
+  app:startDestination="@id/account_list_dest">
 
   <fragment
     android:id="@+id/account_list_dest"
     android:label="@string/app_name"
-    android:name="de.tolunla.ghostotp.view.fragment.AccountListFragment">
+    android:name="de.tolunla.ghostotp.view.fragment.AccountListFragment"
+    tools:layout="@layout/fragment_account_list">
     <action
       android:id="@+id/action_account_list_dest_to_option_menu_sheet_dest"
       app:destination="@id/option_menu_sheet_dest"/>
-    <action
-      android:id="@+id/action_account_list_dest_to_account_detail_dest"
-      app:destination="@id/account_detail_dest"/>
     <action
       android:id="@+id/action_account_list_dest_to_new_account_sheet_dest"
       app:destination="@id/new_account_sheet_dest"/>
   </fragment>
 
-  <fragment
-    android:id="@+id/account_detail_dest"
-    android:label="@string/app_name"
-    android:name="androidx.fragment.app.Fragment">
-  </fragment>
-
   <dialog
     android:id="@+id/new_account_sheet_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"/>
+    android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"
+    tools:layout="@layout/sheet_new_account"/>
 
   <dialog
     android:id="@+id/option_menu_sheet_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.sheet.OptionMenuSheet"/>
+    android:name="de.tolunla.ghostotp.view.fragment.sheet.OptionMenuSheet">
+    <action
+      android:id="@+id/action_option_menu_sheet_dest_to_settings_dest"
+      app:destination="@id/settings_dest"/>
+  </dialog>
+
+  <fragment
+    android:id="@+id/settings_dest"
+    android:label="SettingsFragment"
+    android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"/>
 
 </navigation>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <androidx.preference.SwitchPreference
+    android:summary="@string/preference_night_mode_summary"
+    app:key="night_mode"
+    app:title="@string/preference_night_mode_title"/>
+
+</androidx.preference.PreferenceScreen>

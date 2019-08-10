@@ -25,7 +25,7 @@
 
   <!--Color is customized by overriding Material Components color attributes with custom -->
   <!--color values. In this project, your theme’s color attributes are already overridden -->
-  <!--with default values defined in this file, color.xml.  Change any of the values in -->
+  <!--with default values defined in this file, colors.xml.  Change any of the values in -->
   <!--this file to see changes applied across all elements of your app.-->
 
   <!--LIGHT COLOR THEME-->

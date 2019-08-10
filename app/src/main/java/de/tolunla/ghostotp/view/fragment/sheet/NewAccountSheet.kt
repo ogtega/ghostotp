@@ -19,5 +19,4 @@ class NewAccountSheet : BottomSheetDialogFragment() {
         binding = SheetNewAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 }
