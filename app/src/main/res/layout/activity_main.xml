@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -34,8 +35,7 @@
     <androidx.core.widget.NestedScrollView
       android:id="@+id/content"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:overScrollMode="always">
+      android:layout_height="wrap_content">
 
       <fragment
         android:id="@+id/nav_host_fragment"
@@ -54,6 +54,7 @@
       android:layout_gravity="bottom"
       android:minHeight="?attr/actionBarSize"
       app:hideOnScroll="true"
+      app:fabAlignmentMode="center"
       app:menu="@menu/appbar_menu"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

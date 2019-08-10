@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme.DayNight" parent="Base.AppTheme">
+  <style name="AppTheme.DayNight" parent="Base.AppTheme.DayNight"/>
+
+  <style name="Base.AppTheme.DayNight" parent="Base.AppTheme">
     <item name="android:windowLightStatusBar">true</item>
-    <item name="android:navigationBarColor">?android:colorBackground</item>
+    <item name="android:statusBarColor">?colorSurface</item>
+    <item name="android:navigationBarColor">?colorSurface</item>
     <item name="android:windowLightNavigationBar">true</item>
+    <item name="bottomSheetDialogTheme">@style/ThemeOverlay.AppTheme.BottomSheetDialog.EdgeToEdge
+    </item>
+  </style>
+
+  <style name="ThemeOverlay.AppTheme.BottomSheetDialog.EdgeToEdge" parent="ThemeOverlay.AppTheme.BottomSheetDialog">
+    <item name="android:navigationBarColor">?colorSurface</item>
   </style>
 </resources>

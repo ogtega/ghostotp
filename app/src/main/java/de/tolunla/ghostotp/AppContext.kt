@@ -9,12 +9,9 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        setNightMode(
-            PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-                "night_mode",
-                false
-            )
-        )
+        PreferenceManager.getDefaultSharedPreferences(this).apply {
+            setNightMode(this.getBoolean("night_mode", false))
+        }
     }
 }
 

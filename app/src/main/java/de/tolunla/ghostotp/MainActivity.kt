@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         if (appBarConfig.topLevelDestinations.contains(destination.id)) {
             // Hide the toolbar and make the bottom appbar visible
             binding.topAppbar.visibility = View.GONE
+            // Disable ScrollingViewBehavior
             params.behavior = null
 
             binding.bottomAppbar.visibility = View.VISIBLE
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             // Show the toolbar and make the bottom appbar hidden
             binding.topAppbar.visibility = View.VISIBLE
+            // Enable ScrollingViewBehavior
             params.behavior = AppBarLayout.ScrollingViewBehavior()
 
             binding.bottomAppbar.visibility = View.GONE

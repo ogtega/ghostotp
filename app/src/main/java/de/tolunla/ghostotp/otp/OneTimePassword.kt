@@ -21,22 +21,22 @@ class OneTimePassword(
 ) {
 
     fun generateTOTP(bytes: ByteArray, time: Long = System.currentTimeMillis()): Int {
-        return generateHOTP(bytes, getSteps(time))
+        return generateHOTP(bytes, time.toSteps())
     }
 
     fun generateHOTP(bytes: ByteArray, steps: Long): Int {
         return hmacHash(bytes, steps).truncate()
     }
 
-    fun hmacHash(bytes: ByteArray, steps: Long): ByteArray {
+    private fun hmacHash(bytes: ByteArray, steps: Long): ByteArray {
         return Mac.getInstance("Hmac$crypto").run {
             init(SecretKeySpec(bytes, "RAW"))
             doFinal(steps.getByteArray())
         }
     }
 
-    fun getSteps(time: Long): Long {
-        val elapsed = (time - epoch) / DateUtils.SECOND_IN_MILLIS
+    private fun Long.toSteps(): Long {
+        val elapsed = (this - epoch) / DateUtils.SECOND_IN_MILLIS
         return elapsed / interval
     }
 

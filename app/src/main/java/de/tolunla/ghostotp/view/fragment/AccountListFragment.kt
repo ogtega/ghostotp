@@ -9,7 +9,7 @@ import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 
 class AccountListFragment : Fragment() {
 
-    lateinit var binding: FragmentAccountListBinding
+    private lateinit var binding: FragmentAccountListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -5,7 +5,7 @@
 
   <androidx.preference.SwitchPreference
     android:summary="@string/preference_night_mode_summary"
-    app:key="night_mode"
+    app:key="@string/preference_night_mode_key"
     app:title="@string/preference_night_mode_title"/>
 
 </androidx.preference.PreferenceScreen>

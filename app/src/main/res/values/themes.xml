@@ -40,9 +40,9 @@
 
     <!--Component styles-->
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
-    <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>
-    <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
-    <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+    <item name="bottomSheetDialogTheme">@style/ThemeOverlay.AppTheme.BottomSheetDialog</item>
+    <item name="navigationViewStyle">@style/Widget.AppTheme.NavigationView</item>
+    <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
   </style>
 
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
