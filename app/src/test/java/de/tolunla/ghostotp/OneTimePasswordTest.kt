@@ -22,8 +22,10 @@ class OneTimePasswordTest {
         )
 
         for (i in 0 until results.size) {
-            val account =
-                Account("", seed, type = Type.HOTP, step = i.toLong(), encoding = Encoding.HEX)
+            val account = Account(
+                "", seed, type = Type.HOTP, step = i.toLong(), encoding = Encoding.HEX
+            )
+
             assertEquals(results[i], HOTPassword(account).generateCode())
         }
     }
@@ -50,21 +52,13 @@ class OneTimePasswordTest {
             val sha1 = Account("", seed, digits = 8, type = Type.TOTP, encoding = Encoding.HEX)
 
             val sha256 = Account(
-                "",
-                seed32,
-                crypto = Crypto.SHA256,
-                digits = 8,
-                type = Type.TOTP,
-                encoding = Encoding.HEX
+                "", seed32, crypto = Crypto.SHA256,
+                digits = 8, type = Type.TOTP, encoding = Encoding.HEX
             )
 
             val sha512 = Account(
-                "",
-                seed64,
-                crypto = Crypto.SHA512,
-                digits = 8,
-                type = Type.TOTP,
-                encoding = Encoding.HEX
+                "", seed64, crypto = Crypto.SHA512,
+                digits = 8, type = Type.TOTP, encoding = Encoding.HEX
             )
 
             assertEquals(results[0][i], TOTPassword(sha1).generateCodeAt(testTime))

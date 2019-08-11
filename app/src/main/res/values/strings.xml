@@ -16,13 +16,10 @@
 
   <string name="label_account_name">Account name</string>
   <string name="label_secret_key">Secret key</string>
+  <string name="label_counter_based">Counter based</string>
+  <string name="label_time_based">Time based</string>
 
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>
   <string name="preference_night_mode_summary">Use a dark theme</string>
-
-  <string-array name="auth_types_array">
-    <item>Time based</item>
-    <item>Counter based</item>
-  </string-array>
 </resources>

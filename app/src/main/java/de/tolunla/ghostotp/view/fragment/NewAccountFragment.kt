@@ -30,9 +30,14 @@ class NewAccountFragment : Fragment() {
                 ArrayAdapter(
                     it,
                     R.layout.support_simple_spinner_dropdown_item,
-                    arrayOf("Time based", "Counter based")
+                    arrayOf(
+                        getString(R.string.label_time_based),
+                        getString(R.string.label_counter_based)
+                    )
                 )
             }
         )
+
+        binding.inputAuthType.setText(getString(R.string.label_time_based), false)
     }
 }
