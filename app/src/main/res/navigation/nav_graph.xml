@@ -21,7 +21,11 @@
   <dialog
     android:id="@+id/new_account_sheet_dest"
     android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"
-    tools:layout="@layout/sheet_new_account"/>
+    tools:layout="@layout/sheet_new_account">
+    <action
+      android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
+      app:destination="@id/new_account_dest"/>
+  </dialog>
 
   <dialog
     android:id="@+id/option_menu_sheet_dest"
@@ -35,5 +39,11 @@
     android:id="@+id/settings_dest"
     android:label="SettingsFragment"
     android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"/>
+
+  <fragment
+    android:id="@+id/new_account_dest"
+    android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
+    android:label="NewAccountFragment"
+    tools:layout="@layout/fragment_new_account"/>
 
 </navigation>

@@ -6,6 +6,7 @@
     android:title="@string/action_scan_barcode"/>
 
   <item
+    android:id="@id/new_account_dest"
     android:icon="@drawable/ic_keyboard_24dp"
     android:title="@string/action_manually_enter_key"/>
 

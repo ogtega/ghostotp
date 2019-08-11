@@ -8,12 +8,21 @@
 <resources>
   <string name="app_name">&app_name;</string>
 
+  <string name="action_add">Add</string>
   <string name="action_add_steam_guard">Log into your Steam account</string>
   <string name="action_manually_enter_key">Enter a provided key</string>
   <string name="action_save">Save</string>
   <string name="action_scan_barcode">Scan a barcode</string>
 
+  <string name="label_account_name">Account name</string>
+  <string name="label_secret_key">Secret key</string>
+
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>
   <string name="preference_night_mode_summary">Use a dark theme</string>
+
+  <string-array name="auth_types_array">
+    <item>Time based</item>
+    <item>Counter based</item>
+  </string-array>
 </resources>

@@ -19,7 +19,7 @@ data class Account(
     val encoding: Encoding = Encoding.BASE32,
     var step: Long = 0L
 ) {
-    enum class Type { HOTP, TOTP }
+    enum class Type { TOTP, HOTP }
     enum class Encoding { BASE32, HEX }
 
     fun getSecret(): ByteArray {

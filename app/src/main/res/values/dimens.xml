@@ -22,6 +22,7 @@
   <dimen name="keyline_4">16dp</dimen>
   <dimen name="keyline_5">24dp</dimen>
 
+  <dimen name="activity_default_margin">@dimen/keyline_4</dimen>
   <dimen name="component_label_horizontal_margin">@dimen/keyline_4</dimen>
 
   <!--Emphasis modifiers for "on" colors-->
