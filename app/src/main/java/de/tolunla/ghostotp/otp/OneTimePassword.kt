@@ -1,44 +1,44 @@
 package de.tolunla.ghostotp.otp
 
 import android.text.format.DateUtils
+import de.tolunla.ghostotp.model.Account
+import de.tolunla.ghostotp.model.Account.Type
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
-import kotlin.math.pow
 
-/**
- * @param digits: Length of code generated
- * @param interval: Length for each time step
- * @param epoch: Step calculation start time
- * @param crypto: Hashing algorithm used with HMAC
- */
-class OneTimePassword(
-    private val digits: Int = 6,
-    private val interval: Int = 30,
-    private val epoch: Long = 0L,
-    private val crypto: String = "SHA256"
+private val DIGITS_POWER = arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000)
+
+abstract class OneTimePassword(
+    private val secret: ByteArray,
+    private val digits: Int,
+    private val crypto: Crypto = Crypto.SHA1
 ) {
-
-    fun generateTOTP(bytes: ByteArray, time: Long = System.currentTimeMillis()): Int {
-        return generateHOTP(bytes, time.toSteps())
+    enum class Crypto(val type: String) {
+        SHA1("SHA1"),
+        SHA256("SHA256"),
+        SHA512("SHA512")
     }
 
-    fun generateHOTP(bytes: ByteArray, steps: Long): Int {
-        return hmacHash(bytes, steps).truncate()
+    companion object {
+        fun newInstance(account: Account): OneTimePassword = (
+                if (account.type == Type.HOTP)
+                    HOTPassword(account)
+                else
+                    TOTPassword(account)
+                )
     }
 
-    private fun hmacHash(bytes: ByteArray, steps: Long): ByteArray {
-        return Mac.getInstance("Hmac$crypto").run {
+    abstract fun generateCode(): Int
+
+    fun generateCode(step: Long): Int = getHash(secret, step).truncate()
+
+    private fun getHash(bytes: ByteArray, steps: Long): ByteArray =
+        Mac.getInstance("Hmac${crypto.type}").run {
             init(SecretKeySpec(bytes, "RAW"))
             doFinal(steps.getByteArray())
         }
-    }
-
-    private fun Long.toSteps(): Long {
-        val elapsed = (this - epoch) / DateUtils.SECOND_IN_MILLIS
-        return elapsed / interval
-    }
 
     private fun ByteArray.truncate(): Int {
         val offset = (this.last().toInt() and 0xf)
@@ -46,10 +46,33 @@ class OneTimePassword(
 
         binary.put(0, binary[0].and(0x7F))
 
-        return binary.int.rem(10.toDouble().pow(digits).toInt())
+        return binary.int.rem(DIGITS_POWER[digits])
     }
 
     private fun Long.getByteArray(): ByteArray {
         return ByteBuffer.allocate(8).putLong(this).array()
+    }
+}
+
+class HOTPassword(private val account: Account) :
+    OneTimePassword(account.getSecret(), account.digits, account.crypto) {
+
+    override fun generateCode(): Int {
+        val result = generateCode(account.step)
+        account.incrementStep()
+        return result
+    }
+}
+
+class TOTPassword(private val account: Account) :
+    OneTimePassword(account.getSecret(), account.digits, account.crypto) {
+
+    override fun generateCode(): Int = generateCode(System.currentTimeMillis().toSteps())
+
+    fun generateCodeAt(time: Long) = generateCode(time.toSteps())
+
+    private fun Long.toSteps(): Long {
+        val elapsed = (this - account.epoch) / DateUtils.SECOND_IN_MILLIS
+        return elapsed / account.period
     }
 }

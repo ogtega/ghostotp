@@ -26,11 +26,6 @@ android {
     dataBinding {
         enabled true
     }
-    kotlin {
-        experimental {
-            coroutines "enable"
-        }
-    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -48,7 +43,7 @@ dependencies {
      * Kotlin Standard Library JDK 8 extension
      */
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     /**
      * Support Library Packages
@@ -88,8 +83,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.fragment:fragment-ktx:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.1.0-rc01'
-    implementation 'commons-codec:commons-codec:1.13'
     implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation 'commons-codec:commons-codec:1.13'
 
     /**
      * Test Dependencies

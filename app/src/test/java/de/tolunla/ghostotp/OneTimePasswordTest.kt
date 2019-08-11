@@ -1,39 +1,37 @@
 package de.tolunla.ghostotp
 
 import android.text.format.DateUtils
-import de.tolunla.ghostotp.otp.OneTimePassword
-import org.apache.commons.codec.binary.Hex
+import de.tolunla.ghostotp.model.Account
+import de.tolunla.ghostotp.model.Account.Encoding
+import de.tolunla.ghostotp.model.Account.Type
+import de.tolunla.ghostotp.otp.HOTPassword
+import de.tolunla.ghostotp.otp.OneTimePassword.Crypto
+import de.tolunla.ghostotp.otp.TOTPassword
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class OneTimePasswordTest {
 
-    private val secret = "3132333435363738393031323334353637383930"
+    private val seed = "3132333435363738393031323334353637383930"
 
     @Test
     fun rfc4226AppendixDTest() {
-        val sha1 = OneTimePassword(crypto = "SHA1")
-        val seed = Hex.decodeHex(secret)
-
         val results = intArrayOf(
             755224, 287082, 359152, 969429, 338314,
             254676, 287922, 162583, 399871, 520489
         )
 
-        for (i in 0..9) {
-            assertEquals(results[i], sha1.generateHOTP(seed, i.toLong()))
+        for (i in 0 until results.size) {
+            val account =
+                Account("", seed, type = Type.HOTP, step = i.toLong(), encoding = Encoding.HEX)
+            assertEquals(results[i], HOTPassword(account).generateCode())
         }
     }
 
     @Test
     fun rfc6238AppendixBTest() {
-        val sha1 = OneTimePassword(digits = 8, crypto = "SHA1")
-        val sha256 = OneTimePassword(digits = 8, crypto = "SHA256")
-        val shaSHA512 = OneTimePassword(digits = 8, crypto = "SHA512")
-
-        val seed = Hex.decodeHex(secret)
-        val seed32 = Hex.decodeHex(secret.repeat(2).slice(0..63))
-        val seed64 = Hex.decodeHex(secret.repeat(4).slice(0..127))
+        val seed32 = seed.repeat(2).slice(0..63)
+        val seed64 = seed.repeat(4).slice(0..127)
 
         val times = longArrayOf(
             59L, 1111111109L, 1111111111L,
@@ -49,9 +47,29 @@ class OneTimePasswordTest {
         for (i in 0 until times.size) {
             val testTime = times[i] * DateUtils.SECOND_IN_MILLIS
 
-            assertEquals(results[0][i], sha1.generateTOTP(seed, testTime))
-            assertEquals(results[1][i], sha256.generateTOTP(seed32, testTime))
-            assertEquals(results[2][i], shaSHA512.generateTOTP(seed64, testTime))
+            val sha1 = Account("", seed, digits = 8, type = Type.TOTP, encoding = Encoding.HEX)
+
+            val sha256 = Account(
+                "",
+                seed32,
+                crypto = Crypto.SHA256,
+                digits = 8,
+                type = Type.TOTP,
+                encoding = Encoding.HEX
+            )
+
+            val sha512 = Account(
+                "",
+                seed64,
+                crypto = Crypto.SHA512,
+                digits = 8,
+                type = Type.TOTP,
+                encoding = Encoding.HEX
+            )
+
+            assertEquals(results[0][i], TOTPassword(sha1).generateCodeAt(testTime))
+            assertEquals(results[1][i], TOTPassword(sha256).generateCodeAt(testTime))
+            assertEquals(results[2][i], TOTPassword(sha512).generateCodeAt(testTime))
         }
     }
 }
