@@ -10,7 +10,7 @@ class AppContext : Application() {
         super.onCreate()
 
         PreferenceManager.getDefaultSharedPreferences(this).apply {
-            setNightMode(this.getBoolean("night_mode", false))
+            setNightMode(this.getBoolean(getString(R.string.preference_night_mode_key), false))
         }
     }
 }
