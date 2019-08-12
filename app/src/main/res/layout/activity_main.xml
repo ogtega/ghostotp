@@ -32,10 +32,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
       android:id="@+id/content"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="match_parent">
 
       <fragment
         android:id="@+id/nav_host_fragment"
@@ -45,7 +45,7 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"/>
 
-    </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
       android:id="@+id/bottom_appbar"

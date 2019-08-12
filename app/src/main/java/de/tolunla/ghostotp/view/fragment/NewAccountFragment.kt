@@ -15,7 +15,6 @@ import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
 import de.tolunla.ghostotp.showSoftKeyboard
 import org.apache.commons.codec.binary.Base32
 
-
 class NewAccountFragment : Fragment(), TextWatcher {
 
     private var prev = 0  // Pointer for the previous secret key character location
@@ -49,8 +48,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
                 }
             )
 
-
-            inputSecretKey.bas32Filter()
+            inputSecretKey.addBas32Filter()
             inputAuthType.setText(getString(R.string.label_time_based), false)
             inputSecretKey.addTextChangedListener(this@NewAccountFragment)
 
@@ -132,7 +130,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
     }
 
     // Filters all text not allowed in a Base32 encoded string
-    private fun TextInputEditText.bas32Filter() {
+    private fun TextInputEditText.addBas32Filter() {
         filters = filters.plus(
             listOf(InputFilter { s, _, _, _, _, _ ->
                 s.replace(Regex("[^A-Za-z2-7=\\s]"), "")
