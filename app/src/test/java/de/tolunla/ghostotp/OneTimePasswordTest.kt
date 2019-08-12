@@ -1,9 +1,8 @@
 package de.tolunla.ghostotp
 
 import android.text.format.DateUtils
-import de.tolunla.ghostotp.model.Account
-import de.tolunla.ghostotp.model.Account.Encoding
-import de.tolunla.ghostotp.model.Account.Type
+import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type
 import de.tolunla.ghostotp.otp.HOTPassword
 import de.tolunla.ghostotp.otp.OneTimePassword.Crypto
 import de.tolunla.ghostotp.otp.TOTPassword
@@ -22,8 +21,8 @@ class OneTimePasswordTest {
         )
 
         for (i in 0 until results.size) {
-            val account = Account(
-                "", seed, type = Type.HOTP, step = i.toLong(), encoding = Encoding.HEX
+            val account = AccountEntity(
+                "", seed, type = Type.HOTP, step = i.toLong(), hex = true
             )
 
             assertEquals(results[i], HOTPassword(account).generateCode())
@@ -49,16 +48,22 @@ class OneTimePasswordTest {
         for (i in 0 until times.size) {
             val testTime = times[i] * DateUtils.SECOND_IN_MILLIS
 
-            val sha1 = Account("", seed, digits = 8, type = Type.TOTP, encoding = Encoding.HEX)
-
-            val sha256 = Account(
-                "", seed32, crypto = Crypto.SHA256,
-                digits = 8, type = Type.TOTP, encoding = Encoding.HEX
+            val sha1 = AccountEntity(
+                "",
+                seed,
+                digits = 8,
+                type = Type.TOTP,
+                hex = true
             )
 
-            val sha512 = Account(
+            val sha256 = AccountEntity(
+                "", seed32, crypto = Crypto.SHA256,
+                digits = 8, type = Type.TOTP, hex = true
+            )
+
+            val sha512 = AccountEntity(
                 "", seed64, crypto = Crypto.SHA512,
-                digits = 8, type = Type.TOTP, encoding = Encoding.HEX
+                digits = 8, type = Type.TOTP, hex = true
             )
 
             assertEquals(results[0][i], TOTPassword(sha1).generateCodeAt(testTime))
