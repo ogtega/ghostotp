@@ -11,7 +11,7 @@ import org.apache.commons.codec.binary.Hex
 @Suppress("DataClassPrivateConstructor")
 data class Account private constructor(
     @PrimaryKey @ColumnInfo(name = "_id") val id: String,
-    val label: String,
+    val label: String, // Overwrite duplicate accounts with and issuer only else increase count
     val secret: String,
     val crypto: Crypto,
     val digits: Int,

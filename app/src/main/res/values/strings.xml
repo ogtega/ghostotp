@@ -19,6 +19,9 @@
   <string name="label_counter_based">Counter based</string>
   <string name="label_time_based">Time based</string>
 
+  <string name="message_key_too_short">Secret is too short</string>
+  <string name="message_key_invalid_chars">Secret is invalid</string>
+
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>
   <string name="preference_night_mode_summary">Use a dark theme</string>
