@@ -19,6 +19,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
     private var prev = 0  // Pointer for the previous secret key character location
     private var current = 0 // Pointer to the current secret key character location
+    private var deaf = false
 
     private lateinit var binding: FragmentNewAccountBinding
 
@@ -97,23 +98,36 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
         // Format the input text to have a space every four characters
         s?.let {
-            if (current.rem(4) == 0 && s.isNotEmpty()) {
-
+            if (s.isNotEmpty()) {
                 val last = s[s.length - 1]
 
-                if (last != ' ') {
-                    if (current == prev) {
-                        it.delete(s.length - 1, s.length)
+                if (s.length.rem(5) == 0) {
+                    if (prev > current) {
+                        if (last != ' ') {
+                            it.delete(s.length - 1, s.length)
+                        }
+
+                        return
+                    }
+                }
+
+                if (current.rem(4) == 0) {
+
+                    if (last != ' ') {
+                        if (current == prev) {
+                            it.delete(s.length - 1, s.length)
+                            deaf = true
+                        }
                     }
 
                     if (current > prev) {
                         it.append(' ')
                     }
-                }
 
-                if (prev > current) {
-                    if (last == ' ') {
-                        it.delete(s.length - 1, s.length)
+                    if (prev > current) {
+                        if (last == ' ') {
+                            it.delete(s.length - 1, s.length)
+                        }
                     }
                 }
             }
