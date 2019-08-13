@@ -18,69 +18,69 @@ import de.tolunla.ghostotp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfig: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
+  private lateinit var appBarConfig: AppBarConfiguration
+  private lateinit var binding: ActivityMainBinding
+  private lateinit var navController: NavController
 
-    // Called once the host fragment switches to a new destination
-    private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
-        val params = binding.content.layoutParams as CoordinatorLayout.LayoutParams
+  // Called once the host fragment switches to a new destination
+  private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
+    val params = binding.content.layoutParams as CoordinatorLayout.LayoutParams
 
-        // Check if the destination is on the "top level" (this includes dialogs)
-        if (appBarConfig.topLevelDestinations.contains(destination.id)) {
-            // Disable ScrollingViewBehavior
-            params.behavior = null
-            // Hide the toolbar and make the bottom appbar visible
-            binding.topAppbar.visibility = View.GONE
+    // Check if the destination is on the "top level" (this includes dialogs)
+    if (appBarConfig.topLevelDestinations.contains(destination.id)) {
+      // Disable ScrollingViewBehavior
+      params.behavior = null
+      // Hide the toolbar and make the bottom appbar visible
+      binding.topAppbar.visibility = View.GONE
 
-            binding.bottomAppbar.visibility = View.VISIBLE
-            binding.fab.visibility = View.VISIBLE
-        } else {
-            // Enable ScrollingViewBehavior
-            params.behavior = AppBarLayout.ScrollingViewBehavior()
-            // Show the toolbar and make the bottom appbar hidden
-            binding.topAppbar.visibility = View.VISIBLE
+      binding.bottomAppbar.visibility = View.VISIBLE
+      binding.fab.visibility = View.VISIBLE
+    } else {
+      // Enable ScrollingViewBehavior
+      params.behavior = AppBarLayout.ScrollingViewBehavior()
+      // Show the toolbar and make the bottom appbar hidden
+      binding.topAppbar.visibility = View.VISIBLE
 
-            binding.bottomAppbar.visibility = View.GONE
-            binding.fab.visibility = View.GONE
-        }
-
-        binding.content.requestLayout()
+      binding.bottomAppbar.visibility = View.GONE
+      binding.fab.visibility = View.GONE
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    binding.content.requestLayout()
+  }
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        navController = findNavController(R.id.nav_host_fragment)
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // Used to know when we are at a "top level" destination
-        appBarConfig = AppBarConfiguration(
-            setOf(
-                R.id.account_list_dest,
-                R.id.new_account_sheet_dest,
-                R.id.option_menu_sheet_dest
-            )
-        )
+    navController = findNavController(R.id.nav_host_fragment)
 
-        setSupportActionBar(binding.toolbar)
-        setupActionBarWithNavController(navController, appBarConfig)
-        binding.bottomAppbar.setOnMenuItemClickListener(this::onOptionsItemSelected)
+    // Used to know when we are at a "top level" destination
+    appBarConfig = AppBarConfiguration(
+      setOf(
+        R.id.account_list_dest,
+        R.id.new_account_sheet_dest,
+        R.id.option_menu_sheet_dest
+      )
+    )
 
-        navController.addOnDestinationChangedListener(onDestinationChanged)
+    setSupportActionBar(binding.toolbar)
+    setupActionBarWithNavController(navController, appBarConfig)
+    binding.bottomAppbar.setOnMenuItemClickListener(this::onOptionsItemSelected)
 
-        binding.fab.setOnClickListener {
-            navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
-        }
+    navController.addOnDestinationChangedListener(onDestinationChanged)
+
+    binding.fab.setOnClickListener {
+      navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
     }
+  }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(navController) ||
-                super.onOptionsItemSelected(item)
-    }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return item.onNavDestinationSelected(navController) ||
+        super.onOptionsItemSelected(item)
+  }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfig)
-    }
+  override fun onSupportNavigateUp(): Boolean {
+    return navController.navigateUp(appBarConfig)
+  }
 }

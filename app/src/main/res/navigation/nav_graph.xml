@@ -42,8 +42,8 @@
 
   <fragment
     android:id="@+id/new_account_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
     android:label="NewAccountFragment"
+    android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
     tools:layout="@layout/fragment_new_account"/>
 
 </navigation>

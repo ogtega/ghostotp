@@ -12,16 +12,16 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(context: AppContext) : AndroidViewModel(context) {
 
-    private val repository: AccountDao
-    private val allAccounts: LiveData<List<AccountEntity>>
+  private val repository: AccountDao
+  private val allAccounts: LiveData<List<AccountEntity>>
 
-    init {
-        val database = AppDatabase.getInstance(context)
-        repository = database.accountDao()
-        allAccounts = repository.getAllAccounts()
-    }
+  init {
+    val database = AppDatabase.getInstance(context)
+    repository = database.accountDao()
+    allAccounts = repository.getAllAccounts()
+  }
 
-    fun insert(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertAccount(account)
-    }
+  fun insert(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {
+    repository.insertAccount(account)
+  }
 }

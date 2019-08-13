@@ -4,9 +4,9 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -53,8 +53,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       android:minHeight="?attr/actionBarSize"
-      app:hideOnScroll="true"
       app:fabAlignmentMode="center"
+      app:hideOnScroll="true"
       app:menu="@menu/appbar_menu"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

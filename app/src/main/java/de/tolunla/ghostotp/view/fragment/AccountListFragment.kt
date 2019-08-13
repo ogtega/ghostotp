@@ -9,15 +9,15 @@ import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 
 class AccountListFragment : Fragment() {
 
-    private lateinit var binding: FragmentAccountListBinding
+  private lateinit var binding: FragmentAccountListBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true)
-        binding = FragmentAccountListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    setHasOptionsMenu(true)
+    binding = FragmentAccountListBinding.inflate(inflater, container, false)
+    return binding.root
+  }
 }
