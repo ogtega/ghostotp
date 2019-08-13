@@ -53,6 +53,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
       inputSecretKey.addTextChangedListener(this@NewAccountFragment)
 
       buttonAdd.setOnClickListener {
+
         if (validateSecret(true)) {
           // TODO: Add this account to the db
         }
@@ -67,14 +68,16 @@ class NewAccountFragment : Fragment(), TextWatcher {
   }
 
   private fun getSecretKey(): String {
+
     return binding.inputSecretKey.text.toString()
       .replace(" ", "")
       .toUpperCase()
   }
 
   private fun validateSecret(toSubmit: Boolean = false): Boolean {
-    // TODO: Determine if Google's discarding of the last incomplete chunk is wanted
+    // TODO: Determine if Google's discarding of the last incomplete chunk is wanted behavior
     try {
+
       val bytes = Base32().decode(getSecretKey())
 
       if (bytes.size < 10) {
@@ -84,17 +87,22 @@ class NewAccountFragment : Fragment(), TextWatcher {
       }
 
       binding.layoutKeyInput.error = null
-      return true
-    } catch (t: Throwable) {
-      println(t.message)
+    } catch (e: IllegalArgumentException) {
+
+      println(e.message)
       binding.layoutKeyInput.error =
         (if (toSubmit) getString(R.string.message_key_invalid_chars) else null)
+
       return false
     }
+
+    return true
   }
 
   override fun afterTextChanged(s: Editable?) {
+
     s?.let {
+
       if (s.isNotEmpty()) {
 
         val last = s[s.length - 1]
@@ -114,11 +122,13 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
           if (last != ' ') {
 
-            if (current == prev)
+            if (current == prev) {
               it.delete(s.length - 1, s.length)
+            }
 
-            if (current > prev)
+            if (current > prev) {
               it.append(' ')
+            }
 
           } else if (prev > current) {
             it.delete(s.length - 1, s.length)
