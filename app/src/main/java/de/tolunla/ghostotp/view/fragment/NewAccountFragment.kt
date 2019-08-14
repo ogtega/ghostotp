@@ -2,14 +2,12 @@ package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputEditText
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
 import de.tolunla.ghostotp.showSoftKeyboard
@@ -19,6 +17,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
   private var prev = 0  // Pointer for the previous secret key character location
   private var current = 1 // Pointer to the current secret key character location
+  private val base32Chars = Regex("[A-Za-z2-7=]")
 
   private lateinit var binding: FragmentNewAccountBinding
 
@@ -48,9 +47,8 @@ class NewAccountFragment : Fragment(), TextWatcher {
         }
       )
 
-      inputSecretKey.addBas32Filter()
-      inputAuthType.setText(getString(R.string.label_time_based), false)
       inputSecretKey.addTextChangedListener(this@NewAccountFragment)
+      inputAuthType.setText(getString(R.string.label_time_based), false)
 
       buttonAdd.setOnClickListener {
 
@@ -105,14 +103,20 @@ class NewAccountFragment : Fragment(), TextWatcher {
     validateSecret()
 
     s?.let {
+
       if (s.isNotEmpty()) {
+
         val last = s[current - 1]
 
         if (current.rem(5) == 0) {
-          if (prev < current)
+
+          if (prev < current) {
             s.replace(current - 1, current, " $last")
-          else
-            s.delete(current - 1, current)
+          }
+        }
+
+        if (!base32Chars.matches("$last")) {
+          s.delete(s.length - 1, s.length)
         }
       }
     }
@@ -125,14 +129,5 @@ class NewAccountFragment : Fragment(), TextWatcher {
       prev = current
       current = s.length
     }
-  }
-
-  // Filters all text not allowed in a Base32 encoded string
-  private fun TextInputEditText.addBas32Filter() {
-    filters = filters.plus(
-      listOf(InputFilter { s, _, _, _, _, _ ->
-        s.replace(Regex("[^A-Za-z2-7= ]"), "")
-      })
-    )
   }
 }
