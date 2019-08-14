@@ -49,6 +49,8 @@
 
       </com.google.android.material.textfield.TextInputLayout>
 
+      <!--Single Material Design Spinner (aka Exposed Dropdown Menu) item.
+      Follows Google'srecommended approach-->
       <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_auth_type"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
