@@ -18,7 +18,7 @@ import org.apache.commons.codec.binary.Base32
 class NewAccountFragment : Fragment(), TextWatcher {
 
   private var prev = 0  // Pointer for the previous secret key character location
-  private var current = 0 // Pointer to the current secret key character location
+  private var current = 1 // Pointer to the current secret key character location
 
   private lateinit var binding: FragmentNewAccountBinding
 
@@ -81,8 +81,9 @@ class NewAccountFragment : Fragment(), TextWatcher {
       val bytes = Base32().decode(getSecretKey())
 
       if (bytes.size < 10) {
-        binding.layoutKeyInput.error =
-          (if (toSubmit) getString(R.string.message_key_too_short) else null)
+
+        binding.layoutKeyInput.error = (if (toSubmit) getString(
+          R.string.message_key_too_short) else null)
         return false
       }
 
@@ -90,6 +91,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
     } catch (e: IllegalArgumentException) {
 
       println(e.message)
+
       binding.layoutKeyInput.error =
         (if (toSubmit) getString(R.string.message_key_invalid_chars) else null)
 
@@ -100,44 +102,20 @@ class NewAccountFragment : Fragment(), TextWatcher {
   }
 
   override fun afterTextChanged(s: Editable?) {
+    validateSecret()
 
     s?.let {
-
       if (s.isNotEmpty()) {
+        val last = s[current - 1]
 
-        val last = s[s.length - 1]
-
-        if (s.length.rem(5) == 0) {
-
-          if (prev > current) {
-
-            if (last != ' ')
-              it.delete(s.length - 1, s.length)
-
-            return
-          }
-        }
-
-        if (current.rem(4) == 0) {
-
-          if (last != ' ') {
-
-            if (current == prev) {
-              it.delete(s.length - 1, s.length)
-            }
-
-            if (current > prev) {
-              it.append(' ')
-            }
-
-          } else if (prev > current) {
-            it.delete(s.length - 1, s.length)
-          }
+        if (current.rem(5) == 0) {
+          if (prev < current)
+            s.replace(current - 1, current, " $last")
+          else
+            s.delete(current - 1, current)
         }
       }
     }
-
-    validateSecret()
   }
 
   override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -145,7 +123,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
   override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     s?.let {
       prev = current
-      current = s.replace(Regex("\\s"), "").length
+      current = s.length
     }
   }
 
@@ -153,7 +131,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
   private fun TextInputEditText.addBas32Filter() {
     filters = filters.plus(
       listOf(InputFilter { s, _, _, _, _, _ ->
-        s.replace(Regex("[^A-Za-z2-7=\\s]"), "")
+        s.replace(Regex("[^A-Za-z2-7= ]"), "")
       })
     )
   }
