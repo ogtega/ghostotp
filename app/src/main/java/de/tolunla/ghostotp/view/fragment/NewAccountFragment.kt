@@ -17,7 +17,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
   private var prev = 0  // Pointer for the previous secret key character location
   private var current = 1 // Pointer to the current secret key character location
-  private val base32Chars = Regex("[A-Za-z2-7=]")
+  private val base32Chars = Regex("[A-Za-z2-7=]") // Used to match legal base32 chars
 
   private lateinit var binding: FragmentNewAccountBinding
 
@@ -34,8 +34,10 @@ class NewAccountFragment : Fragment(), TextWatcher {
     super.onViewCreated(view, savedInstanceState)
 
     with(binding) {
-      inputAuthType.setAdapter(
-        context?.let {
+
+      context?.let {
+
+        inputAuthType.setAdapter(
           ArrayAdapter(
             it,
             R.layout.support_simple_spinner_dropdown_item,
@@ -44,18 +46,18 @@ class NewAccountFragment : Fragment(), TextWatcher {
               getString(R.string.label_counter_based)
             )
           )
+        )
+
+        buttonAdd.setOnClickListener { _ ->
+          if (validateSecret(true)) {
+            // TODO: Neatly map user inputs to an AccountEntity
+            // AppDatabase.getInstance(it).accountDao().insertAccount()
+          }
         }
-      )
+      }
 
       inputSecretKey.addTextChangedListener(this@NewAccountFragment)
       inputAuthType.setText(getString(R.string.label_time_based), false)
-
-      buttonAdd.setOnClickListener {
-
-        if (validateSecret(true)) {
-          // TODO: Add this account to the db
-        }
-      }
     }
   }
 
@@ -108,11 +110,8 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
         val last = s[current - 1]
 
-        if (current.rem(5) == 0) {
-
-          if (prev < current) {
-            s.replace(current - 1, current, " $last")
-          }
+        if (current.rem(5) == 0 && prev < current) {
+          s.replace(current - 1, current, " $last")
         }
 
         if (!base32Chars.matches("$last")) {
