@@ -28,6 +28,14 @@ class NewAccountFragment : Fragment(), TextWatcher {
   private lateinit var accountViewModel: AccountViewModel
   private lateinit var binding: FragmentNewAccountBinding
 
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+
+    activity?.let {
+      accountViewModel = ViewModelProviders.of(it).get(AccountViewModel::class.java)
+    }
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -35,7 +43,6 @@ class NewAccountFragment : Fragment(), TextWatcher {
   ): View? {
 
     binding = FragmentNewAccountBinding.inflate(layoutInflater, container, false)
-    accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     return binding.root
   }
 

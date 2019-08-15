@@ -18,6 +18,20 @@ class AccountListFragment : Fragment() {
   private lateinit var binding: FragmentAccountListBinding
   private lateinit var accountViewModel: AccountViewModel
 
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+
+    activity?.let {
+      accountViewModel = ViewModelProviders.of(it).get(AccountViewModel::class.java)
+
+      accountViewModel.allAccounts.observe(this, Observer { accounts ->
+        accounts?.let {
+          accountAdapter.setAccounts(accounts)
+        }
+      })
+    }
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -25,16 +39,7 @@ class AccountListFragment : Fragment() {
   ): View? {
 
     setHasOptionsMenu(true)
-
-    accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     binding = FragmentAccountListBinding.inflate(inflater, container, false)
-
-    accountViewModel.allAccounts.observe(this, Observer { accounts ->
-      accounts?.let {
-        accountAdapter.setAccounts(accounts)
-      }
-    })
-
     return binding.root
   }
 
