@@ -8,7 +8,7 @@ import org.apache.commons.codec.binary.Hex
 
 @Entity(tableName = "accounts")
 @Suppress("DataClassPrivateConstructor")
-data class AccountEntity(
+data class Account(
   val name: String, val secret: String, val crypto: Crypto = Crypto.SHA1, val digits: Int = 6,
   val type: Type, val issuer: String = "", val epoch: Long = 0L, val period: Int = 30,
   val hex: Boolean = false, var step: Long = 0L, @PrimaryKey val id: String = "$issuer$name"

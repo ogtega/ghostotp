@@ -1,8 +1,8 @@
 package de.tolunla.ghostotp
 
 import android.text.format.DateUtils
-import de.tolunla.ghostotp.db.entity.AccountEntity
-import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.db.entity.Account.Type
 import de.tolunla.ghostotp.otp.HOTPassword
 import de.tolunla.ghostotp.otp.OneTimePassword.Crypto
 import de.tolunla.ghostotp.otp.TOTPassword
@@ -21,7 +21,7 @@ class OneTimePasswordTest {
     )
 
     for (i in 0 until results.size) {
-      val account = AccountEntity(
+      val account = Account(
         "", seed, type = Type.HOTP, step = i.toLong(), hex = true
       )
 
@@ -48,7 +48,7 @@ class OneTimePasswordTest {
     for (i in 0 until times.size) {
       val testTime = times[i] * DateUtils.SECOND_IN_MILLIS
 
-      val sha1 = AccountEntity(
+      val sha1 = Account(
         "",
         seed,
         digits = 8,
@@ -56,12 +56,12 @@ class OneTimePasswordTest {
         hex = true
       )
 
-      val sha256 = AccountEntity(
+      val sha256 = Account(
         "", seed32, crypto = Crypto.SHA256,
         digits = 8, type = Type.TOTP, hex = true
       )
 
-      val sha512 = AccountEntity(
+      val sha512 = Account(
         "", seed64, crypto = Crypto.SHA512,
         digits = 8, type = Type.TOTP, hex = true
       )

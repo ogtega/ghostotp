@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
-import de.tolunla.ghostotp.db.entity.AccountEntity
-import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.db.entity.Account.Type
 import de.tolunla.ghostotp.showSoftKeyboard
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import org.apache.commons.codec.binary.Base32
@@ -50,10 +50,10 @@ class NewAccountFragment : Fragment(), TextWatcher {
         if (validateSecret(true)) {
 
           accountViewModel.insert(
-            AccountEntity(getAccountName(), getSecretKey(), type = getAuthType())
+            Account(getAccountName(), getSecretKey(), type = getAuthType())
           )
 
-          findNavController().navigate(R.id.account_list_dest)
+          findNavController().navigateUp()
         }
       }
 

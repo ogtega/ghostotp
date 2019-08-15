@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.tolunla.ghostotp.db.dao.AccountDao
-import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.Account
 
 @TypeConverters(
-  AccountEntity.TypeStringConverter::class,
-  AccountEntity.CryptoStringConverter::class
+  Account.TypeStringConverter::class,
+  Account.CryptoStringConverter::class
 )
-@Database(entities = arrayOf(AccountEntity::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Account::class), version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
   abstract fun accountDao(): AccountDao

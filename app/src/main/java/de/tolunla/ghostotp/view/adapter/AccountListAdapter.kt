@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import de.tolunla.ghostotp.databinding.ListItemAccountTotpBinding
-import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.Account
 
 class AccountListAdapter internal constructor(val context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
-  private var accounts = emptyList<AccountEntity>()
+  private var accounts = emptyList<Account>()
   private val inflater = LayoutInflater.from(context)
 
-  internal fun setAccounts(accounts: List<AccountEntity>) {
+  internal fun setAccounts(accounts: List<Account>) {
     this.accounts = accounts
     notifyDataSetChanged()
   }
@@ -28,8 +28,8 @@ class AccountListAdapter internal constructor(val context: Context) :
   inner class AccountViewHolder internal constructor(val binding: ListItemAccountTotpBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun update(accountEntity: AccountEntity) {
-      binding.accountName.text = accountEntity.name
+    fun update(account: Account) {
+      binding.accountName.text = account.name
     }
   }
 

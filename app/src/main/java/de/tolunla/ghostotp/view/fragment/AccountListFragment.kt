@@ -26,9 +26,15 @@ class AccountListFragment : Fragment() {
 
     setHasOptionsMenu(true)
 
-
     accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     binding = FragmentAccountListBinding.inflate(inflater, container, false)
+
+    accountViewModel.allAccounts.observe(this, Observer { accounts ->
+      accounts?.let {
+        accountAdapter.setAccounts(accounts)
+      }
+    })
+
     return binding.root
   }
 
@@ -40,11 +46,5 @@ class AccountListFragment : Fragment() {
       binding.accountList.adapter = accountAdapter
       binding.accountList.layoutManager = LinearLayoutManager(it)
     }
-
-    accountViewModel.allAccounts.observe(this, Observer { accounts ->
-      accounts?.let {
-        accountAdapter.setAccounts(accounts)
-      }
-    })
   }
 }

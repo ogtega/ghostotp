@@ -1,7 +1,7 @@
 package de.tolunla.ghostotp.db
 
 import androidx.annotation.WorkerThread
-import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.Account
 
 class DataRepository private constructor(private val database: AppDatabase) {
   companion object {
@@ -17,7 +17,7 @@ class DataRepository private constructor(private val database: AppDatabase) {
   val accounts = database.accountDao().getAll()
 
   @WorkerThread
-  fun insertAccount(account: AccountEntity) {
+  fun insertAccount(account: Account) {
     database.accountDao().insert(account)
   }
 }

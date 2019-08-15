@@ -6,14 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import de.tolunla.ghostotp.db.AppDatabase
 import de.tolunla.ghostotp.db.DataRepository
-import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.Account
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AccountViewModel(context: Application) : AndroidViewModel(context) {
 
   private val repository: DataRepository
-  val allAccounts: LiveData<List<AccountEntity>>
+
+  val allAccounts: LiveData<List<Account>>
 
   init {
     val database = AppDatabase.getInstance(context)
@@ -21,7 +22,7 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
     allAccounts = repository.accounts
   }
 
-  fun insert(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {
+  fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
     repository.insertAccount(account)
   }
 }

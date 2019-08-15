@@ -1,8 +1,8 @@
 package de.tolunla.ghostotp.otp
 
 import android.text.format.DateUtils
-import de.tolunla.ghostotp.db.entity.AccountEntity
-import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.db.entity.Account.Type
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -23,7 +23,7 @@ abstract class OneTimePassword(
   }
 
   companion object {
-    fun newInstance(account: AccountEntity): OneTimePassword = (
+    fun newInstance(account: Account): OneTimePassword = (
         if (account.type == Type.HOTP)
           HOTPassword(account)
         else
@@ -55,7 +55,7 @@ abstract class OneTimePassword(
   }
 }
 
-class HOTPassword(private val account: AccountEntity) :
+class HOTPassword(private val account: Account) :
   OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
   override fun generateCode(): Int {
@@ -65,7 +65,7 @@ class HOTPassword(private val account: AccountEntity) :
   }
 }
 
-class TOTPassword(private val account: AccountEntity) :
+class TOTPassword(private val account: Account) :
   OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
   override fun generateCode(): Int = generateCode(System.currentTimeMillis().toSteps())
