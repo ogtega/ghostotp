@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
-import de.tolunla.ghostotp.db.AppDatabase
 import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type
 import de.tolunla.ghostotp.showSoftKeyboard
+import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import org.apache.commons.codec.binary.Base32
 
 class NewAccountFragment : Fragment(), TextWatcher {
@@ -24,7 +25,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
   private val base32Chars = Regex("[A-Za-z2-7=]") // Used to match legal base32 chars
 
   private lateinit var typeAdapter: ArrayAdapter<String>
-
+  private lateinit var accountViewModel: AccountViewModel
   private lateinit var binding: FragmentNewAccountBinding
 
   override fun onCreateView(
@@ -32,7 +33,9 @@ class NewAccountFragment : Fragment(), TextWatcher {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
+
     binding = FragmentNewAccountBinding.inflate(layoutInflater, container, false)
+    accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     return binding.root
   }
 
@@ -41,28 +44,16 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
     with(binding) {
 
-      context?.let {
+      adaptTypeSpinner()
 
-        typeAdapter = ArrayAdapter(
-          it,
-          R.layout.support_simple_spinner_dropdown_item,
-          arrayOf(
-            getString(R.string.label_time_based),
-            getString(R.string.label_counter_based)
+      buttonAdd.setOnClickListener {
+        if (validateSecret(true)) {
+
+          accountViewModel.insert(
+            AccountEntity(getAccountName(), getSecretKey(), type = getAuthType())
           )
-        )
 
-        inputAuthType.setAdapter(typeAdapter)
-
-        buttonAdd.setOnClickListener { _ ->
-          if (validateSecret(true)) {
-            // TODO: Move this to a background thread
-            AppDatabase.getInstance(it).accountDao().insertAccount(
-              AccountEntity(getAccountName(), getSecretKey(), type = getAuthType())
-            )
-
-            findNavController().navigate(R.id.account_list_dest)
-          }
+          findNavController().navigate(R.id.account_list_dest)
         }
       }
 
@@ -83,8 +74,25 @@ class NewAccountFragment : Fragment(), TextWatcher {
   private fun getAccountName(): String = binding.inputAccountName.text.toString()
 
   private fun getAuthType(): Type {
+
     val pos = typeAdapter.getPosition(binding.inputAuthType.text.toString())
     return (if (pos == 0) Type.TOTP else Type.HOTP)
+  }
+
+  private fun adaptTypeSpinner() {
+    context?.let {
+
+      typeAdapter = ArrayAdapter(
+        it,
+        R.layout.support_simple_spinner_dropdown_item,
+        arrayOf(
+          getString(R.string.label_time_based),
+          getString(R.string.label_counter_based)
+        )
+      )
+
+      binding.inputAuthType.setAdapter(typeAdapter)
+    }
   }
 
   private fun validateSecret(toSubmit: Boolean = false): Boolean {
@@ -101,6 +109,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
       }
 
       binding.layoutKeyInput.error = null
+      return true
     } catch (e: IllegalArgumentException) {
 
       binding.layoutKeyInput.error =
@@ -108,9 +117,8 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
       return false
     }
-
-    return true
   }
+
 
   override fun afterTextChanged(s: Editable?) {
     validateSecret()

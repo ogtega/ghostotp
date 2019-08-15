@@ -8,17 +8,17 @@ import de.tolunla.ghostotp.db.entity.AccountEntity
 interface AccountDao {
 
   @Query("SELECT * FROM accounts WHERE id = :id")
-  suspend fun getAccountById(id: String): AccountEntity
+  suspend fun getById(id: String): AccountEntity
 
   @Query("SELECT * FROM accounts ORDER BY name")
-  fun getAllAccounts(): LiveData<List<AccountEntity>>
+  fun getAll(): LiveData<List<AccountEntity>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertAccount(account: AccountEntity)
+  fun insert(account: AccountEntity)
 
   @Update
-  fun updateAccount(account: AccountEntity)
+  fun update(account: AccountEntity)
 
   @Delete
-  fun deleteAccount(account: AccountEntity)
+  fun delete(account: AccountEntity)
 }

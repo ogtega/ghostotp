@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
       )
     )
 
+    setupNavigation()
+  }
+
+  private fun setupNavigation() {
     setSupportActionBar(binding.toolbar)
     setupActionBarWithNavController(navController, appBarConfig)
     binding.bottomAppbar.setOnMenuItemClickListener(this::onOptionsItemSelected)

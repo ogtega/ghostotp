@@ -12,7 +12,7 @@ import de.tolunla.ghostotp.db.entity.AccountEntity
   AccountEntity.TypeStringConverter::class,
   AccountEntity.CryptoStringConverter::class
 )
-@Database(entities = [AccountEntity::class], version = 1, exportSchema = false)
+@Database(entities = arrayOf(AccountEntity::class), version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
   abstract fun accountDao(): AccountDao
