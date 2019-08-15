@@ -21,28 +21,15 @@ class MainActivity : AppCompatActivity() {
   private lateinit var appBarConfig: AppBarConfiguration
   private lateinit var binding: ActivityMainBinding
   private lateinit var navController: NavController
+  private lateinit var contentParameters: CoordinatorLayout.LayoutParams
 
   // Called once the host fragment switches to a new destination
   private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
-    val params = binding.content.layoutParams as CoordinatorLayout.LayoutParams
-
     // Check if the destination is on the "top level" (this includes dialogs)
     if (appBarConfig.topLevelDestinations.contains(destination.id)) {
-      // Disable ScrollingViewBehavior
-      params.behavior = null
-      // Hide the toolbar and make the bottom appbar visible
-      binding.topAppbar.visibility = View.GONE
-
-      binding.bottomAppbar.visibility = View.VISIBLE
-      binding.fab.visibility = View.VISIBLE
+      showBottomBar()
     } else {
-      // Enable ScrollingViewBehavior
-      params.behavior = AppBarLayout.ScrollingViewBehavior()
-      // Show the toolbar and make the bottom appbar hidden
-      binding.topAppbar.visibility = View.VISIBLE
-
-      binding.bottomAppbar.visibility = View.GONE
-      binding.fab.visibility = View.GONE
+      showTopBar()
     }
 
     binding.content.requestLayout()
@@ -54,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
     navController = findNavController(R.id.nav_host_fragment)
+
+    contentParameters = binding.content.layoutParams as CoordinatorLayout.LayoutParams
 
     // Used to know when we are at a "top level" destination
     appBarConfig = AppBarConfiguration(
@@ -77,6 +66,26 @@ class MainActivity : AppCompatActivity() {
     binding.fab.setOnClickListener {
       navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
     }
+  }
+
+  private fun showBottomBar() {
+    // Disable ScrollingViewBehavior
+    contentParameters.behavior = null
+    // Hide the toolbar and make the bottom appbar visible
+    binding.topAppbar.visibility = View.GONE
+
+    binding.bottomAppbar.visibility = View.VISIBLE
+    binding.fab.visibility = View.VISIBLE
+  }
+
+  private fun showTopBar() {
+    // Enable ScrollingViewBehavior
+    contentParameters.behavior = AppBarLayout.ScrollingViewBehavior()
+    // Show the toolbar and make the bottom appbar hidden
+    binding.topAppbar.visibility = View.VISIBLE
+
+    binding.bottomAppbar.visibility = View.GONE
+    binding.fab.visibility = View.GONE
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
