@@ -3,7 +3,6 @@ package de.tolunla.ghostotp
 import android.text.format.DateUtils
 import de.tolunla.ghostotp.db.entity.Account
 import de.tolunla.ghostotp.db.entity.Account.Type
-import de.tolunla.ghostotp.otp.HOTPassword
 import de.tolunla.ghostotp.otp.OneTimePassword.Crypto
 import de.tolunla.ghostotp.otp.TOTPassword
 import org.junit.Assert.assertEquals
@@ -25,7 +24,7 @@ class OneTimePasswordTest {
         "", seed, type = Type.HOTP, step = i.toLong(), hex = true
       )
 
-      assertEquals(results[i], HOTPassword(account).generateCode())
+      assertEquals(results[i], account.oneTimePassword.generateCode())
     }
   }
 

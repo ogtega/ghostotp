@@ -33,7 +33,7 @@ abstract class OneTimePassword(
 
   abstract fun generateCode(): Int
 
-  fun generateCode(step: Long): Int = getHash(secret, step).truncate()
+  protected fun generateCode(step: Long): Int = getHash(secret, step).truncate()
 
   private fun getHash(bytes: ByteArray, steps: Long): ByteArray =
     Mac.getInstance("Hmac${crypto.type}").run {

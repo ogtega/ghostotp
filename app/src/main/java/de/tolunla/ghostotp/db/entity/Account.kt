@@ -1,7 +1,9 @@
 package de.tolunla.ghostotp.db.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import de.tolunla.ghostotp.otp.OneTimePassword
 import de.tolunla.ghostotp.otp.OneTimePassword.Crypto
 import org.apache.commons.codec.binary.Base32
 import org.apache.commons.codec.binary.Hex
@@ -15,6 +17,9 @@ data class Account(
 ) {
 
   enum class Type { TOTP, HOTP }
+
+  @Ignore
+  val oneTimePassword = OneTimePassword.newInstance(this)
 
   fun getSecretBytes(): ByteArray {
     return (if (!hex) Base32().decode(secret) else Hex.decodeHex(secret))

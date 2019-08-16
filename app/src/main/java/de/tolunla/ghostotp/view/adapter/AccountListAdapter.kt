@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.tolunla.ghostotp.databinding.ListItemAccountTotpBinding
 import de.tolunla.ghostotp.db.entity.Account
 
-class AccountListAdapter internal constructor(val context: Context) :
+class AccountListAdapter(private val context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
   private var accounts = emptyList<Account>()
@@ -25,13 +25,14 @@ class AccountListAdapter internal constructor(val context: Context) :
     holder.update(accounts[position])
   }
 
-  inner class AccountViewHolder internal constructor(val binding: ListItemAccountTotpBinding) :
+  override fun getItemCount(): Int = accounts.size
+
+  inner class AccountViewHolder(val binding: ListItemAccountTotpBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun update(account: Account) {
       binding.accountName.text = account.name
+      binding.accountCode.text = account.oneTimePassword.generateCode().toString()
     }
   }
-
-  override fun getItemCount(): Int = accounts.size
 }

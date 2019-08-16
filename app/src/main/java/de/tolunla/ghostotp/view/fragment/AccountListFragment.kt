@@ -1,6 +1,8 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 import de.tolunla.ghostotp.view.adapter.AccountListAdapter
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
+import kotlin.concurrent.fixedRateTimer
+
 
 class AccountListFragment : Fragment() {
 
   private lateinit var accountAdapter: AccountListAdapter
-  private lateinit var binding: FragmentAccountListBinding
   private lateinit var accountViewModel: AccountViewModel
+  private lateinit var binding: FragmentAccountListBinding
+
+  private val mHandler = Handler(Looper.getMainLooper())
+
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -50,6 +57,10 @@ class AccountListFragment : Fragment() {
       accountAdapter = AccountListAdapter(it)
       binding.accountList.adapter = accountAdapter
       binding.accountList.layoutManager = LinearLayoutManager(it)
+    }
+
+    fixedRateTimer("", false, System.currentTimeMillis().rem(250), 250) {
+      // TODO: Update views without adapter.notifyDataSetChanged()
     }
   }
 }
