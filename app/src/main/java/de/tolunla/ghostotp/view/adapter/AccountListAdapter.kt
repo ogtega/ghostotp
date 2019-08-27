@@ -34,6 +34,7 @@ class AccountListAdapter(context: Context) :
   }
 
   fun setAccounts(accounts: List<Account>) {
+    viewHolders.clear()
     this.accounts = accounts
     notifyDataSetChanged()
   }
@@ -42,8 +43,13 @@ class AccountListAdapter(context: Context) :
     AccountViewHolder(ListItemAccountTotpBinding.inflate(inflater, parent, false))
 
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-    holder.update(accounts[position])
-    viewHolders.add(holder)
+    val account : Account = accounts[position]
+
+    holder.update(account)
+
+    if (account.type != Account.Type.HOTP) {
+      viewHolders.add(holder)
+    }
   }
 
   override fun onViewRecycled(holder: AccountViewHolder) {
@@ -68,7 +74,7 @@ class AccountListAdapter(context: Context) :
 
     fun update(account: Account) {
       binding.accountName.text = account.name
-      binding.accountCode.text = account.oneTimePassword.generateCode().toString()
+      binding.accountCode.text = account.oneTimePassword.generateCode()
     }
   }
 }

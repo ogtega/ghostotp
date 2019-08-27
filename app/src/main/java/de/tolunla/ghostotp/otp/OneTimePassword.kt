@@ -12,7 +12,7 @@ private val DIGITS_POWER = arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 100
 
 abstract class OneTimePassword(
   private val secret: ByteArray,
-  private val digits: Int,
+  protected val digits: Int,
   private val crypto: Crypto = Crypto.SHA1
 ) {
 
@@ -31,7 +31,7 @@ abstract class OneTimePassword(
         )
   }
 
-  abstract fun generateCode(): Int
+  abstract fun generateCode(): String
 
   protected fun generateCode(step: Long): Int = getHash(secret, step).truncate()
 
@@ -58,17 +58,19 @@ abstract class OneTimePassword(
 class HOTPassword(private val account: Account) :
   OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
-  override fun generateCode(): Int {
-    val result = generateCode(account.step)
+  override fun generateCode(): String {
+    val code = generateCode(account.step)
     account.incrementStep()
-    return result
+
+    return code.addPadding(digits)
   }
 }
 
 class TOTPassword(private val account: Account) :
   OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
-  override fun generateCode(): Int = generateCode(System.currentTimeMillis().toSteps())
+  override fun generateCode(): String = generateCode(System.currentTimeMillis().toSteps())
+    .addPadding(digits)
 
   fun generateCodeAt(time: Long) = generateCode(time.toSteps())
 
@@ -76,4 +78,12 @@ class TOTPassword(private val account: Account) :
     val elapsed = (this - account.epoch) / DateUtils.SECOND_IN_MILLIS
     return elapsed / account.period
   }
+}
+
+/**
+ * Method used to add n 0s before generated code (where n is the digits needed for a complete code)
+ */
+fun Int.addPadding(digits: Int): String {
+  val code = this.toString()
+  return "${"0".repeat(digits - code.length)}$code"
 }
