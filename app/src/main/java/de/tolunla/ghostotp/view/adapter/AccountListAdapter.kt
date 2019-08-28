@@ -3,12 +3,16 @@ package de.tolunla.ghostotp.view.adapter
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.text.format.DateUtils
 import android.util.Log
+import android.util.TimeUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import de.tolunla.ghostotp.databinding.ListItemAccountTotpBinding
 import de.tolunla.ghostotp.db.entity.Account
+import java.text.DateFormat
 
 class AccountListAdapter(context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
@@ -29,7 +33,7 @@ class AccountListAdapter(context: Context) :
         it.update(account)
       }
 
-      mHandler.postDelayed(this, System.currentTimeMillis().rem(250L))
+      mHandler.postDelayed(this, System.currentTimeMillis().rem(500L))
     }
   }
 
@@ -39,8 +43,20 @@ class AccountListAdapter(context: Context) :
     notifyDataSetChanged()
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder =
-    AccountViewHolder(ListItemAccountTotpBinding.inflate(inflater, parent, false))
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
+    val holder = AccountViewHolder(ListItemAccountTotpBinding.inflate(inflater, parent, false))
+
+    holder.binding.root.setOnLongClickListener {
+      Snackbar.make(parent, holder.code, Snackbar.LENGTH_SHORT).show()
+      true
+    }
+
+    holder.binding.accountCode.setOnClickListener {
+      Snackbar.make(parent, holder.binding.accountName.text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    return holder
+  }
 
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
     val account : Account = accounts[position]
@@ -72,9 +88,23 @@ class AccountListAdapter(context: Context) :
   inner class AccountViewHolder(val binding: ListItemAccountTotpBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
+    lateinit var code : String
+
     fun update(account: Account) {
+      // Convert all times stored in the account object to milliseconds for precision purposes
+      val epoch = account.epoch * DateUtils.SECOND_IN_MILLIS
+      val period = account.period * DateUtils.SECOND_IN_MILLIS
+
       binding.accountName.text = account.name
-      binding.accountCode.text = account.oneTimePassword.generateCode()
+
+      code = account.oneTimePassword.generateCode()
+      binding.accountCode.text = code
+
+      // Get a float value representing the percentage of time left till our code is invalid
+      val progress : Float =
+        (System.currentTimeMillis() - epoch).rem(period).toFloat() / period.toFloat()
+
+      binding.countdownIndicator.setPhase(1 - progress)
     }
   }
 }

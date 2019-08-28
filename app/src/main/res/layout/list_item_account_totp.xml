@@ -12,14 +12,23 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
       android:id="@+id/account_code"
-      app:layout_constraintTop_toBottomOf="@id/account_name"
-      app:layout_constraintStart_toStartOf="parent"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/account_name" />
+
+    <de.tolunla.countdownview.CountdownView
+      android:id="@+id/countdown_indicator"
+      android:layout_width="16dp"
+      android:layout_height="16dp"
+      app:color="@color/color_primary"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:startAngle="270"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

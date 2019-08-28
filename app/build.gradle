@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':countdownview')
 
     /**
      * Kotlin Standard Library JDK 8 extension
