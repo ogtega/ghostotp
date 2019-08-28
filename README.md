@@ -1,7 +1,7 @@
 # Ghost Mobile Authenticator
 
-[![GitHub top language](https://img.shields.io/github/languages/top/ogtega/ghostotp)](https://github.com/ogtega/ghostauth#)
-[![GitHub](https://img.shields.io/github/license/ogtega/ghostotp)](https://github.com/ogtega/ghostauth/blob/master/LICENSE)
+[![GitHub top language](https://img.shields.io/github/languages/top/ogtega/ghostotp)](https://github.com/ogtega/ghostotp#)
+[![GitHub](https://img.shields.io/github/license/ogtega/ghostotp)](https://github.com/ogtega/ghostotp/blob/master/LICENSE)
 
 An android app designed to managing multiple authenticators for many platforms.
 
