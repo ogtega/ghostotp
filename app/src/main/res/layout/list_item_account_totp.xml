@@ -30,14 +30,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_code" />
 
+      <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_refresh"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_refresh_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="@{timeBase ? View.GONE : View.VISIBLE}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
       <de.tolunla.countdownview.CountdownView
         android:id="@+id/countdown_indicator"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:visibility="@{timeBase ? View.VISIBLE : View.GONE}"
         app:color="@color/color_on_surface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.card.MaterialCardView>
+
+  <data>
+    <import type="android.view.View" />
+    <variable
+      name="timeBase"
+      type="Boolean" />
+  </data>
 </layout>

@@ -59,8 +59,8 @@ class HOTPassword(private val account: Account) :
   OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
   override fun generateCode(): String {
-    val code = generateCode(account.step)
     account.incrementStep()
+    val code = generateCode(account.step)
 
     return code.addPadding(digits)
   }
