@@ -20,4 +20,9 @@ class DataRepository private constructor(private val database: AppDatabase) {
   fun insertAccount(account: Account) {
     database.accountDao().insert(account)
   }
+
+  @WorkerThread
+  fun updateAccount(account: Account) {
+    database.accountDao().update(account)
+  }
 }

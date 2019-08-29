@@ -25,4 +25,8 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
   fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
     repository.insertAccount(account)
   }
+
+  fun update(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+    repository.updateAccount(account)
+  }
 }

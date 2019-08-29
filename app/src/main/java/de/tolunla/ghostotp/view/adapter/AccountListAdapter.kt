@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import de.tolunla.ghostotp.databinding.ListItemAccountTotpBinding
+import de.tolunla.ghostotp.db.AppDatabase
+import de.tolunla.ghostotp.db.DataRepository
 import de.tolunla.ghostotp.db.entity.Account
-import de.tolunla.ghostotp.viewmodel.AccountViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AccountListAdapter(context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
@@ -22,13 +25,12 @@ class AccountListAdapter(context: Context) :
   private val mTOTPHolders = HashSet<AccountViewHolder>()
   private val mHandler = Handler(Looper.getMainLooper())
 
+  private val mRepository = DataRepository.getInstance(AppDatabase.getInstance(context))
+
   private val updateTOTPCodes = object : Runnable {
+
     override fun run() {
-
       mTOTPHolders.forEach {
-        val account = mAccounts[it.adapterPosition]
-
-        Log.d("Handler", "${account.name}: ${System.currentTimeMillis()}")
         it.refreshTOTP()
       }
 
@@ -64,6 +66,11 @@ class AccountListAdapter(context: Context) :
       )
 
       holder.refreshHOTP()
+
+      // Save the account with it's new count to the database
+      CoroutineScope(Dispatchers.IO).launch {
+        mRepository.updateAccount(holder.account)
+      }
     }
 
     return holder
