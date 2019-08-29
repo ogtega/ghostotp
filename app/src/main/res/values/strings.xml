@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE resources [
-  <!ENTITY app_name "Ghost OTP">
-  <!ENTITY project_url "https://github.com/ogtega/ghostotp">
-  ]>
+<!DOCTYPE resources [<!ENTITY app_name "Ghost OTP"><!ENTITY project_url "https://github.com/ogtega/ghostotp">]>
 
 <resources>
   <string name="app_name">&app_name;</string>

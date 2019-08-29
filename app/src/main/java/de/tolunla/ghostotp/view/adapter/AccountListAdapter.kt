@@ -65,6 +65,14 @@ class AccountListAdapter(context: Context) :
         6 * DateUtils.SECOND_IN_MILLIS
       )
 
+      // Clear the displayed HOTP code after 1 minute
+      mHandler.postDelayed(
+        {
+          holder.binding.accountCode.text = "- ".repeat(holder.account.digits)
+        },
+        1 * DateUtils.MINUTE_IN_MILLIS
+      )
+
       holder.refreshHOTP()
 
       // Save the account with it's new count to the database

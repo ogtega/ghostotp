@@ -12,23 +12,15 @@
       android:layout_margin="@dimen/activity_default_margin"
       android:orientation="vertical">
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_name_input"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="match_parent"
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_add"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_default_margin"
-        android:hint="@string/label_account_name"
+        android:text="@string/action_add"
+        app:layout_constraintBottom_toBottomOf="@id/layout_auth_type"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/input_account_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
-
-      </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="@id/layout_auth_type" />
 
       <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_key_input"
@@ -45,7 +37,7 @@
           android:id="@+id/input_secret_key"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:inputType="text|textNoSuggestions"/>
+          android:inputType="text|textNoSuggestions" />
 
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,19 +57,27 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:completionThreshold="0"
-          android:editable="false"/>
+          android:editable="false" />
 
       </com.google.android.material.textfield.TextInputLayout>
 
-      <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_add"
-        android:layout_width="wrap_content"
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_name_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_default_margin"
-        android:text="@string/action_add"
-        app:layout_constraintBottom_toBottomOf="@id/layout_auth_type"
+        android:hint="@string/label_account_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layout_auth_type"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/input_account_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>

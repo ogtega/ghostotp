@@ -37,8 +37,8 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
   override fun onDraw(canvas: Canvas?) {
     super.onDraw(canvas)
 
-    val sweepAngle : Float = mPhase * 360
-    val sweepStart : Float = mStartAngle.toFloat() - sweepAngle
+    val sweepAngle: Float = mPhase * 360
+    val sweepStart: Float = mStartAngle.toFloat() - sweepAngle
 
     if (mDrawingRect == null) {
       mDrawingRect = RectF(1f, 1f, (width - 1).toFloat(), (height - 1).toFloat())

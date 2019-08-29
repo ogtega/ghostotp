@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme.DayNight" parent="Base.AppTheme.DayNight"/>
+  <style name="AppTheme.DayNight" parent="Base.AppTheme.DayNight" />
 
   <style name="Base.AppTheme.DayNight" parent="Base.AppTheme">
     <item name="android:windowLightStatusBar">true</item>

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 import de.tolunla.ghostotp.view.adapter.AccountListAdapter
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
@@ -50,7 +49,6 @@ class AccountListFragment : Fragment() {
       accountAdapter = AccountListAdapter(it)
       binding.accountList.adapter = accountAdapter
       accountAdapter.onAttachedToRecyclerView(binding.accountList)
-      binding.accountList.layoutManager = LinearLayoutManager(it)
     }
   }
 

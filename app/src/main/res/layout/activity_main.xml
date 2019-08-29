@@ -9,6 +9,21 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <LinearLayout
+      android:id="@+id/content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <fragment
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
+
+    </LinearLayout>
+
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/top_appbar"
       android:layout_width="match_parent"
@@ -26,26 +41,11 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:minHeight="?attr/actionBarSize"
-          app:layout_collapseMode="pin"/>
+          app:layout_collapseMode="pin" />
 
       </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-      android:id="@+id/content"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <fragment
-        android:id="@+id/nav_host_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"/>
-
-    </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
       android:id="@+id/bottom_appbar"
@@ -54,15 +54,14 @@
       android:layout_gravity="bottom"
       android:minHeight="?attr/actionBarSize"
       app:fabAlignmentMode="center"
-      app:hideOnScroll="true"
-      app:menu="@menu/appbar_menu"/>
+      app:menu="@menu/appbar_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/fab"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_add_24dp"
-      app:layout_anchor="@id/bottom_appbar"/>
+      app:layout_anchor="@id/bottom_appbar" />
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
