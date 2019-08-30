@@ -1,5 +1,7 @@
 package de.tolunla.ghostotp.view.adapter
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AccountListAdapter(context: Context) :
+class AccountListAdapter(val context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
   private var mAccounts = emptyList<Account>()
@@ -49,7 +51,16 @@ class AccountListAdapter(context: Context) :
     val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
-      Snackbar.make(parent, holder.code, Snackbar.LENGTH_SHORT).setAnchorView(R.id.fab).show()
+      // Sequence to copying the selected OTP code to the user's clipboard
+      val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+      val clip: ClipData = ClipData.newPlainText("${holder.account.name} otp", holder.code)
+      clipboard.setPrimaryClip(clip)
+
+      // Notify the user that we've copied the OTP
+      Snackbar.make(parent, context.getText(R.string.message_otp_copied), Snackbar.LENGTH_SHORT)
+        .setAnchorView(R.id.fab)
+        .show()
+
       true
     }
 

@@ -32,8 +32,8 @@
 
       <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_refresh"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_refresh_24dp"
         android:visibility="@{timeBase ? View.GONE : View.VISIBLE}"
