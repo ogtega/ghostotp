@@ -13,8 +13,8 @@ interface AccountDao {
   @Query("SELECT * FROM accounts ORDER BY name")
   fun getAll(): LiveData<List<Account>>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insert(account: Account)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
+  fun insert(account: Account): Long
 
   @Update
   fun update(account: Account)

@@ -8,6 +8,7 @@ import android.os.Looper
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import de.tolunla.ghostotp.R
@@ -15,6 +16,7 @@ import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.db.AppDatabase
 import de.tolunla.ghostotp.db.DataRepository
 import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.util.AccountDiffCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ class AccountListAdapter(val context: Context) :
 
   private var mAccounts = emptyList<Account>()
 
+  private val mClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
   private val mInflater = LayoutInflater.from(context)
   private val mTOTPHolders = HashSet<AccountViewHolder>()
   private val mHandler = Handler(Looper.getMainLooper())
@@ -37,14 +40,16 @@ class AccountListAdapter(val context: Context) :
         it.refreshTOTP()
       }
 
-      mHandler.postDelayed(this, System.currentTimeMillis().rem(500L))
+      mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
     }
   }
 
   fun setAccounts(accounts: List<Account>) {
-    mTOTPHolders.clear()
-    this.mAccounts = accounts
-    notifyDataSetChanged()
+    val diffCallback = AccountDiffCallback(mAccounts, accounts)
+    val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+    mAccounts = accounts
+    diffResult.dispatchUpdatesTo(this)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -52,9 +57,8 @@ class AccountListAdapter(val context: Context) :
 
     holder.binding.root.setOnLongClickListener {
       // Sequence to copying the selected OTP code to the user's clipboard
-      val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip: ClipData = ClipData.newPlainText("${holder.account.name} otp", holder.code)
-      clipboard.setPrimaryClip(clip)
+      val clip = ClipData.newPlainText("${holder.account.name} otp", holder.code)
+      mClipboard.setPrimaryClip(clip)
 
       // Notify the user that we've copied the OTP
       Snackbar.make(parent, context.getText(R.string.message_otp_copied), Snackbar.LENGTH_SHORT)

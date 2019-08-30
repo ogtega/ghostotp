@@ -2,6 +2,7 @@ package de.tolunla.ghostotp.db
 
 import androidx.annotation.WorkerThread
 import de.tolunla.ghostotp.db.entity.Account
+import java.util.*
 
 class DataRepository private constructor(private val database: AppDatabase) {
   companion object {
@@ -18,7 +19,23 @@ class DataRepository private constructor(private val database: AppDatabase) {
 
   @WorkerThread
   fun insertAccount(account: Account) {
-    database.accountDao().insert(account)
+    var tries = 1
+    val res = database.accountDao().insert(account)
+
+    if (res == -1L) {
+      while (insertAccount(account, tries) == -1L) {
+        tries++
+      }
+    }
+  }
+
+  private fun insertAccount(account: Account, tries: Int): Long {
+    val copy = account.copy(
+      name = "${account.name}($tries)",
+      id = "${account.issuer.toLowerCase(Locale.ROOT)}${account.name}"
+    )
+
+    return database.accountDao().insert(copy)
   }
 
   @WorkerThread
