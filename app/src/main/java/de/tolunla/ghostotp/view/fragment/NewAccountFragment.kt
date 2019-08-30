@@ -14,7 +14,6 @@ import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
 import de.tolunla.ghostotp.db.entity.Account
 import de.tolunla.ghostotp.db.entity.Account.Type
-import de.tolunla.ghostotp.showSoftKeyboard
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import org.apache.commons.codec.binary.Base32
 
@@ -67,12 +66,6 @@ class NewAccountFragment : Fragment(), TextWatcher {
       inputSecretKey.addTextChangedListener(this@NewAccountFragment)
       inputAuthType.setText(getString(R.string.label_time_based), false)
     }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    // Request for the software keyboard to appear on the name EditText
-    context?.let { binding.inputAccountName.showSoftKeyboard(it) }
   }
 
   private fun getSecretKey(): String = binding.inputSecretKey.text.toString()

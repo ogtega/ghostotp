@@ -9,4 +9,5 @@
     android:paddingBottom="?attr/actionBarSize"
     android:overScrollMode="never"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 </layout>

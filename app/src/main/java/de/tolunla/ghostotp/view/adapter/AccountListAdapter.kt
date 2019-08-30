@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.db.AppDatabase
 import de.tolunla.ghostotp.db.DataRepository
@@ -48,7 +49,7 @@ class AccountListAdapter(context: Context) :
     val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
-      Snackbar.make(parent, holder.code, Snackbar.LENGTH_SHORT).show()
+      Snackbar.make(parent, holder.code, Snackbar.LENGTH_SHORT).setAnchorView(R.id.fab).show()
       true
     }
 
