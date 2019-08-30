@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import de.tolunla.ghostotp.databinding.ListItemAccountTotpBinding
+import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.db.AppDatabase
 import de.tolunla.ghostotp.db.DataRepository
 import de.tolunla.ghostotp.db.entity.Account
@@ -45,7 +45,7 @@ class AccountListAdapter(context: Context) :
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-    val holder = AccountViewHolder(ListItemAccountTotpBinding.inflate(mInflater, parent, false))
+    val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
       Snackbar.make(parent, holder.code, Snackbar.LENGTH_SHORT).show()
@@ -111,7 +111,7 @@ class AccountListAdapter(context: Context) :
 
   override fun getItemCount(): Int = mAccounts.size
 
-  inner class AccountViewHolder(val binding: ListItemAccountTotpBinding) :
+  inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     var code: String = ""
