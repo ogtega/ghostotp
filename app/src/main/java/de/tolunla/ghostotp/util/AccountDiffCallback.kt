@@ -15,6 +15,9 @@ class AccountDiffCallback(private val oldList: List<Account>,
   }
 
   override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-    return oldList[oldItemPosition].step == newList[newItemPosition].step
+    val old = oldList[oldItemPosition]
+    val new = newList[newItemPosition]
+
+    return old.step == new.step && old.secret == new.secret
   }
 }

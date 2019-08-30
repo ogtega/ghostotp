@@ -21,6 +21,13 @@ data class Account(
   enum class Type { TOTP, HOTP }
 
   @Ignore
+  val label: String = if (issuer.isNotEmpty()) {
+    "$issuer ($name)"
+  } else {
+    name
+  }
+
+  @Ignore
   val oneTimePassword = OneTimePassword.newInstance(this)
 
   fun getSecretBytes(): ByteArray {

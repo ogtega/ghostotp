@@ -39,7 +39,7 @@
         android:layout_height="16dp"
         android:layout_marginTop="@dimen/layout_default_margin"
         android:foregroundGravity="center"
-        android:visibility="@{timeBase ? View.VISIBLE : View.GONE}"
+        android:visibility="@{timeBased ? View.VISIBLE : View.GONE}"
         app:color="@color/color_on_surface"
         app:layout_constraintBottom_toBottomOf="@id/account_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
   <data>
     <import type="android.view.View" />
     <variable
-      name="timeBase"
+      name="timeBased"
       type="Boolean" />
   </data>
 </layout>

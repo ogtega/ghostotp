@@ -22,7 +22,16 @@ class DataRepository private constructor(private val database: AppDatabase) {
     var tries = 1
     val res = database.accountDao().insert(account)
 
+    // If we're adding a duplicate account
     if (res == -1L) {
+
+      // If there is an issuer provided we simply update the account within the database
+      if (account.issuer.isNotEmpty()) {
+        database.accountDao().update(account)
+        return
+      }
+
+      // Repeatedly increment the number suffix until we succeed in inserting the account
       while (insertAccount(account, tries) == -1L) {
         tries++
       }

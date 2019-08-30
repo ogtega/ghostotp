@@ -77,7 +77,7 @@ class AccountListAdapter(val context: Context) :
     return holder
   }
 
-  fun refreshHOTP(holder: AccountViewHolder) {
+  private fun refreshHOTP(holder: AccountViewHolder) {
     // Disable code refreshing
     holder.binding.root.isEnabled = false
 
@@ -135,13 +135,13 @@ class AccountListAdapter(val context: Context) :
 
     fun bind(account: Account) {
       this.account = account
-      binding.accountName.text = account.name
+      binding.accountName.text = account.label
 
       if (account.type == Account.Type.HOTP) {
         binding.accountCode.text = "- ".repeat(account.digits)
-        binding.timeBase = false
+        binding.timeBased = false
       } else {
-        binding.timeBase = true
+        binding.timeBased = true
         refreshTOTP()
       }
     }
