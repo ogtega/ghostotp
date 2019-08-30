@@ -41,7 +41,8 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
     val sweepStart: Float = mStartAngle.toFloat() - sweepAngle
 
     if (mDrawingRect == null) {
-      mDrawingRect = RectF(1f, 1f, (width - 1).toFloat(), (height - 1).toFloat())
+      val size = (Math.min(width, height) - 1).toFloat()
+      mDrawingRect = RectF(1f, 1f, size, size)
     }
 
     canvas?.let {

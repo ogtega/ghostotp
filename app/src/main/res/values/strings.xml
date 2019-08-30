@@ -19,7 +19,7 @@
 
   <string name="message_key_too_short">Secret is too short</string>
   <string name="message_key_invalid_chars">Secret is invalid</string>
-  <string name="message_otp_copied">One time password copied to clipboard</string>
+  <string name="message_otp_copied">Code copied to clipboard</string>
 
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>

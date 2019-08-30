@@ -15,39 +15,35 @@
 
       <TextView
         android:id="@+id/account_code"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:letterSpacing="0.1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
       <TextView
         android:id="@+id/account_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_marginTop="@dimen/layout_default_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        app:layout_constraintEnd_toStartOf="@id/countdown_indicator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_code" />
-
-      <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_refresh"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_refresh_24dp"
-        android:visibility="@{timeBase ? View.GONE : View.VISIBLE}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
       <de.tolunla.countdownview.CountdownView
         android:id="@+id/countdown_indicator"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginTop="@dimen/layout_default_margin"
+        android:foregroundGravity="center"
         android:visibility="@{timeBase ? View.VISIBLE : View.GONE}"
         app:color="@color/color_on_surface"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/account_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/account_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.card.MaterialCardView>

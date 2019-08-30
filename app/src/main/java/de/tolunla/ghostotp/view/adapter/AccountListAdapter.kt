@@ -64,42 +64,42 @@ class AccountListAdapter(val context: Context) :
       true
     }
 
-    holder.binding.btnRefresh.setOnClickListener {
-
-      // Disable the refresh button
-      holder.binding.btnRefresh.isEnabled = false
-
-      // Re-enable the refresh button 6 seconds later
-      mHandler.postDelayed(
-        {
-          holder.binding.btnRefresh.isEnabled = true
-        },
-        6 * DateUtils.SECOND_IN_MILLIS
-      )
-
-      // Clear the displayed HOTP code after 1 minute
-      mHandler.postDelayed(
-        {
-          holder.binding.accountCode.text = "- ".repeat(holder.account.digits)
-        },
-        1 * DateUtils.MINUTE_IN_MILLIS
-      )
-
-      holder.refreshHOTP()
-
-      // Save the account with it's new count to the database
-      CoroutineScope(Dispatchers.IO).launch {
-        mRepository.updateAccount(holder.account)
+    holder.binding.root.setOnClickListener {
+      if (holder.account.type == Account.Type.HOTP) {
+        refreshHOTP(holder)
       }
     }
 
     return holder
   }
 
+  fun refreshHOTP(holder: AccountViewHolder) {
+    // Disable code refreshing
+    holder.binding.root.isEnabled = false
+
+    // Update the code
+    holder.refreshHOTP()
+
+    // Save the account with it's new count to the database
+    CoroutineScope(Dispatchers.IO).launch {
+      mRepository.updateAccount(holder.account)
+    }
+
+    // Re-enable the refresh button 6 seconds later
+    mHandler.postDelayed({
+      holder.binding.root.isEnabled = true
+    }, 6 * DateUtils.SECOND_IN_MILLIS)
+
+    // Clear the displayed HOTP code after 1 minute
+    mHandler.postDelayed({
+      holder.binding.accountCode.text = "- ".repeat(holder.account.digits)
+    }, 1 * DateUtils.MINUTE_IN_MILLIS)
+  }
+
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
     val account: Account = mAccounts[position]
 
-    holder.init(account)
+    holder.bind(account)
 
     if (account.type != Account.Type.HOTP) {
       mTOTPHolders.add(holder)
@@ -129,7 +129,7 @@ class AccountListAdapter(val context: Context) :
     var code: String = ""
     lateinit var account: Account
 
-    fun init(account: Account) {
+    fun bind(account: Account) {
       this.account = account
       binding.accountName.text = account.name
 
