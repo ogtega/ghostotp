@@ -13,15 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
-import de.tolunla.ghostotp.db.AppDatabase
-import de.tolunla.ghostotp.db.DataRepository
 import de.tolunla.ghostotp.db.entity.Account
 import de.tolunla.ghostotp.util.AccountDiffCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
-class AccountListAdapter(val context: Context) :
+class AccountListAdapter(private val context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
   private var mAccounts = emptyList<Account>()
@@ -31,7 +27,7 @@ class AccountListAdapter(val context: Context) :
   private val mTOTPHolders = HashSet<AccountViewHolder>()
   private val mHandler = Handler(Looper.getMainLooper())
 
-  private val mRepository = DataRepository.getInstance(AppDatabase.getInstance(context))
+  private lateinit var mViewModel: AccountViewModel
 
   private val updateTOTPCodes = object : Runnable {
 
@@ -50,6 +46,10 @@ class AccountListAdapter(val context: Context) :
 
     mAccounts = accounts
     diffResult.dispatchUpdatesTo(this)
+  }
+
+  fun setViewModel(viewModel: AccountViewModel) {
+    mViewModel = viewModel
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -83,11 +83,7 @@ class AccountListAdapter(val context: Context) :
 
     // Update the code
     holder.refreshHOTP()
-
-    // Save the account with it's new count to the database
-    CoroutineScope(Dispatchers.IO).launch {
-      mRepository.updateAccount(holder.account)
-    }
+    mViewModel.update(holder.account)
 
     // Re-enable the refresh button 6 seconds later
     mHandler.postDelayed({

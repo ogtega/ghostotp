@@ -18,6 +18,6 @@ class AccountDiffCallback(private val oldList: List<Account>,
     val old = oldList[oldItemPosition]
     val new = newList[newItemPosition]
 
-    return old.step == new.step && old.secret == new.secret
+    return old.secret == new.secret
   }
 }

@@ -23,6 +23,8 @@ class AccountListFragment : Fragment() {
     activity?.let {
       accountViewModel = ViewModelProviders.of(it).get(AccountViewModel::class.java)
 
+      accountAdapter.setViewModel(accountViewModel)
+
       accountViewModel.allAccounts.observe(this, Observer { accounts ->
         accounts?.let {
           accountAdapter.setAccounts(accounts)
