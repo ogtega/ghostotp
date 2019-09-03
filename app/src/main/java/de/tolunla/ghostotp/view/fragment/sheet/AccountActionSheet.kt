@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import de.tolunla.ghostotp.databinding.SheetEditAccountBinding
+import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
 
-class EditAccountSheet : BottomSheetDialogFragment() {
+class AccountActionSheet : BottomSheetDialogFragment() {
 
-  lateinit var binding: SheetEditAccountBinding
+  lateinit var binding: SheetAccountActionBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -20,7 +20,7 @@ class EditAccountSheet : BottomSheetDialogFragment() {
     savedInstanceState: Bundle?
   ): View? {
     setHasOptionsMenu(true)
-    binding = SheetEditAccountBinding.inflate(inflater, container, false)
+    binding = SheetAccountActionBinding.inflate(inflater, container, false)
     return binding.root
   }
 

@@ -1,6 +1,5 @@
 package de.tolunla.ghostotp.view.adapter
 
-import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Handler
@@ -8,16 +7,17 @@ import android.os.Looper
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.db.entity.Account
 import de.tolunla.ghostotp.util.AccountDiffCallback
+import de.tolunla.ghostotp.view.fragment.sheet.AccountActionSheet
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
-class AccountListAdapter(private val context: Context) :
+class AccountListAdapter(private val context: Context,
+  private val fragmentManager: FragmentManager) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
   private var mAccounts = emptyList<Account>()
@@ -56,15 +56,7 @@ class AccountListAdapter(private val context: Context) :
     val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
-      // Sequence to copying the selected OTP code to the user's clipboard
-      val clip = ClipData.newPlainText("${holder.account.name} otp", holder.code)
-      mClipboard.setPrimaryClip(clip)
-
-      // Notify the user that we've copied the OTP
-      Snackbar.make(parent, context.getText(R.string.message_otp_copied), Snackbar.LENGTH_SHORT)
-        .setAnchorView(R.id.fab)
-        .show()
-
+      AccountActionSheet().show(fragmentManager, "")
       true
     }
 
