@@ -22,6 +22,10 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
     allAccounts = repository.accounts
   }
 
+  fun delete(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+    repository.deleteAccount(account)
+  }
+
   fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
     repository.insertAccount(account)
   }

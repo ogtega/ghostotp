@@ -48,6 +48,11 @@ class DataRepository private constructor(private val database: AppDatabase) {
   }
 
   @WorkerThread
+  fun deleteAccount(account: Account) {
+    database.accountDao().delete(account)
+  }
+
+  @WorkerThread
   fun updateAccount(account: Account) {
     database.accountDao().update(account)
   }

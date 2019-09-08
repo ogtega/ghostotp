@@ -47,7 +47,7 @@ class AccountListFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     context?.let {
-      accountAdapter = AccountListAdapter(it, childFragmentManager)
+      accountAdapter = AccountListAdapter(it)
       binding.accountList.adapter = accountAdapter
       accountAdapter.onAttachedToRecyclerView(binding.accountList)
     }

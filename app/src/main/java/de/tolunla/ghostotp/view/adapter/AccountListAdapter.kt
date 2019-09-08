@@ -1,26 +1,29 @@
 package de.tolunla.ghostotp.view.adapter
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.text.format.DateUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
+import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
 import de.tolunla.ghostotp.db.entity.Account
 import de.tolunla.ghostotp.util.AccountDiffCallback
-import de.tolunla.ghostotp.view.fragment.sheet.AccountActionSheet
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
-class AccountListAdapter(private val context: Context,
-  private val fragmentManager: FragmentManager) :
+class AccountListAdapter(val context: Context) :
   RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
-  private var mAccounts = emptyList<Account>()
+  private var accountList = emptyList<Account>()
 
   private val mClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
   private val mInflater = LayoutInflater.from(context)
@@ -30,10 +33,9 @@ class AccountListAdapter(private val context: Context,
   private lateinit var mViewModel: AccountViewModel
 
   private val updateTOTPCodes = object : Runnable {
-
     override fun run() {
       mTOTPHolders.forEach {
-        it.refreshTOTP()
+        it.refresh()
       }
 
       mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
@@ -41,10 +43,10 @@ class AccountListAdapter(private val context: Context,
   }
 
   fun setAccounts(accounts: List<Account>) {
-    val diffCallback = AccountDiffCallback(mAccounts, accounts)
+    val diffCallback = AccountDiffCallback(accountList, accounts)
     val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-    mAccounts = accounts
+    accountList = accounts
     diffResult.dispatchUpdatesTo(this)
   }
 
@@ -56,7 +58,7 @@ class AccountListAdapter(private val context: Context,
     val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
-      AccountActionSheet().show(fragmentManager, "")
+      holder.showDialog(parent)
       true
     }
 
@@ -74,7 +76,7 @@ class AccountListAdapter(private val context: Context,
     holder.binding.root.isEnabled = false
 
     // Update the code
-    holder.refreshHOTP()
+    holder.refresh()
     mViewModel.update(holder.account)
 
     // Re-enable the refresh button 6 seconds later
@@ -89,7 +91,7 @@ class AccountListAdapter(private val context: Context,
   }
 
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-    val account: Account = mAccounts[position]
+    val account: Account = accountList[position]
 
     holder.bind(account)
 
@@ -113,7 +115,7 @@ class AccountListAdapter(private val context: Context,
     super.onDetachedFromRecyclerView(recyclerView)
   }
 
-  override fun getItemCount(): Int = mAccounts.size
+  override fun getItemCount(): Int = accountList.size
 
   inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -130,27 +132,63 @@ class AccountListAdapter(private val context: Context,
         binding.timeBased = false
       } else {
         binding.timeBased = true
-        refreshTOTP()
+        refresh()
       }
     }
 
-    fun refreshTOTP() {
-      // Convert all times stored in the account object to milliseconds for precision purposes
-      val epoch = account.epoch * DateUtils.SECOND_IN_MILLIS
-      val period = account.period * DateUtils.SECOND_IN_MILLIS
+    fun showDialog(parent: View) {
+      val binding = SheetAccountActionBinding.inflate(mInflater)
+      val dialog = BottomSheetDialog(context)
 
-      // Get a float value representing the percentage of time left till our code is invalid
-      val progress: Float =
-        (System.currentTimeMillis() - epoch).rem(period).toFloat() / period.toFloat()
+      dialog.setContentView(binding.root)
 
-      binding.countdownIndicator.setPhase(1 - progress)
+      binding.navView.setNavigationItemSelectedListener { item ->
 
-      // Set the code based off the current time, then update the code text
-      code = account.oneTimePassword.generateCode()
-      binding.accountCode.text = code
+        when (item.itemId) {
+
+          R.id.action_edit_account -> {
+            // TODO: Launch a dialog to rename the account
+          }
+
+          R.id.action_copy_account -> {
+            val clipData = ClipData.newPlainText("text", code)
+            mClipboard.setPrimaryClip(clipData)
+
+            // Notify the user that we've copied the OTP
+            Snackbar.make(parent, context.getText(R.string.message_otp_copied),
+              Snackbar.LENGTH_LONG)
+              .setAnchorView(R.id.fab)
+              .show()
+
+            dialog.dismiss()
+          }
+
+          R.id.action_delete_account -> {
+            mViewModel.delete(account)
+            dialog.dismiss()
+          }
+        }
+
+        true
+      }
+
+      dialog.show()
     }
 
-    fun refreshHOTP() {
+    fun refresh() {
+      if (account.type == Account.Type.TOTP) {
+        // Convert all times stored in the account object to milliseconds for precision purposes
+        val epoch = account.epoch * DateUtils.SECOND_IN_MILLIS
+        val period = account.period * DateUtils.SECOND_IN_MILLIS
+
+        // Get a float value representing the percentage of time left till our code is invalid
+        val progress: Float =
+          (System.currentTimeMillis() - epoch).rem(period).toFloat() / period.toFloat()
+
+        binding.countdownIndicator.setPhase(1 - progress)
+      }
+
+      // Set the code based off the current time, then update the code text
       code = account.oneTimePassword.generateCode()
       binding.accountCode.text = code
     }
