@@ -9,7 +9,10 @@
   <string name="action_add_steam_guard">Log into your Steam account</string>
   <string name="action_manually_enter_key">Enter a provided key</string>
   <string name="action_copy_code">Copy code</string>
+  <string name="action_cancel">Cancel</string>
   <string name="action_rename_account">Rename account</string>
+  <string name="action_rename">Rename</string>
+  <string name="action_remove_account">Remove account</string>
   <string name="action_remove">Remove</string>
   <string name="action_save">Save</string>
   <string name="action_settings">Settings</string>
@@ -20,9 +23,16 @@
   <string name="label_counter_based">Counter based</string>
   <string name="label_time_based">Time based</string>
 
+  <string name="message_remove_account">Remove %1$s?</string>
+  <string name="message_rename_account">Rename %1$s?</string>
   <string name="message_key_too_short">Secret is too short</string>
   <string name="message_key_invalid_chars">Secret is invalid</string>
   <string name="message_otp_copied">Code copied to clipboard</string>
+  <string name="message_account_deletion">
+    Removing this account will remove your ability to generate codes,
+    however it will not turn off 2-factor authentication. This may prevent you from signing into
+    your account.
+  </string>
 
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>

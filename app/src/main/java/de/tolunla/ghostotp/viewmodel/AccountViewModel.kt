@@ -33,4 +33,8 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
   fun update(account: Account) = viewModelScope.launch(Dispatchers.IO) {
     repository.updateAccount(account)
   }
+
+  fun increaseStep(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+    repository.increaseStep(account)
+  }
 }

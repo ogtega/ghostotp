@@ -9,10 +9,12 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
@@ -58,7 +60,7 @@ class AccountListAdapter(val context: Context) :
     val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
     holder.binding.root.setOnLongClickListener {
-      holder.showDialog(parent)
+      holder.showActionSheet(parent)
       true
     }
 
@@ -77,7 +79,7 @@ class AccountListAdapter(val context: Context) :
 
     // Update the code
     holder.refresh()
-    mViewModel.update(holder.account)
+    mViewModel.increaseStep(holder.account)
 
     // Re-enable the refresh button 6 seconds later
     mHandler.postDelayed({
@@ -136,45 +138,6 @@ class AccountListAdapter(val context: Context) :
       }
     }
 
-    fun showDialog(parent: View) {
-      val binding = SheetAccountActionBinding.inflate(mInflater)
-      val dialog = BottomSheetDialog(context)
-
-      dialog.setContentView(binding.root)
-
-      binding.navView.setNavigationItemSelectedListener { item ->
-
-        when (item.itemId) {
-
-          R.id.action_edit_account -> {
-            // TODO: Launch a dialog to rename the account
-          }
-
-          R.id.action_copy_account -> {
-            val clipData = ClipData.newPlainText("text", code)
-            mClipboard.setPrimaryClip(clipData)
-
-            // Notify the user that we've copied the OTP
-            Snackbar.make(parent, context.getText(R.string.message_otp_copied),
-              Snackbar.LENGTH_LONG)
-              .setAnchorView(R.id.fab)
-              .show()
-
-            dialog.dismiss()
-          }
-
-          R.id.action_delete_account -> {
-            mViewModel.delete(account)
-            dialog.dismiss()
-          }
-        }
-
-        true
-      }
-
-      dialog.show()
-    }
-
     fun refresh() {
       if (account.type == Account.Type.TOTP) {
         // Convert all times stored in the account object to milliseconds for precision purposes
@@ -191,6 +154,97 @@ class AccountListAdapter(val context: Context) :
       // Set the code based off the current time, then update the code text
       code = account.oneTimePassword.generateCode()
       binding.accountCode.text = code
+    }
+
+    fun showActionSheet(parent: View) {
+      val binding = SheetAccountActionBinding.inflate(mInflater)
+      val dialog = BottomSheetDialog(context)
+
+      dialog.setContentView(binding.root)
+
+      binding.navView.setNavigationItemSelectedListener { item ->
+
+        when (item.itemId) {
+
+          R.id.action_edit_account -> {
+            editAccount()
+          }
+
+          R.id.action_copy_account -> {
+            copyCode(parent)
+          }
+
+          R.id.action_delete_account -> {
+            deleteAccount()
+          }
+        }
+
+        dialog.dismiss()
+        true
+      }
+
+      dialog.show()
+    }
+
+    private fun editAccount() {
+      val builder = AlertDialog.Builder(context)
+
+      val title = String.format(
+        context.resources.getString(R.string.message_rename_account), account.name
+      )
+
+      val input = TextInputEditText(context)
+      input.setText(account.name)
+
+      with(builder) {
+        setTitle(title)
+
+        setPositiveButton(R.string.action_rename) { _, _ ->
+          val updated = account.copy(name = input.text.toString())
+          mViewModel.update(updated)
+        }
+
+        setNegativeButton(R.string.action_cancel) { dialog, _ ->
+          dialog.dismiss()
+        }
+
+        setView(input)
+        show()
+      }
+    }
+
+    private fun deleteAccount() {
+      val builder = AlertDialog.Builder(context)
+
+      val title = String.format(
+        context.resources.getString(R.string.message_remove_account), account.name
+      )
+
+      with(builder) {
+        setTitle(title)
+        setMessage(R.string.message_account_deletion)
+
+        setPositiveButton(R.string.action_remove) { _, _ ->
+          mViewModel.delete(account)
+        }
+
+        setNegativeButton(R.string.action_cancel) { dialog, _ ->
+          dialog.dismiss()
+        }
+
+        show()
+      }
+    }
+
+    private fun copyCode(view: View) {
+      val clipData = ClipData.newPlainText("text", code)
+      mClipboard.setPrimaryClip(clipData)
+
+      // Notify the user that we've copied the OTP
+      Snackbar.make(view, context.getText(R.string.message_otp_copied),
+        Snackbar.LENGTH_LONG)
+        .setAnchorView(R.id.fab)
+        .show()
     }
   }
 }

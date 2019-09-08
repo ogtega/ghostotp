@@ -41,7 +41,7 @@ data class Account(
   override fun equals(other: Any?): Boolean {
     other?.let {
       if (it is Account) {
-        return it.id == id
+        return it.id == id && it.name == name
       }
     }
 

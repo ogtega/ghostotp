@@ -53,6 +53,11 @@ class DataRepository private constructor(private val database: AppDatabase) {
   }
 
   @WorkerThread
+  fun increaseStep(account: Account) {
+    database.accountDao().update(account.copy(step = account.step + 1))
+  }
+
+  @WorkerThread
   fun updateAccount(account: Account) {
     database.accountDao().update(account)
   }
