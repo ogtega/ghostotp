@@ -1,5 +1,6 @@
 package de.tolunla.ghostotp.db.entity
 
+import android.text.format.DateUtils
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -51,6 +52,11 @@ data class Account(
   override fun hashCode(): Int {
     return id.hashCode()
   }
+
+  fun getProgress(): Float =
+    (System.currentTimeMillis() - (epoch * DateUtils.SECOND_IN_MILLIS))
+      .rem(period * DateUtils.SECOND_IN_MILLIS).toFloat() / (period * DateUtils.SECOND_IN_MILLIS)
+      .toFloat()
 
   class TypeStringConverter {
     @androidx.room.TypeConverter

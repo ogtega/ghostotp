@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import de.tolunla.ghostotp.R
+import de.tolunla.ghostotp.databinding.LayoutDialogInputBinding
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
 import de.tolunla.ghostotp.db.entity.Account
@@ -34,6 +34,9 @@ class AccountListAdapter(val context: Context) :
 
   private lateinit var mViewModel: AccountViewModel
 
+  /**
+   * A task that runs periodically to update TOTP codes
+   */
   private val updateTOTPCodes = object : Runnable {
     override fun run() {
       mTOTPHolders.forEach {
@@ -44,6 +47,9 @@ class AccountListAdapter(val context: Context) :
     }
   }
 
+  /**
+   * Updates the account list and notifies the adapter of changes
+   */
   fun setAccounts(accounts: List<Account>) {
     val diffCallback = AccountDiffCallback(accountList, accounts)
     val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -66,30 +72,21 @@ class AccountListAdapter(val context: Context) :
 
     holder.binding.root.setOnClickListener {
       if (holder.account.type == Account.Type.HOTP) {
-        refreshHOTP(holder)
+        holder.refresh()
+
+        // Re-enable the refresh button 6 seconds later
+        mHandler.postDelayed({
+          holder.binding.root.isEnabled = true
+        }, 6 * DateUtils.SECOND_IN_MILLIS)
+
+        // Clear the displayed HOTP code after 1 minute
+        mHandler.postDelayed({
+          holder.bind(holder.account)
+        }, 1 * DateUtils.MINUTE_IN_MILLIS)
       }
     }
 
     return holder
-  }
-
-  private fun refreshHOTP(holder: AccountViewHolder) {
-    // Disable code refreshing
-    holder.binding.root.isEnabled = false
-
-    // Update the code
-    holder.refresh()
-    mViewModel.increaseStep(holder.account)
-
-    // Re-enable the refresh button 6 seconds later
-    mHandler.postDelayed({
-      holder.binding.root.isEnabled = true
-    }, 6 * DateUtils.SECOND_IN_MILLIS)
-
-    // Clear the displayed HOTP code after 1 minute
-    mHandler.postDelayed({
-      holder.binding.accountCode.text = "- ".repeat(holder.account.digits)
-    }, 1 * DateUtils.MINUTE_IN_MILLIS)
   }
 
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
@@ -139,16 +136,15 @@ class AccountListAdapter(val context: Context) :
     }
 
     fun refresh() {
-      if (account.type == Account.Type.TOTP) {
-        // Convert all times stored in the account object to milliseconds for precision purposes
-        val epoch = account.epoch * DateUtils.SECOND_IN_MILLIS
-        val period = account.period * DateUtils.SECOND_IN_MILLIS
+      when (account.type) {
+        Account.Type.TOTP -> {
+          binding.countdownIndicator.setPhase(1 - account.getProgress())
+        }
 
-        // Get a float value representing the percentage of time left till our code is invalid
-        val progress: Float =
-          (System.currentTimeMillis() - epoch).rem(period).toFloat() / period.toFloat()
-
-        binding.countdownIndicator.setPhase(1 - progress)
+        Account.Type.HOTP -> {
+          binding.root.isEnabled = false
+          mViewModel.increaseStep(account)
+        }
       }
 
       // Set the code based off the current time, then update the code text
@@ -193,14 +189,14 @@ class AccountListAdapter(val context: Context) :
         context.resources.getString(R.string.message_rename_account), account.name
       )
 
-      val input = TextInputEditText(context)
-      input.setText(account.name)
+      val binding = LayoutDialogInputBinding.inflate(mInflater)
+      binding.etInput.setText(account.name)
 
       with(builder) {
         setTitle(title)
 
         setPositiveButton(R.string.action_rename) { _, _ ->
-          val updated = account.copy(name = input.text.toString())
+          val updated = account.copy(name = binding.etInput.text.toString())
           mViewModel.update(updated)
         }
 
@@ -208,7 +204,7 @@ class AccountListAdapter(val context: Context) :
           dialog.dismiss()
         }
 
-        setView(input)
+        setView(binding.root)
         show()
       }
     }
