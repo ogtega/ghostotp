@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="@dimen/activity_default_margin"
-      android:background="?attr/selectableItemBackground">
+      android:background="?attr/selectableItemBackground"
+      android:padding="@dimen/activity_default_margin">
 
       <TextView
         android:id="@+id/account_code"

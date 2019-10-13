@@ -3,11 +3,11 @@
   package="de.tolunla.ghostotp">
 
   <application
+    android:name=".AppContext"
     android:allowBackup="true"
     android:fullBackupContent="@xml/backup_descriptor"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:name=".AppContext"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme.DayNight"

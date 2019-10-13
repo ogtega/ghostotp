@@ -18,7 +18,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments = [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental":"true"
+                ]
             }
         }
     }
@@ -95,7 +98,6 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.0'
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation 'commons-codec:commons-codec:1.13'
-    implementation 'com.google.firebase:firebase-ml-vision:23.0.0'
 
     /**
      * Test Dependencies
