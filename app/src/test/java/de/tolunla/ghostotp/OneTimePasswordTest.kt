@@ -14,16 +14,17 @@ class OneTimePasswordTest {
 
   @Test
   fun rfc4226AppendixDTest() {
-    val results = intArrayOf(
-      755224, 287082, 359152, 969429, 338314,
-      254676, 287922, 162583, 399871, 520489
+    val results = arrayOf(
+      "755224", "287082", "359152", "969429", "338314",
+      "254676", "287922", "162583", "399871", "520489"
     )
 
-    for (i in 0 until results.size) {
-      val account = Account(
-        "", seed, type = Type.HOTP, step = i.toLong(), hex = true
-      )
+    val account = Account(
+      "", seed, type = Type.HOTP, hex = true
+    )
 
+
+    for (i in results.indices) {
       assertEquals(results[i], account.oneTimePassword.generateCode())
     }
   }
@@ -39,12 +40,12 @@ class OneTimePasswordTest {
     )
 
     val results = arrayOf(
-      intArrayOf(94287082, 7081804, 14050471, 89005924, 69279037, 65353130),
-      intArrayOf(46119246, 68084774, 67062674, 91819424, 90698825, 77737706),
-      intArrayOf(90693936, 25091201, 99943326, 93441116, 38618901, 47863826)
+      arrayOf(94287082, 7081804, 14050471, 89005924, 69279037, 65353130),
+      arrayOf(46119246, 68084774, 67062674, 91819424, 90698825, 77737706),
+      arrayOf(90693936, 25091201, 99943326, 93441116, 38618901, 47863826)
     )
 
-    for (i in 0 until times.size) {
+    for (i in times.indices) {
       val testTime = times[i] * DateUtils.SECOND_IN_MILLIS
 
       val sha1 = Account(

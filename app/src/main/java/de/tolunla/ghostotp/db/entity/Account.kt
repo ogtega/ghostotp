@@ -15,7 +15,7 @@ import java.util.*
 data class Account(
   val name: String, val secret: String, val crypto: Crypto = Crypto.SHA1, val digits: Int = 6,
   val type: Type, val issuer: String = "", val epoch: Long = 0L, val period: Int = 30,
-  val hex: Boolean = false, var step: Long = 0L,
+  val hex: Boolean = false, var step: Long = -1L,
   @PrimaryKey val id: String = "${issuer.toLowerCase(Locale.ROOT)}$name"
 ) {
 
