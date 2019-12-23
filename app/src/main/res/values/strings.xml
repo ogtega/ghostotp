@@ -4,6 +4,8 @@
 
 <resources>
   <string name="app_name">&app_name;</string>
+  <string name="settings_dest_label">Settings</string>
+  <string name="new_account_dest_label">New Account</string>
 
   <string name="action_add">Add</string>
   <string name="action_add_steam_guard">Log into your Steam account</string>

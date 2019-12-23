@@ -38,12 +38,12 @@
   <fragment
     android:id="@+id/settings_dest"
     android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"
-    android:label="SettingsFragment" />
+    android:label="@string/settings_dest_label" />
 
   <fragment
     android:id="@+id/new_account_dest"
     android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
-    android:label="NewAccountFragment"
+    android:label="@string/new_account_dest_label"
     tools:layout="@layout/fragment_new_account" />
 
 </navigation>

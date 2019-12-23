@@ -1,12 +1,11 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 import de.tolunla.ghostotp.view.adapter.AccountListAdapter
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
@@ -41,6 +40,11 @@ class AccountListFragment : Fragment() {
     setHasOptionsMenu(true)
     binding = FragmentAccountListBinding.inflate(inflater, container, false)
     return binding.root
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.appbar_menu, menu)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

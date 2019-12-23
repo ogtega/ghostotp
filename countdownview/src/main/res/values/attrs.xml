@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <declare-styleable name="CountdownView">
-    <attr format="color" name="color" />
-    <attr format="integer" name="startAngle" />
-    <attr format="float" name="phase" />
+    <attr name="color" format="color" />
+    <attr name="startAngle" format="integer" />
+    <attr name="phase" format="float" />
   </declare-styleable>
 </resources>
