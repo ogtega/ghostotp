@@ -110,3 +110,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation "androidx.work:work-testing:$work_version"
 }
+
+task buildSteam(type: GradleBuild) {
+    dir = file("${getRootDir()}/steamauth")
+    tasks = ['build']
+}
+
+preBuild.dependsOn buildSteam
