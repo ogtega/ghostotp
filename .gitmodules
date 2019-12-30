@@ -1,3 +1,3 @@
 [submodule "steamauth"]
 	path = steamauth
-	url = git@gitlab.com:ogtega/steamauth.git
+	url = https://github.com/ogtega/steamauth.git
