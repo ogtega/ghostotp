@@ -24,6 +24,7 @@
   <string name="label_secret_key">Secret key</string>
   <string name="label_counter_based">Counter based</string>
   <string name="label_time_based">Time based</string>
+  <string name="label_steam_login">Log Into Steam</string>
 
   <string name="message_remove_account">Remove %1$s?</string>
   <string name="message_rename_account">Rename %1$s?</string>

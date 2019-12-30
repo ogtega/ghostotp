@@ -12,6 +12,9 @@
     <action
       android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
       app:destination="@id/new_account_dest" />
+    <action
+      android:id="@+id/action_new_account_sheet_dest_to_new_platform_dest"
+      app:destination="@id/new_platform_dest" />
   </dialog>
 
   <dialog
@@ -45,5 +48,10 @@
     android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
     android:label="@string/new_account_dest_label"
     tools:layout="@layout/fragment_new_account" />
+
+  <fragment
+    android:id="@+id/new_platform_dest"
+    android:name="de.tolunla.ghostotp.view.fragment.NewPlatformFragment"
+    tools:layout="@layout/fragment_new_platform" />
 
 </navigation>
