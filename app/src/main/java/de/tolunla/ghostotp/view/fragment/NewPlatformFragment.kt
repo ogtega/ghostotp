@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewPlatformBinding
+import de.tolunla.ghostotp.util.WebAuthAppInterface
 
 class NewPlatformFragment : Fragment() {
 
@@ -32,11 +34,18 @@ class NewPlatformFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    binding.webView.settings.javaScriptEnabled = true
+    activity?.let {
 
-    binding.webView.loadUrl(when (platform) {
-      R.id.new_steam_dest -> "file:///android_asset/steamauth/index.html"
-      else -> ""
-    })
+      WebView.setWebContentsDebuggingEnabled(true)
+      binding.webView.addJavascriptInterface(WebAuthAppInterface(it), "Android")
+      binding.webView.webViewClient = WebAuthAppInterface.CORSViewClient()
+      binding.webView.settings.allowUniversalAccessFromFileURLs = true
+      binding.webView.settings.javaScriptEnabled = true
+
+      binding.webView.loadUrl(when (platform) {
+        R.id.new_steam_dest -> "file:///android_asset/steamauth/index.html"
+        else -> ""
+      })
+    }
   }
 }
