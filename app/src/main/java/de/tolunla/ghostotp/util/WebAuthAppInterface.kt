@@ -39,8 +39,15 @@ class WebAuthAppInterface(private val context: Context) {
     override fun shouldInterceptRequest(view: WebView?,
       request: WebResourceRequest?): WebResourceResponse? {
 
-      if (request?.method?.toLowerCase(Locale.getDefault()).equals("options")) {
-        return buildCORSResponse()
+      request?.let {
+        if (it.method == "OPTIONS") {
+          return buildCORSResponse()
+        }
+
+        if (it.method == "POST" && it.url.toString().contains("login")) {
+          it.requestHeaders["Referer"] = "https://steamcommunity.com/mobilelogin?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client"
+          return super.shouldInterceptRequest(view, it)
+        }
       }
 
       return null

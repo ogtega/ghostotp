@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import de.tolunla.ghostotp.R
@@ -37,6 +38,7 @@ class NewPlatformFragment : Fragment() {
     activity?.let {
 
       WebView.setWebContentsDebuggingEnabled(true)
+      CookieManager.getInstance().setAcceptThirdPartyCookies(binding.webView, true)
       binding.webView.addJavascriptInterface(WebAuthAppInterface(it), "Android")
       binding.webView.webViewClient = WebAuthAppInterface.CORSViewClient()
       binding.webView.settings.allowUniversalAccessFromFileURLs = true
