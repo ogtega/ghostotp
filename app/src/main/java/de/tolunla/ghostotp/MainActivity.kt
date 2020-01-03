@@ -21,19 +21,12 @@ class MainActivity : AppCompatActivity() {
   private lateinit var navController: NavController
 
   // Called once the host fragment switches to a new destination
-  private val onDestinationChanged = OnDestinationChangedListener { _, destination, args ->
+  private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
     // Check if the destination is on the "top level" (this includes dialogs)
     if (appBarConfig.topLevelDestinations.contains(destination.id)) {
       binding.fab.visibility = View.VISIBLE
     } else {
       binding.fab.visibility = View.GONE
-    }
-
-    if (destination.id.equals(R.id.new_platform_dest)) {
-      supportActionBar?.title = when (args?.getInt("dest")) {
-        R.id.new_steam_dest -> getString(R.string.label_steam_login)
-        else -> getString(R.string.app_name)
-      }
     }
   }
 
