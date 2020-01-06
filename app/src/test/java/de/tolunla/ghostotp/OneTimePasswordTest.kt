@@ -23,7 +23,6 @@ class OneTimePasswordTest {
       "", seed, type = Type.HOTP, hex = true
     )
 
-
     for (i in results.indices) {
       assertEquals(results[i], account.oneTimePassword.generateCode())
     }
