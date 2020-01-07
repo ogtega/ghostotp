@@ -1,11 +1,12 @@
 package de.tolunla.steamauth
 
-import android.util.Base64
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.Headers.Companion.toHeaders
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.binary.StringUtils
 import org.json.JSONObject
 import java.io.IOException
 import java.math.BigInteger
@@ -105,9 +106,9 @@ class SteamAuthLogin(private var username: String, private var password: String)
 
     cipher.init(Cipher.ENCRYPT_MODE, pub)
 
-    var passEncrypted = cipher.doFinal(password.toByteArray())
-    passEncrypted = Base64.encode(passEncrypted, Base64.DEFAULT)
+    var passEncrypted = cipher.doFinal(StringUtils.getBytesUtf8(password))
+    passEncrypted = Base64.encodeBase64(passEncrypted)
 
-    return String(passEncrypted, Charsets.UTF_8)
+    return StringUtils.newStringUtf8(passEncrypted)
   }
 }
