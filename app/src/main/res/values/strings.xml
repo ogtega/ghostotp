@@ -8,6 +8,7 @@
   <string name="new_account_dest_label">New Account</string>
 
   <string name="action_add">Add</string>
+  <string name="action_next">Next</string>
   <string name="action_add_steam_guard">Log into your Steam account</string>
   <string name="action_manually_enter_key">Enter a provided key</string>
   <string name="action_copy_code">Copy code</string>
@@ -23,7 +24,9 @@
   <string name="label_account_name">Account name</string>
   <string name="label_secret_key">Secret key</string>
   <string name="label_counter_based">Counter based</string>
+  <string name="label_password">Password</string>
   <string name="label_time_based">Time based</string>
+  <string name="label_username">Username</string>
   <string name="label_steam_login">Steam sign in</string>
 
   <string name="message_remove_account">Remove %1$s?</string>

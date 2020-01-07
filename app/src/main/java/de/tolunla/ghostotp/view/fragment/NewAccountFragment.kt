@@ -74,7 +74,6 @@ class NewAccountFragment : Fragment(), TextWatcher {
   private fun getAccountName(): String = binding.inputAccountName.text.toString()
 
   private fun getAuthType(): Type {
-
     val pos = typeAdapter.getPosition(binding.inputAuthType.text.toString())
     return (if (pos == 0) Type.TOTP else Type.HOTP)
   }

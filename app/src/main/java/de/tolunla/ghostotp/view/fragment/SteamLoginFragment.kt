@@ -1,7 +1,6 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +22,17 @@ class SteamLoginFragment : Fragment() {
     return binding.root
   }
 
-  private fun login(username: String, password: String) = GlobalScope.launch(Dispatchers.Main) {
-    val res = SteamAuthLogin(username, password).doLogin()
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    binding.buttonAdd.setOnClickListener {
+      login()
+    }
+  }
+
+  private fun login() = GlobalScope.launch(Dispatchers.Main) {
+    val res = SteamAuthLogin(binding.inputUsername.text.toString(),
+      binding.inputPassword.text.toString()).doLogin()
     Log.d("DoLogin", res)
   }
 }
