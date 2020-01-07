@@ -27,7 +27,7 @@
   <string name="label_password">Password</string>
   <string name="label_time_based">Time based</string>
   <string name="label_username">Username</string>
-  <string name="label_steam_login">Steam sign in</string>
+  <string name="label_steam_login">Steam Sign In</string>
 
   <string name="message_remove_account">Remove %1$s?</string>
   <string name="message_rename_account">Rename %1$s?</string>
