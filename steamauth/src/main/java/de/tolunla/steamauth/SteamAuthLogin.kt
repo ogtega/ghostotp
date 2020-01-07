@@ -2,7 +2,8 @@ package de.tolunla.steamauth
 
 import android.util.Base64
 import android.util.Log
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.Headers.Companion.toHeaders
 import org.json.JSONObject
@@ -12,11 +13,23 @@ import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import java.util.*
 import javax.crypto.Cipher
-import kotlin.coroutines.resume
+
 
 class SteamAuthLogin(private var username: String, private var password: String) {
 
-  private val client = OkHttpClient()
+  private val client = OkHttpClient.Builder().cookieJar(
+    object : CookieJar {
+      private val cookieStore: HashMap<HttpUrl, List<Cookie>> = HashMap()
+
+      override fun loadForRequest(url: HttpUrl): List<Cookie> {
+        return cookieStore[url] ?: ArrayList()
+      }
+
+      override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+        cookieStore[url] = cookies
+      }
+    }
+  ).build()
 
   private val referer = "https://steamcommunity.com/mobilelogin?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client"
   private var userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
@@ -30,8 +43,8 @@ class SteamAuthLogin(private var username: String, private var password: String)
 
   private var captchaGid: String = ""
 
-  suspend fun doLogin(captcha: String = "", emailauth: String = "",
-    twofactorcode: String = ""): String {
+  suspend fun doLogin(captcha: String = "", emailAuth: String = "",
+    twoFactorCode: String = ""): String = withContext(Dispatchers.IO) {
 
     val rsaObj = JSONObject(getRSAKey())
 
@@ -42,8 +55,8 @@ class SteamAuthLogin(private var username: String, private var password: String)
       .add("password", encryptPassword(rsaObj))
       .add("captchagid", captchaGid)
       .add("captcha_text", captcha)
-      .add("emailauth", emailauth)
-      .add("twofactorcode", twofactorcode)
+      .add("emailauth", emailAuth)
+      .add("twofactorcode", twoFactorCode)
       .add("rsatimestamp", rsaObj.getString("timestamp"))
       .add("remember_login", "true")
       .add("loginfriendlyname", "#login_emailauth_friendlyname_mobile")
@@ -58,27 +71,13 @@ class SteamAuthLogin(private var username: String, private var password: String)
       .headers(headers.toHeaders())
       .build()
 
-    return login(request)
+    client.newCall(request).execute().use { res ->
+      if (!res.isSuccessful) throw IOException("/dologin failed")
+      return@withContext res.body?.string() ?: ""
+    }
   }
 
-  private suspend fun login(request: Request): String =
-    suspendCancellableCoroutine { continuation ->
-      client.newCall(request).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-          e.printStackTrace()
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-          if (!response.isSuccessful) throw IOException("/dologin failed")
-
-          response.body?.let {
-            continuation.resume(it.string())
-          }
-        }
-      })
-    }
-
-  private suspend fun getRSAKey(): String = suspendCancellableCoroutine { continuation ->
+  private suspend fun getRSAKey(): String = withContext(Dispatchers.IO) {
     val formBody = FormBody.Builder()
       .add("username", username)
       .build()
@@ -89,19 +88,10 @@ class SteamAuthLogin(private var username: String, private var password: String)
       .headers(headers.toHeaders())
       .build()
 
-    client.newCall(request).enqueue(object : Callback {
-      override fun onFailure(call: Call, e: IOException) {
-        e.printStackTrace()
-      }
-
-      override fun onResponse(call: Call, response: Response) {
-        if (!response.isSuccessful) throw IOException("/getrsakey failed")
-
-        response.body?.let {
-          continuation.resume(it.string())
-        }
-      }
-    })
+    client.newCall(request).execute().use { res ->
+      if (!res.isSuccessful) throw IOException("/getrsakey failed")
+      return@withContext res.body?.string() ?: ""
+    }
   }
 
   private fun encryptPassword(rsaObj: JSONObject): String {

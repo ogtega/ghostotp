@@ -13,7 +13,7 @@
       android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
       app:destination="@id/new_account_dest" />
     <action
-      android:id="@+id/action_new_account_sheet_dest_to_new_platform_dest"
+      android:id="@+id/action_new_account_sheet_dest_to_steam_login_dest"
       app:destination="@id/steam_login_dest" />
   </dialog>
 
