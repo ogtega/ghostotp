@@ -24,7 +24,8 @@
           android:id="@+id/layout_login"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          tools:visibility="visible">
 
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_username_input"
@@ -68,8 +69,9 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/layout_default_margin"
-          android:hint="@string/label_password"
-          android:visibility="visible">
+          android:hint="@string/hint_steam_steamguard"
+          android:visibility="gone"
+          tools:visibility="gone">
 
           <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_code"
@@ -82,7 +84,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/layout_captcha"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content">
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+          tools:visibility="gone">
 
           <ImageView
             android:id="@+id/image_captcha"

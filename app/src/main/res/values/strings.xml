@@ -41,6 +41,7 @@
   </string>
 
   <string name="hint_steam_captcha">Enter the text above</string>
+  <string name="hint_steam_steamguard">Enter your SteamGuard code</string>
 
   <string name="description_steam_captcha">Image containing a captcha code</string>
 

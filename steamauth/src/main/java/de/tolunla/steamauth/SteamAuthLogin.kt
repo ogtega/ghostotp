@@ -12,7 +12,6 @@ import java.io.IOException
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
-import java.util.*
 import javax.crypto.Cipher
 
 
@@ -48,10 +47,8 @@ class SteamAuthLogin(private var username: String, private var password: String)
     "Accept" to "text/javascript, text/html, application/xml, text/xml, */*"
   )
 
-  private var captchaGid: String = ""
-
-  suspend fun doLogin(captcha: String = "", emailAuth: String = "",
-    twoFactorCode: String = ""): String = withContext(Dispatchers.IO) {
+  suspend fun doLogin(captcha: String = "", captchaGid: String = "", emailAuth: String = "",
+    twoFactorCode: String = ""): LoginResult = withContext(Dispatchers.IO) {
 
     val rsaObj = JSONObject(getRSAKey())
 
@@ -67,7 +64,7 @@ class SteamAuthLogin(private var username: String, private var password: String)
       .add("rsatimestamp", rsaObj.getString("timestamp"))
       .add("remember_login", "true")
       .add("loginfriendlyname", "#login_emailauth_friendlyname_mobile")
-      .add("donotcache", Date().time.toString())
+      .add("donotcache", System.currentTimeMillis().toString())
       .add("oauth_client_id", "DE45CD61")
       .add("oauth_scope", "read_profile write_profile read_client write_client")
       .build()
@@ -80,7 +77,18 @@ class SteamAuthLogin(private var username: String, private var password: String)
 
     client.newCall(request).execute().use { res ->
       if (!res.isSuccessful) throw IOException("/dologin failed")
-      return@withContext res.body?.string() ?: ""
+      val data = JSONObject(res.body?.string() ?: "")
+
+      Log.d("DoLogin", data.toString())
+
+      return@withContext LoginResult(
+        success = data.optBoolean("success", false),
+        emailCode = data.optBoolean("emailauth_needed", false),
+        mobileCode = data.optBoolean("requires_twofactor", false),
+        captcha = data.optBoolean("captcha_needed", false),
+        captchaGid = data.optString("captcha_gid", "-1"),
+        oathToken = data.optJSONObject("oauth")?.optString("oauth_token") ?: ""
+      )
     }
   }
 
@@ -117,4 +125,14 @@ class SteamAuthLogin(private var username: String, private var password: String)
 
     return StringUtils.newStringUtf8(passEncrypted)
   }
+
+  data class LoginResult(
+    val success: Boolean,
+    val emailCode: Boolean,
+    val mobileCode: Boolean,
+    val captcha: Boolean,
+    val captchaGid: String,
+    val captchaURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid=${captchaGid}",
+    val oathToken: String
+  )
 }

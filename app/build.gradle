@@ -99,6 +99,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.0'
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation 'commons-codec:commons-codec:1.13'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     /**
      * Test Dependencies
