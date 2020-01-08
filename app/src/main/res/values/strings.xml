@@ -40,6 +40,10 @@
     your account.
   </string>
 
+  <string name="hint_steam_captcha">Enter the text above</string>
+
+  <string name="description_steam_captcha">Image containing a captcha code</string>
+
   <string name="preference_night_mode_key">night_mode</string>
   <string name="preference_night_mode_title">Night mode</string>
   <string name="preference_night_mode_summary">Use a dark theme</string>

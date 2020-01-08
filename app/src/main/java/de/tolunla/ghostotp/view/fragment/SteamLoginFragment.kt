@@ -31,8 +31,16 @@ class SteamLoginFragment : Fragment() {
   }
 
   private fun login() = GlobalScope.launch(Dispatchers.Main) {
-    val res = SteamAuthLogin(binding.inputUsername.text.toString(),
-      binding.inputPassword.text.toString()).doLogin()
+    val res = SteamAuthLogin(
+      binding.inputUsername.text.toString(),
+      binding.inputPassword.text.toString()
+    ).doLogin(
+      emailAuth = binding.inputCode.text.toString(),
+      twoFactorCode = binding.inputCode.text.toString()
+    )
+
+
+
     Log.d("DoLogin", res)
   }
 }

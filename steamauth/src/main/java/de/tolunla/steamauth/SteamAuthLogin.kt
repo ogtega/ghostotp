@@ -20,14 +20,20 @@ class SteamAuthLogin(private var username: String, private var password: String)
 
   private val client = OkHttpClient.Builder().cookieJar(
     object : CookieJar {
-      private val cookieStore: HashMap<HttpUrl, List<Cookie>> = HashMap()
+
+      private val cookieStore = mutableListOf(
+        Cookie.Builder().domain("steamcommunity.com").name("mobileClientVersion")
+          .value("0 (2.1.3)").build(),
+        Cookie.Builder().domain("steamcommunity.com").name("mobileClient")
+          .value("android").build()
+      )
 
       override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return cookieStore[url] ?: ArrayList()
+        return cookieStore
       }
 
       override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        cookieStore[url] = cookies
+        cookieStore.addAll(cookies)
       }
     }
   ).build()
