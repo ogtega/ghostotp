@@ -78,6 +78,7 @@ class SteamAuthLogin(private var username: String, private var password: String)
     client.newCall(request).execute().use { res ->
       if (!res.isSuccessful) throw IOException("/dologin failed")
       val data = JSONObject(res.body?.string() ?: "")
+      val oath = JSONObject(data.optString("oauth", "{}"))
 
       Log.d("DoLogin", data.toString())
 
@@ -87,7 +88,8 @@ class SteamAuthLogin(private var username: String, private var password: String)
         mobileCode = data.optBoolean("requires_twofactor", false),
         captcha = data.optBoolean("captcha_needed", false),
         captchaGid = data.optString("captcha_gid", "-1"),
-        oathToken = data.optJSONObject("oauth")?.optString("oauth_token") ?: ""
+        oathToken = oath.optString("oauth_token", ""),
+        steamID = oath.optString("steamid", "")
       )
     }
   }
@@ -133,6 +135,7 @@ class SteamAuthLogin(private var username: String, private var password: String)
     val captcha: Boolean,
     val captchaGid: String,
     val captchaURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid=${captchaGid}",
-    val oathToken: String
+    val oathToken: String,
+    val steamID: String
   )
 }
