@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import de.tolunla.ghostotp.databinding.FragmentSteamLoginBinding
 import de.tolunla.steamauth.SteamAuthLogin
+import de.tolunla.steamauth.SteamAuthTwoFactor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,5 +54,10 @@ class SteamLoginFragment : Fragment() {
     binding.layoutCaptcha.visibility = if (res.captcha) View.VISIBLE else View.GONE
 
     binding.layoutCodeInput.visibility = if (res.emailCode || res.mobileCode) View.VISIBLE else View.GONE
+
+    if (res.success) {
+      val steamAuthTwoFactor = SteamAuthTwoFactor(res)
+      steamAuthTwoFactor.enableTwoFactor()
+    }
   }
 }
