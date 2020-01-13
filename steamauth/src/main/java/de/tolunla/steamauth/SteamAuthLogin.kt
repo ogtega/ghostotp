@@ -3,8 +3,8 @@ package de.tolunla.steamauth
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.*
-import okhttp3.Headers.Companion.toHeaders
+import okhttp3.FormBody
+import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.StringUtils
 import org.json.JSONObject
@@ -17,35 +17,8 @@ import javax.crypto.Cipher
 
 class SteamAuthLogin(private var username: String, private var password: String) {
 
-  private val client = OkHttpClient.Builder().cookieJar(
-    object : CookieJar {
-
-      private val cookieStore = mutableListOf(
-        Cookie.Builder().domain("steamcommunity.com").name("mobileClientVersion")
-          .value("0 (2.1.3)").build(),
-        Cookie.Builder().domain("steamcommunity.com").name("mobileClient")
-          .value("android").build()
-      )
-
-      override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return cookieStore
-      }
-
-      override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        cookieStore.addAll(cookies)
-      }
-    }
-  ).build()
-
-  private val referer = "https://steamcommunity.com/mobilelogin?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client"
-  private var userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
-
-  private val headers: Map<String, String> = mapOf(
-    "X-Requested-With" to "com.valvesoftware.android.steam.community",
-    "Referer" to referer,
-    "User-Agent" to userAgent,
-    "Accept" to "text/javascript, text/html, application/xml, text/xml, */*"
-  )
+  val client = SteamAuthUtils.getClient()
+  val headers = SteamAuthUtils.getHeaders()
 
   suspend fun doLogin(captcha: String = "", captchaGid: String = "", emailAuth: String = "",
     twoFactorCode: String = ""): LoginResult = withContext(Dispatchers.IO) {
@@ -72,7 +45,7 @@ class SteamAuthLogin(private var username: String, private var password: String)
     val request = Request.Builder()
       .url("https://steamcommunity.com/login/dologin/")
       .post(formBody)
-      .headers(headers.toHeaders())
+      .headers(headers)
       .build()
 
     client.newCall(request).execute().use { res ->
@@ -102,7 +75,7 @@ class SteamAuthLogin(private var username: String, private var password: String)
     val request = Request.Builder()
       .url("https://steamcommunity.com/login/getrsakey/")
       .post(formBody)
-      .headers(headers.toHeaders())
+      .headers(headers)
       .build()
 
     client.newCall(request).execute().use { res ->
