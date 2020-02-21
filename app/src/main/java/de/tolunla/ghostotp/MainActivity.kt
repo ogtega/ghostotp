@@ -16,54 +16,54 @@ import de.tolunla.ghostotp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-  private lateinit var appBarConfig: AppBarConfiguration
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var navController: NavController
+    private lateinit var appBarConfig: AppBarConfiguration
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
-  // Called once the host fragment switches to a new destination
-  private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
-    // Check if the destination is on the "top level" (this includes dialogs)
-    if (appBarConfig.topLevelDestinations.contains(destination.id)) {
-      binding.fab.visibility = View.VISIBLE
-    } else {
-      binding.fab.visibility = View.GONE
+    // Called once the host fragment switches to a new destination
+    private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
+        // Check if the destination is on the "top level" (this includes dialogs)
+        if (appBarConfig.topLevelDestinations.contains(destination.id)) {
+            binding.fab.visibility = View.VISIBLE
+        } else {
+            binding.fab.visibility = View.GONE
+        }
     }
-  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-    navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
 
-    // Used to know when we are at a "top level" destination
-    appBarConfig = AppBarConfiguration.Builder(
-      R.id.account_list_dest,
-      R.id.new_account_sheet_dest,
-      R.id.option_menu_sheet_dest
-    ).build()
+        // Used to know when we are at a "top level" destination
+        appBarConfig = AppBarConfiguration.Builder(
+                R.id.account_list_dest,
+                R.id.new_account_sheet_dest,
+                R.id.option_menu_sheet_dest
+        ).build()
 
-    setupNavigation()
-  }
-
-  private fun setupNavigation() {
-    setSupportActionBar(binding.toolbar)
-    setupActionBarWithNavController(navController, appBarConfig)
-
-    navController.addOnDestinationChangedListener(onDestinationChanged)
-
-    binding.fab.setOnClickListener {
-      navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
+        setupNavigation()
     }
-  }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return item.onNavDestinationSelected(navController) ||
-        super.onOptionsItemSelected(item)
-  }
+    private fun setupNavigation() {
+        setSupportActionBar(binding.toolbar)
+        setupActionBarWithNavController(navController, appBarConfig)
 
-  override fun onSupportNavigateUp(): Boolean {
-    return navController.navigateUp(appBarConfig)
-  }
+        navController.addOnDestinationChangedListener(onDestinationChanged)
+
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.action_account_list_dest_to_new_account_sheet_dest)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) ||
+                super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfig)
+    }
 }

@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/nav_graph"
-  app:startDestination="@id/account_list_dest">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/account_list_dest">
 
-  <dialog
-    android:id="@+id/new_account_sheet_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"
-    tools:layout="@layout/sheet_new_account">
-    <action
-      android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
-      app:destination="@id/new_account_dest" />
-    <action
-      android:id="@+id/action_new_account_sheet_dest_to_steam_login_dest"
-      app:destination="@id/steam_login_dest" />
-  </dialog>
+    <dialog
+            android:id="@+id/new_account_sheet_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.sheet.NewAccountSheet"
+            tools:layout="@layout/sheet_new_account">
+        <action
+                android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
+                app:destination="@id/new_account_dest"/>
+        <action
+                android:id="@+id/action_new_account_sheet_dest_to_steam_login_dest"
+                app:destination="@id/steam_login_dest"/>
+    </dialog>
 
-  <dialog
-    android:id="@+id/option_menu_sheet_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.sheet.OptionMenuSheet">
-    <action
-      android:id="@+id/action_option_menu_sheet_dest_to_settings_dest"
-      app:destination="@id/settings_dest" />
-  </dialog>
+    <dialog
+            android:id="@+id/option_menu_sheet_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.sheet.OptionMenuSheet">
+        <action
+                android:id="@+id/action_option_menu_sheet_dest_to_settings_dest"
+                app:destination="@id/settings_dest"/>
+    </dialog>
 
-  <fragment
-    android:id="@+id/account_list_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.AccountListFragment"
-    android:label="@string/app_name"
-    tools:layout="@layout/fragment_account_list">
-    <action
-      android:id="@+id/action_account_list_dest_to_option_menu_sheet_dest"
-      app:destination="@id/option_menu_sheet_dest" />
-    <action
-      android:id="@+id/action_account_list_dest_to_new_account_sheet_dest"
-      app:destination="@id/new_account_sheet_dest" />
-  </fragment>
+    <fragment
+            android:id="@+id/account_list_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.AccountListFragment"
+            android:label="@string/app_name"
+            tools:layout="@layout/fragment_account_list">
+        <action
+                android:id="@+id/action_account_list_dest_to_option_menu_sheet_dest"
+                app:destination="@id/option_menu_sheet_dest"/>
+        <action
+                android:id="@+id/action_account_list_dest_to_new_account_sheet_dest"
+                app:destination="@id/new_account_sheet_dest"/>
+    </fragment>
 
-  <fragment
-    android:id="@+id/settings_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"
-    android:label="@string/settings_dest_label" />
+    <fragment
+            android:id="@+id/settings_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"
+            android:label="@string/settings_dest_label"/>
 
-  <fragment
-    android:id="@+id/new_account_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
-    android:label="@string/new_account_dest_label"
-    tools:layout="@layout/fragment_new_account" />
+    <fragment
+            android:id="@+id/new_account_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.NewAccountFragment"
+            android:label="@string/new_account_dest_label"
+            tools:layout="@layout/fragment_new_account"/>
 
-  <fragment
-    android:id="@+id/steam_login_dest"
-    android:name="de.tolunla.ghostotp.view.fragment.SteamLoginFragment"
-    android:label="@string/label_steam_login"
-    tools:layout="@layout/fragment_steam_login" />
+    <fragment
+            android:id="@+id/steam_login_dest"
+            android:name="de.tolunla.ghostotp.view.fragment.SteamLoginFragment"
+            android:label="@string/label_steam_login"
+            tools:layout="@layout/fragment_steam_login"/>
 
 </navigation>

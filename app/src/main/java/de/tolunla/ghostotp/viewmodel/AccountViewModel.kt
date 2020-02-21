@@ -12,29 +12,29 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(context: Application) : AndroidViewModel(context) {
 
-  private val repository: DataRepository
+    private val repository: DataRepository
 
-  val allAccounts: LiveData<List<Account>>
+    val allAccounts: LiveData<List<Account>>
 
-  init {
-    val database = AppDatabase.getInstance(context)
-    repository = DataRepository.getInstance(database)
-    allAccounts = repository.accounts
-  }
+    init {
+        val database = AppDatabase.getInstance(context)
+        repository = DataRepository.getInstance(database)
+        allAccounts = repository.accounts
+    }
 
-  fun delete(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-    repository.deleteAccount(account)
-  }
+    fun delete(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteAccount(account)
+    }
 
-  fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-    repository.insertAccount(account)
-  }
+    fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertAccount(account)
+    }
 
-  fun update(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-    repository.updateAccount(account)
-  }
+    fun update(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateAccount(account)
+    }
 
-  fun increaseStep(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-    repository.increaseStep(account)
-  }
+    fun increaseStep(account: Account) = viewModelScope.launch(Dispatchers.IO) {
+        repository.increaseStep(account)
+    }
 }

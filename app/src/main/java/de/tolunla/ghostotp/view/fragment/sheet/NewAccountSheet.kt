@@ -12,25 +12,25 @@ import de.tolunla.ghostotp.databinding.SheetNewAccountBinding
 
 class NewAccountSheet : BottomSheetDialogFragment() {
 
-  private lateinit var binding: SheetNewAccountBinding
+    private lateinit var binding: SheetNewAccountBinding
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    setHasOptionsMenu(true)
-    binding = SheetNewAccountBinding.inflate(inflater, container, false)
-    return binding.root
-  }
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        binding = SheetNewAccountBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    binding.navView.setNavigationItemSelectedListener(this::onOptionsItemSelected)
-  }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.navView.setNavigationItemSelectedListener(this::onOptionsItemSelected)
+    }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return item.onNavDestinationSelected(findNavController()) ||
-        super.onOptionsItemSelected(item)
-  }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(findNavController()) ||
+                super.onOptionsItemSelected(item)
+    }
 }

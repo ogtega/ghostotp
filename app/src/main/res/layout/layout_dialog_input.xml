@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-  <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/et_layout"
-    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="@dimen/keyline_4"
-    android:paddingTop="@dimen/keyline_2"
-    android:paddingEnd="@dimen/keyline_4"
-    android:paddingBottom="@dimen/keyline_2">
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/et_input"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-  </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                           android:id="@+id/et_layout"
+                                                           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="wrap_content"
+                                                           android:paddingStart="@dimen/keyline_4"
+                                                           android:paddingTop="@dimen/keyline_2"
+                                                           android:paddingEnd="@dimen/keyline_4"
+                                                           android:paddingBottom="@dimen/keyline_2">
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
 </layout>

@@ -16,22 +16,22 @@
 
 <resources>
 
-  <!--DARK COLOR THEME-->
-  <!--The same color values are defined for dark theme, but with values more appropriate for -->
-  <!--low-luminance UIs. These colors will be used by night/themes.xml.-->
+    <!--DARK COLOR THEME-->
+    <!--The same color values are defined for dark theme, but with values more appropriate for -->
+    <!--low-luminance UIs. These colors will be used by night/themes.xml.-->
 
-  <color name="color_primary">#1a73e8</color>
-  <color name="color_primary_variant">#69a1ff</color>
-  <color name="color_secondary">#1a73e8</color>
-  <color name="color_secondary_variant">#0017c6</color>
+    <color name="color_primary">#1a73e8</color>
+    <color name="color_primary_variant">#69a1ff</color>
+    <color name="color_secondary">#1a73e8</color>
+    <color name="color_secondary_variant">#0017c6</color>
 
-  <color name="color_background">#000000</color>
-  <color name="color_surface">#121212</color>
-  <color name="color_error">#e84853</color>
+    <color name="color_background">#000000</color>
+    <color name="color_surface">#121212</color>
+    <color name="color_error">#e84853</color>
 
-  <color name="color_on_primary">#ffffff</color>
-  <color name="color_on_secondary">#ffffff</color>
-  <color name="color_on_background">#f1f3f4</color>
-  <color name="color_on_surface">#f1f3f4</color>
-  <color name="color_on_error">#000000</color>
+    <color name="color_on_primary">#ffffff</color>
+    <color name="color_on_secondary">#ffffff</color>
+    <color name="color_on_background">#f1f3f4</color>
+    <color name="color_on_surface">#f1f3f4</color>
+    <color name="color_on_error">#000000</color>
 </resources>

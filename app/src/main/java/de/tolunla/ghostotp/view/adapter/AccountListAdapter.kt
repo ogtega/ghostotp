@@ -23,224 +23,226 @@ import de.tolunla.ghostotp.util.AccountDiffCallback
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
 class AccountListAdapter(val context: Context) :
-  RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
+        RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
-  private var accountList = emptyList<Account>()
+    private var accountList = emptyList<Account>()
 
-  private val mClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-  private val mInflater = LayoutInflater.from(context)
-  private val mTOTPHolders = HashSet<AccountViewHolder>()
-  private val mHandler = Handler(Looper.getMainLooper())
+    private val mClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    private val mInflater = LayoutInflater.from(context)
+    private val mTOTPHolders = HashSet<AccountViewHolder>()
+    private val mHandler = Handler(Looper.getMainLooper())
 
-  private lateinit var mViewModel: AccountViewModel
+    private lateinit var mViewModel: AccountViewModel
 
-  /**
-   * A task that runs periodically to update TOTP codes
-   */
-  private val updateTOTPCodes = object : Runnable {
-    override fun run() {
-      mTOTPHolders.forEach {
-        it.refresh()
-      }
+    /**
+     * A task that runs periodically to update TOTP codes
+     */
+    private val updateTOTPCodes = object : Runnable {
+        override fun run() {
+            mTOTPHolders.forEach {
+                it.refresh()
+            }
 
-      mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
-    }
-  }
-
-  /**
-   * Updates the account list and notifies the adapter of changes
-   */
-  fun setAccounts(accounts: List<Account>) {
-    val diffCallback = AccountDiffCallback(accountList, accounts)
-    val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-    accountList = accounts
-    diffResult.dispatchUpdatesTo(this)
-  }
-
-  fun setViewModel(viewModel: AccountViewModel) {
-    mViewModel = viewModel
-  }
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-    val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
-
-    holder.binding.root.setOnLongClickListener {
-      holder.showActionSheet(parent)
-      true
+            mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
+        }
     }
 
-    holder.binding.root.setOnClickListener {
-      if (holder.account.type == Account.Type.HOTP) {
-        holder.refresh()
+    /**
+     * Updates the account list and notifies the adapter of changes
+     */
+    fun setAccounts(accounts: List<Account>) {
+        val diffCallback = AccountDiffCallback(accountList, accounts)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        // Re-enable the refresh button 6 seconds later
-        mHandler.postDelayed({
-          holder.binding.root.isEnabled = true
-        }, 6 * DateUtils.SECOND_IN_MILLIS)
-
-        // Clear the displayed HOTP code after 1 minute
-        mHandler.postDelayed({
-          holder.bind(holder.account)
-        }, 1 * DateUtils.MINUTE_IN_MILLIS)
-      }
+        accountList = accounts
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    return holder
-  }
-
-  override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-    val account: Account = accountList[position]
-
-    holder.bind(account)
-
-    if (account.type != Account.Type.HOTP) {
-      mTOTPHolders.add(holder)
-    }
-  }
-
-  override fun onViewRecycled(holder: AccountViewHolder) {
-    mTOTPHolders.remove(holder)
-    super.onViewRecycled(holder)
-  }
-
-  override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-    super.onAttachedToRecyclerView(recyclerView)
-    mHandler.post(updateTOTPCodes)
-  }
-
-  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-    mHandler.removeCallbacks(updateTOTPCodes)
-    super.onDetachedFromRecyclerView(recyclerView)
-  }
-
-  override fun getItemCount(): Int = accountList.size
-
-  inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    var code: String = ""
-    lateinit var account: Account
-
-    fun bind(account: Account) {
-      this.account = account
-      binding.accountName.text = account.label
-
-      if (account.type == Account.Type.HOTP) {
-        binding.accountCode.text = "- ".repeat(account.digits)
-        binding.timeBased = false
-      } else {
-        binding.timeBased = true
-        refresh()
-      }
+    fun setViewModel(viewModel: AccountViewModel) {
+        mViewModel = viewModel
     }
 
-    fun refresh() {
-      when (account.type) {
-        Account.Type.TOTP -> {
-          binding.countdownIndicator.setPhase(1 - account.getProgress())
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
+        val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
+
+        holder.binding.root.setOnLongClickListener {
+            holder.showActionSheet(parent)
+            true
         }
 
-        Account.Type.HOTP -> {
-          binding.root.isEnabled = false
-          mViewModel.increaseStep(account)
-        }
-      }
+        holder.binding.root.setOnClickListener {
+            if (holder.account.type == Account.Type.HOTP) {
+                holder.refresh()
 
-      // Set the code based off the current time, then update the code text
-      code = account.oneTimePassword.generateCode()
-      binding.accountCode.text = code
+                // Re-enable the refresh button 6 seconds later
+                mHandler.postDelayed({
+                    holder.binding.root.isEnabled = true
+                }, 6 * DateUtils.SECOND_IN_MILLIS)
+
+                // Clear the displayed HOTP code after 1 minute
+                mHandler.postDelayed({
+                    holder.bind(holder.account)
+                }, 1 * DateUtils.MINUTE_IN_MILLIS)
+            }
+        }
+
+        return holder
     }
 
-    fun showActionSheet(parent: View) {
-      val binding = SheetAccountActionBinding.inflate(mInflater)
-      val dialog = BottomSheetDialog(context)
+    override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
+        val account: Account = accountList[position]
 
-      dialog.setContentView(binding.root)
+        holder.bind(account)
 
-      binding.navView.setNavigationItemSelectedListener { item ->
-
-        when (item.itemId) {
-
-          R.id.action_edit_account -> {
-            editAccount()
-          }
-
-          R.id.action_copy_account -> {
-            copyCode(parent)
-          }
-
-          R.id.action_delete_account -> {
-            deleteAccount()
-          }
+        if (account.type != Account.Type.HOTP) {
+            mTOTPHolders.add(holder)
         }
-
-        dialog.dismiss()
-        true
-      }
-
-      dialog.show()
     }
 
-    private fun editAccount() {
-      val builder = AlertDialog.Builder(context)
-
-      val title = String.format(
-        context.resources.getString(R.string.message_rename_account), account.name
-      )
-
-      val binding = LayoutDialogInputBinding.inflate(mInflater)
-      binding.etInput.setText(account.name)
-
-      with(builder) {
-        setTitle(title)
-
-        setPositiveButton(R.string.action_rename) { _, _ ->
-          val updated = account.copy(name = binding.etInput.text.toString())
-          mViewModel.update(updated)
-        }
-
-        setNegativeButton(R.string.action_cancel) { dialog, _ ->
-          dialog.dismiss()
-        }
-
-        setView(binding.root)
-        show()
-      }
+    override fun onViewRecycled(holder: AccountViewHolder) {
+        mTOTPHolders.remove(holder)
+        super.onViewRecycled(holder)
     }
 
-    private fun deleteAccount() {
-      val builder = AlertDialog.Builder(context)
-
-      val title = String.format(
-        context.resources.getString(R.string.message_remove_account), account.name
-      )
-
-      with(builder) {
-        setTitle(title)
-        setMessage(R.string.message_account_deletion)
-
-        setPositiveButton(R.string.action_remove) { _, _ ->
-          mViewModel.delete(account)
-        }
-
-        setNegativeButton(R.string.action_cancel) { dialog, _ ->
-          dialog.dismiss()
-        }
-
-        show()
-      }
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mHandler.post(updateTOTPCodes)
     }
 
-    private fun copyCode(view: View) {
-      val clipData = ClipData.newPlainText("text", code)
-      mClipboard.setPrimaryClip(clipData)
-
-      // Notify the user that we've copied the OTP
-      Snackbar.make(view, context.getText(R.string.message_otp_copied),
-        Snackbar.LENGTH_LONG)
-        .setAnchorView(R.id.fab)
-        .show()
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        mHandler.removeCallbacks(updateTOTPCodes)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
-  }
+
+    override fun getItemCount(): Int = accountList.size
+
+    inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+
+        var code: String = ""
+        lateinit var account: Account
+
+        fun bind(account: Account) {
+            this.account = account
+            binding.accountName.text = account.label
+
+            if (account.type == Account.Type.HOTP) {
+                binding.accountCode.text = "- ".repeat(account.digits)
+                binding.timeBased = false
+            } else {
+                binding.timeBased = true
+                refresh()
+            }
+        }
+
+        fun refresh() {
+            when (account.type) {
+                Account.Type.TOTP -> {
+                    binding.countdownIndicator.setPhase(1 - account.getProgress())
+                }
+
+                Account.Type.HOTP -> {
+                    binding.root.isEnabled = false
+                    mViewModel.increaseStep(account)
+                }
+            }
+
+            // Set the code based off the current time, then update the code text
+            code = account.oneTimePassword.generateCode()
+            binding.accountCode.text = code
+        }
+
+        fun showActionSheet(parent: View) {
+            val binding = SheetAccountActionBinding.inflate(mInflater)
+            val dialog = BottomSheetDialog(context)
+
+            dialog.setContentView(binding.root)
+
+            binding.navView.setNavigationItemSelectedListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.action_edit_account -> {
+                        editAccount()
+                    }
+
+                    R.id.action_copy_account -> {
+                        copyCode(parent)
+                    }
+
+                    R.id.action_delete_account -> {
+                        deleteAccount()
+                    }
+                }
+
+                dialog.dismiss()
+                true
+            }
+
+            dialog.show()
+        }
+
+        private fun editAccount() {
+            val builder = AlertDialog.Builder(context)
+
+            val title = String.format(
+                    context.resources.getString(R.string.message_rename_account), account.name
+            )
+
+            val binding = LayoutDialogInputBinding.inflate(mInflater)
+            binding.etInput.setText(account.name)
+
+            with(builder) {
+                setTitle(title)
+
+                setPositiveButton(R.string.action_rename) { _, _ ->
+                    val updated = account.copy(name = binding.etInput.text.toString())
+                    mViewModel.update(updated)
+                }
+
+                setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                setView(binding.root)
+                show()
+            }
+        }
+
+        private fun deleteAccount() {
+            val builder = AlertDialog.Builder(context)
+
+            val title = String.format(
+                    context.resources.getString(R.string.message_remove_account), account.name
+            )
+
+            with(builder) {
+                setTitle(title)
+                setMessage(R.string.message_account_deletion)
+
+                setPositiveButton(R.string.action_remove) { _, _ ->
+                    mViewModel.delete(account)
+                }
+
+                setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                show()
+            }
+        }
+
+        private fun copyCode(view: View) {
+            val clipData = ClipData.newPlainText("text", code)
+            mClipboard.setPrimaryClip(clipData)
+
+            // Notify the user that we've copied the OTP
+            Snackbar.make(
+                    view, context.getText(R.string.message_otp_copied),
+                    Snackbar.LENGTH_LONG
+            )
+                    .setAnchorView(R.id.fab)
+                    .show()
+        }
+    }
 }
