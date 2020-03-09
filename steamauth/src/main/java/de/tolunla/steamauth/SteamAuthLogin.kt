@@ -14,7 +14,6 @@ import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import javax.crypto.Cipher
 
-
 class SteamAuthLogin(private var username: String, private var password: String) {
 
     val client = SteamAuthUtils.getClient()

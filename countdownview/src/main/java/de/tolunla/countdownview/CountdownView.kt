@@ -2,6 +2,7 @@ package de.tolunla.countdownview
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -11,7 +12,7 @@ import androidx.core.graphics.toColorInt
 
 class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    private var mColor: Int = "0x3060c0".toColorInt() // Color used to paint the indicator's arc
+    private var mColor: Int = "#3060c0".toColorInt() // Color used to paint the indicator's arc
     private val mPaint: Paint
     private var mPhase: Float = 0f
     private var mStartAngle: Int = 270 // Start angle for the indicator's arc
