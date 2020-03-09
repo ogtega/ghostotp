@@ -1,5 +1,6 @@
 # Ghost Mobile Authenticator
 
+![Android CI](https://github.com/ogtega/ghostotp/workflows/Android%20CI/badge.svg)
 [![GitHub top language](https://img.shields.io/github/languages/top/ogtega/ghostotp)](https://github.com/ogtega/ghostotp#)
 [![GitHub](https://img.shields.io/github/license/ogtega/ghostotp)](https://github.com/ogtega/ghostotp/blob/master/LICENSE)
 
