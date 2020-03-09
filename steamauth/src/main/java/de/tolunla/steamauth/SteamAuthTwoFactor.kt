@@ -18,19 +18,19 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
     suspend fun enableTwoFactor() = withContext(Dispatchers.IO) {
 
         val formBody = FormBody.Builder()
-                .add("steamid", loginResult.steamID)
-                .add("access_token", loginResult.oathToken)
-                .add("authenticator_time", floor(Date().time.div(1000.0)).toString())
-                .add("authenticator_type", "1")
-                .add("device_identifier", SteamAuthUtils.getDeviceId(loginResult.steamID))
-                .add("sms_phone_id", "1")
-                .build()
+            .add("steamid", loginResult.steamID)
+            .add("access_token", loginResult.oathToken)
+            .add("authenticator_time", floor(Date().time.div(1000.0)).toString())
+            .add("authenticator_type", "1")
+            .add("device_identifier", SteamAuthUtils.getDeviceId(loginResult.steamID))
+            .add("sms_phone_id", "1")
+            .build()
 
         val request = Request.Builder()
-                .url("https://api.steampowered.com/ITwoFactorService/AddAuthenticator/v1/")
-                .headers(headers)
-                .post(formBody)
-                .build()
+            .url("https://api.steampowered.com/ITwoFactorService/AddAuthenticator/v1/")
+            .headers(headers)
+            .post(formBody)
+            .build()
 
         /**
          * response.status:
@@ -55,8 +55,8 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
             if (!res.isSuccessful) throw IOException("/AddAuthenticator failed")
 
             val data = JSONObject(
-                    JSONObject(res.body?.string() ?: "")
-                            .optString("response", "{}")
+                JSONObject(res.body?.string() ?: "")
+                    .optString("response", "{}")
             )
 
             Log.d("AddAuthenticator", data.toString())

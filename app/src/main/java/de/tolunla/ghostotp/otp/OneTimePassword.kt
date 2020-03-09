@@ -11,9 +11,9 @@ import kotlin.experimental.and
 private val DIGITS_POWER = arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000)
 
 abstract class OneTimePassword(
-        private val secret: ByteArray,
-        protected val digits: Int,
-        private val crypto: Crypto = Crypto.SHA1
+    private val secret: ByteArray,
+    protected val digits: Int,
+    private val crypto: Crypto = Crypto.SHA1
 ) {
 
     enum class Crypto(val type: String) {
@@ -36,10 +36,10 @@ abstract class OneTimePassword(
     protected fun generateCode(step: Long): Int = getHash(secret, step).truncate()
 
     private fun getHash(bytes: ByteArray, steps: Long): ByteArray =
-            Mac.getInstance("Hmac${crypto.type}").run {
-                init(SecretKeySpec(bytes, "RAW"))
-                doFinal(steps.getByteArray())
-            }
+        Mac.getInstance("Hmac${crypto.type}").run {
+            init(SecretKeySpec(bytes, "RAW"))
+            doFinal(steps.getByteArray())
+        }
 
     private fun ByteArray.truncate(): Int {
         val offset = (this.last().toInt() and 0xf)
@@ -56,7 +56,7 @@ abstract class OneTimePassword(
 }
 
 class HOTPassword(private val account: Account) :
-        OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
+    OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
     override fun generateCode(): String {
         account.incrementStep()
@@ -67,10 +67,10 @@ class HOTPassword(private val account: Account) :
 }
 
 class TOTPassword(private val account: Account) :
-        OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
+    OneTimePassword(account.getSecretBytes(), account.digits, account.crypto) {
 
     override fun generateCode(): String = generateCode(System.currentTimeMillis().toSteps())
-            .addPadding(digits)
+        .addPadding(digits)
 
     fun generateCodeAt(time: Long) = generateCode(time.toSteps())
 

@@ -19,8 +19,8 @@ class SteamLoginFragment : Fragment() {
     private lateinit var binding: FragmentSteamLoginBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSteamLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -36,20 +36,20 @@ class SteamLoginFragment : Fragment() {
 
     private fun login() = GlobalScope.launch(Dispatchers.Main) {
         val res = SteamAuthLogin(
-                binding.inputUsername.text.toString(),
-                binding.inputPassword.text.toString()
+            binding.inputUsername.text.toString(),
+            binding.inputPassword.text.toString()
         ).doLogin(
-                emailAuth = binding.inputCode.text.toString(),
-                twoFactorCode = binding.inputCode.text.toString(),
-                captcha = binding.inputCaptcha.text.toString(),
-                captchaGid = captchaGid
+            emailAuth = binding.inputCode.text.toString(),
+            twoFactorCode = binding.inputCode.text.toString(),
+            captcha = binding.inputCaptcha.text.toString(),
+            captchaGid = captchaGid
         )
 
         captchaGid = res.captchaGid
 
         binding.layoutLogin.visibility =
-                if (!res.success && !(res.captcha || res.mobileCode || res.emailCode))
-                    View.VISIBLE else View.GONE
+            if (!res.success && !(res.captcha || res.mobileCode || res.emailCode))
+                View.VISIBLE else View.GONE
 
         if (res.captcha) Picasso.get().load(res.captchaURL).into(binding.imageCaptcha)
 

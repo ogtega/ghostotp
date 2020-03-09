@@ -36,9 +36,9 @@ class NewAccountFragment : Fragment(), TextWatcher {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentNewAccountBinding.inflate(layoutInflater, container, false)
@@ -56,7 +56,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
                 if (validateSecret(true)) {
 
                     accountViewModel.insert(
-                            Account(getAccountName(), getSecretKey(), type = getAuthType())
+                        Account(getAccountName(), getSecretKey(), type = getAuthType())
                     )
 
                     findNavController().navigateUp()
@@ -69,7 +69,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
     }
 
     private fun getSecretKey(): String = binding.inputSecretKey.text.toString()
-            .replace(" ", "")
+        .replace(" ", "")
 
     private fun getAccountName(): String = binding.inputAccountName.text.toString()
 
@@ -82,12 +82,12 @@ class NewAccountFragment : Fragment(), TextWatcher {
         context?.let {
 
             typeAdapter = ArrayAdapter(
-                    it,
-                    R.layout.support_simple_spinner_dropdown_item,
-                    arrayOf(
-                            getString(R.string.label_time_based),
-                            getString(R.string.label_counter_based)
-                    )
+                it,
+                R.layout.support_simple_spinner_dropdown_item,
+                arrayOf(
+                    getString(R.string.label_time_based),
+                    getString(R.string.label_counter_based)
+                )
             )
 
             binding.inputAuthType.setAdapter(typeAdapter)
@@ -103,7 +103,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
             if (bytes.size < 10) {
 
                 binding.layoutKeyInput.error = (if (toSubmit) getString(
-                        R.string.message_key_too_short
+                    R.string.message_key_too_short
                 ) else null)
                 return false
             }
@@ -113,7 +113,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
         } catch (e: IllegalArgumentException) {
 
             binding.layoutKeyInput.error =
-                    (if (toSubmit) getString(R.string.message_key_invalid_chars) else null)
+                (if (toSubmit) getString(R.string.message_key_invalid_chars) else null)
 
             return false
         }

@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-            android:icon="@drawable/ic_barcode_scan_24dp"
-            android:title="@string/action_scan_barcode"/>
+        android:icon="@drawable/ic_barcode_scan_24dp"
+        android:title="@string/action_scan_barcode" />
 
     <item
-            android:id="@id/new_account_dest"
-            android:icon="@drawable/ic_keyboard_24dp"
-            android:title="@string/action_manually_enter_key"/>
+        android:id="@id/new_account_dest"
+        android:icon="@drawable/ic_keyboard_24dp"
+        android:title="@string/action_manually_enter_key" />
 
     <item
-            android:id="@+id/steam_login_dest"
-            android:icon="@drawable/ic_steam_24dp"
-            android:title="@string/action_add_steam_guard"/>
+        android:id="@+id/steam_login_dest"
+        android:icon="@drawable/ic_steam_24dp"
+        android:title="@string/action_add_steam_guard" />
 
 </menu>

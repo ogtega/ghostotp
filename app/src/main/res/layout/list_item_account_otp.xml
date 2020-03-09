@@ -1,57 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/keyline_2">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/keyline_2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/activity_default_margin">
+
+            <TextView
+                android:id="@+id/account_code"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/activity_default_margin">
+                android:letterSpacing="0.1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                    android:id="@+id/account_code"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:letterSpacing="0.1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                    android:id="@+id/account_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_default_margin"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintEnd_toStartOf="@id/countdown_indicator"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/account_code"/>
+                android:id="@+id/account_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_default_margin"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintEnd_toStartOf="@id/countdown_indicator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/account_code" />
 
             <de.tolunla.countdownview.CountdownView
-                    android:id="@+id/countdown_indicator"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="@dimen/layout_default_margin"
-                    android:foregroundGravity="center"
-                    android:visibility="@{timeBased ? View.VISIBLE : View.GONE}"
-                    app:color="@color/color_on_surface"
-                    app:layout_constraintBottom_toBottomOf="@id/account_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/account_name"/>
+                android:id="@+id/countdown_indicator"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="@dimen/layout_default_margin"
+                android:foregroundGravity="center"
+                android:visibility="@{timeBased ? View.VISIBLE : View.GONE}"
+                app:color="@color/color_on_surface"
+                app:layout_constraintBottom_toBottomOf="@id/account_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/account_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
-                name="timeBased"
-                type="Boolean"/>
+            name="timeBased"
+            type="Boolean" />
     </data>
 </layout>

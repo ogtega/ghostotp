@@ -14,10 +14,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private val nightModeListener = Preference.OnPreferenceChangeListener { _, newVal ->
         AppCompatDelegate.setDefaultNightMode(
-                if (newVal as Boolean)
-                    AppCompatDelegate.MODE_NIGHT_YES
-                else
-                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            if (newVal as Boolean)
+                AppCompatDelegate.MODE_NIGHT_YES
+            else
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         )
         true
     }
@@ -27,9 +27,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val nightMode = preferenceManager.findPreference<SwitchPreference>("night_mode")
 

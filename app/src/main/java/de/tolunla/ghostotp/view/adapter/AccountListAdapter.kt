@@ -23,7 +23,7 @@ import de.tolunla.ghostotp.util.AccountDiffCallback
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
 class AccountListAdapter(val context: Context) :
-        RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
+    RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
     private var accountList = emptyList<Account>()
 
@@ -117,7 +117,7 @@ class AccountListAdapter(val context: Context) :
     override fun getItemCount(): Int = accountList.size
 
     inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         var code: String = ""
         lateinit var account: Account
@@ -186,7 +186,7 @@ class AccountListAdapter(val context: Context) :
             val builder = AlertDialog.Builder(context)
 
             val title = String.format(
-                    context.resources.getString(R.string.message_rename_account), account.name
+                context.resources.getString(R.string.message_rename_account), account.name
             )
 
             val binding = LayoutDialogInputBinding.inflate(mInflater)
@@ -213,7 +213,7 @@ class AccountListAdapter(val context: Context) :
             val builder = AlertDialog.Builder(context)
 
             val title = String.format(
-                    context.resources.getString(R.string.message_remove_account), account.name
+                context.resources.getString(R.string.message_remove_account), account.name
             )
 
             with(builder) {
@@ -238,11 +238,11 @@ class AccountListAdapter(val context: Context) :
 
             // Notify the user that we've copied the OTP
             Snackbar.make(
-                    view, context.getText(R.string.message_otp_copied),
-                    Snackbar.LENGTH_LONG
+                view, context.getText(R.string.message_otp_copied),
+                Snackbar.LENGTH_LONG
             )
-                    .setAnchorView(R.id.fab)
-                    .show()
+                .setAnchorView(R.id.fab)
+                .show()
         }
     }
 }

@@ -13,10 +13,10 @@ import java.util.*
 @Entity(tableName = "accounts")
 @Suppress("DataClassPrivateConstructor")
 data class Account(
-        val name: String, val secret: String, val crypto: Crypto = Crypto.SHA1, val digits: Int = 6,
-        val type: Type, val issuer: String = "", val epoch: Long = 0L, val period: Int = 30,
-        val hex: Boolean = false, var step: Long = -1L,
-        @PrimaryKey val id: String = "${issuer.toLowerCase(Locale.ROOT)}$name"
+    val name: String, val secret: String, val crypto: Crypto = Crypto.SHA1, val digits: Int = 6,
+    val type: Type, val issuer: String = "", val epoch: Long = 0L, val period: Int = 30,
+    val hex: Boolean = false, var step: Long = -1L,
+    @PrimaryKey val id: String = "${issuer.toLowerCase(Locale.ROOT)}$name"
 ) {
 
     enum class Type { TOTP, HOTP }
@@ -54,9 +54,9 @@ data class Account(
     }
 
     fun getProgress(): Float =
-            (System.currentTimeMillis() - (epoch * DateUtils.SECOND_IN_MILLIS))
-                    .rem(period * DateUtils.SECOND_IN_MILLIS).toFloat() / (period * DateUtils.SECOND_IN_MILLIS)
-                    .toFloat()
+        (System.currentTimeMillis() - (epoch * DateUtils.SECOND_IN_MILLIS))
+            .rem(period * DateUtils.SECOND_IN_MILLIS).toFloat() / (period * DateUtils.SECOND_IN_MILLIS)
+            .toFloat()
 
     class TypeStringConverter {
         @androidx.room.TypeConverter

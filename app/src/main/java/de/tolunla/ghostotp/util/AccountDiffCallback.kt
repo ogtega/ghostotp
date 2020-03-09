@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.DiffUtil
 import de.tolunla.ghostotp.db.entity.Account
 
 class AccountDiffCallback(
-        private val oldList: List<Account>,
-        private val newList: List<Account>
+    private val oldList: List<Account>,
+    private val newList: List<Account>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize() = oldList.size

@@ -17,7 +17,7 @@
 <resources>
 
     <!--Top level DayNight theme to be used in AndroidManifest.xml-->
-    <style name="AppTheme.DayNight" parent="Base.AppTheme"/>
+    <style name="AppTheme.DayNight" parent="Base.AppTheme" />
 
     <!--Base custom theme which will be shared between both light and dark theme variants-->
     <style name="Base.AppTheme" parent="Base.MaterialThemeBuilder">

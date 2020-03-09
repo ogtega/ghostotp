@@ -40,8 +40,8 @@ class DataRepository private constructor(private val database: AppDatabase) {
 
     private fun insertAccount(account: Account, tries: Int): Long {
         val copy = account.copy(
-                name = "${account.name}($tries)",
-                id = "${account.issuer.toLowerCase(Locale.ROOT)}${account.name}_$tries"
+            name = "${account.name}($tries)",
+            id = "${account.issuer.toLowerCase(Locale.ROOT)}${account.name}_$tries"
         )
 
         return database.accountDao().insert(copy)

@@ -1,122 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="@dimen/activity_default_margin"
-                app:layout_constraintDimensionRatio="w,3:2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/activity_default_margin"
+            app:layout_constraintDimensionRatio="w,3:2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/layout_login"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        tools:visibility="visible">
+                    android:id="@+id/layout_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/layout_username_input"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/layout_default_margin"
-                            android:hint="@string/label_username">
+                        android:id="@+id/layout_username_input"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/layout_default_margin"
+                        android:hint="@string/label_username">
 
                         <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/input_username"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text|textVisiblePassword"
-                                android:singleLine="false"/>
+                            android:id="@+id/input_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text|textVisiblePassword"
+                            android:singleLine="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/layout_password_input"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/layout_default_margin"
-                            android:hint="@string/label_password"
-                            app:endIconMode="password_toggle">
+                        android:id="@+id/layout_password_input"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/layout_default_margin"
+                        android:hint="@string/label_password"
+                        app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/input_password"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text|textPassword"
-                                android:singleLine="false"/>
+                            android:id="@+id/input_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text|textPassword"
+                            android:singleLine="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_code_input"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/layout_default_margin"
-                        android:hint="@string/hint_steam_steamguard"
-                        android:visibility="gone"
-                        tools:visibility="gone">
+                    android:id="@+id/layout_code_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_default_margin"
+                    android:hint="@string/hint_steam_steamguard"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_code"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
+                        android:id="@+id/input_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_captcha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        tools:visibility="gone">
+                    android:id="@+id/layout_captcha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <ImageView
-                            android:id="@+id/image_captcha"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="@dimen/layout_default_margin"
-                            android:layout_marginTop="@dimen/layout_default_margin"
-                            android:layout_marginEnd="@dimen/layout_default_margin"
-                            android:contentDescription="@string/description_steam_captcha"
-                            app:layout_constraintDimensionRatio="4:1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                        android:id="@+id/image_captcha"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/layout_default_margin"
+                        android:layout_marginTop="@dimen/layout_default_margin"
+                        android:layout_marginEnd="@dimen/layout_default_margin"
+                        android:contentDescription="@string/description_steam_captcha"
+                        app:layout_constraintDimensionRatio="4:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/layout_captcha_input"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/layout_default_margin"
-                            android:layout_marginTop="@dimen/layout_default_margin"
-                            android:hint="@string/hint_steam_captcha"
-                            app:layout_constraintTop_toBottomOf="@+id/image_captcha"
-                            tools:layout_editor_absoluteX="8dp">
+                        android:id="@+id/layout_captcha_input"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/layout_default_margin"
+                        android:layout_marginTop="@dimen/layout_default_margin"
+                        android:hint="@string/hint_steam_captcha"
+                        app:layout_constraintTop_toBottomOf="@+id/image_captcha"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/input_captcha"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:singleLine="false"/>
+                            android:id="@+id/input_captcha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,12 +127,12 @@
         </ScrollView>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_default_margin"
-                android:text="@string/action_next"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            android:id="@+id/button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_default_margin"
+            android:text="@string/action_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

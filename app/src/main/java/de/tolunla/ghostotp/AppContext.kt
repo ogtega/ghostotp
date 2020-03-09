@@ -17,9 +17,9 @@ class AppContext : Application() {
 
 fun setNightMode(nightMode: Boolean) {
     AppCompatDelegate.setDefaultNightMode(
-            if (nightMode)
-                AppCompatDelegate.MODE_NIGHT_YES
-            else
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        if (nightMode)
+            AppCompatDelegate.MODE_NIGHT_YES
+        else
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
 }
