@@ -4,7 +4,7 @@ buildscript {
         lifecycle_version = '2.2.0'
         navigation_version = '2.2.1'
         room_version = '2.2.4'
-        work_version = '2.3.2'
+        work_version = '2.3.3'
         build_tools_version = '29.0.3'
     }
     repositories {
