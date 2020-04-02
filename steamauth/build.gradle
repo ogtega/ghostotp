@@ -14,20 +14,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation Dependencies.kotlin_stdlib
-
     implementation Dependencies.coroutines_core
     implementation Dependencies.coroutines_android
     implementation Dependencies.okhttp
@@ -36,6 +35,7 @@ dependencies {
     implementation Dependencies.apache_codec
 
     testImplementation Testing.junit
+
     androidTestImplementation Testing.android_junit
     androidTestImplementation Testing.android_espresso
 }

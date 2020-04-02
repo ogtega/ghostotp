@@ -17,6 +17,11 @@ android {
         versionCode 1
         versionName "0.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.incremental":"true"]
+            }
+        }
     }
     buildTypes {
         release {
@@ -74,6 +79,7 @@ dependencies {
      */
     testImplementation Testing.junit
     testImplementation Testing.room
+
     androidTestImplementation Testing.android_junit
     androidTestImplementation Testing.android_espresso
     androidTestImplementation Testing.android_work
