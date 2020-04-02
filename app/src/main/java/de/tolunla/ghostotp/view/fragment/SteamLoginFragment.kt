@@ -55,7 +55,8 @@ class SteamLoginFragment : Fragment() {
 
         binding.layoutCaptcha.visibility = if (res.captcha) View.VISIBLE else View.GONE
 
-        binding.layoutCodeInput.visibility = if (res.emailCode || res.mobileCode) View.VISIBLE else View.GONE
+        binding.layoutCodeInput.visibility =
+            if (res.emailCode || res.mobileCode) View.VISIBLE else View.GONE
 
         if (res.success) {
             val steamAuthTwoFactor = SteamAuthTwoFactor(res)

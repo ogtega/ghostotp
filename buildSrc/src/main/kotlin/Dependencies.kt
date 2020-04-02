@@ -1,12 +1,3 @@
-object Versions {
-    val kotlin = "1.3.61"
-    val lifecycle = "2.2.0"
-    val navigation = "2.2.1"
-    val room = "2.2.5"
-    val work = "2.3.4"
-    val build_tools = "29.0.3"
-}
-
 object Dependencies {
     val androidx = "androidx.core:core-ktx:1.2.0"
 
@@ -28,7 +19,6 @@ object Dependencies {
 
     val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     val navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
-
 
     val apache_codec = "commons-codec:commons-codec:1.14"
     val picasso = "com.squareup.picasso:picasso:2.71828"

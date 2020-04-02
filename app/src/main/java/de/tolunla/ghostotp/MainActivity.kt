@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.NavController.OnDestinationChangedListener
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
@@ -35,7 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+        navController = navHostFragment.navController
 
         // Used to know when we are at a "top level" destination
         appBarConfig = AppBarConfiguration.Builder(

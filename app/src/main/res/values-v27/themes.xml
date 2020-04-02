@@ -8,7 +8,8 @@
         <item name="android:statusBarColor">?colorSurface</item>
         <item name="android:navigationBarColor">?colorSurface</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.AppTheme.BottomSheetDialog.EdgeToEdge
+        <item name="bottomSheetDialogTheme">
+            @style/ThemeOverlay.AppTheme.BottomSheetDialog.EdgeToEdge
         </item>
     </style>
 

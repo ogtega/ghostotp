@@ -38,7 +38,8 @@
         <item name="colorOnError">@color/color_on_error</item>
 
         <!--Component styles-->
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert
+        </item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.AppTheme.BottomSheetDialog</item>
         <item name="navigationViewStyle">@style/Widget.AppTheme.NavigationView</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
