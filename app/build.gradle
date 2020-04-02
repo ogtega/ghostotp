@@ -8,7 +8,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "$build_tools_version"
+    buildToolsVersion Versions.build_tools
 
     defaultConfig {
         applicationId "de.tolunla.ghostotp"
@@ -36,45 +36,45 @@ dependencies {
     /**
      * Kotlin Standard Library JDK 8 extension
      */
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation Dependencies.kotlin_stdlib
     /**
      * Support Library Packages
      */
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation Dependencies.appcompat
+    implementation Dependencies.constraint_layout
+    implementation Dependencies.material
     /**
      * Lifecycle Components (Lifecycle, LiveData & ViewModel)
      */
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation Dependencies.lifecycle_common
+    implementation Dependencies.lifecycle_ext
+    implementation Dependencies.lifecycle_viewmodel
     /**
      * Room Persistence Library
      */
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-runtime:$room_version"
+    kapt Annotations.room
+    implementation Dependencies.room_ktx
+    implementation Dependencies.room_runtime
     /**
      * Navigation Components
      */
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation Dependencies.navigation_fragment
+    implementation Dependencies.navigation_ui
     /**
      * Miscellaneous Libraries
      */
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.2'
-    implementation 'androidx.preference:preference-ktx:1.1.0'
-    implementation "androidx.work:work-runtime-ktx:$work_version"
-    implementation 'commons-codec:commons-codec:1.14'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation Dependencies.androidx
+    implementation Dependencies.fragment
+    implementation Dependencies.preference
+    implementation Dependencies.work
+    implementation Dependencies.apache_codec
+    implementation Dependencies.picasso
     /**
      * Test Dependencies
      */
-    testImplementation 'junit:junit:4.13'
-    testImplementation "androidx.room:room-testing:$room_version"
-    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation "androidx.work:work-testing:$work_version"
+    testImplementation Testing.junit
+    testImplementation Testing.room
+    androidTestImplementation Testing.android_junit
+    androidTestImplementation Testing.android_espresso
+    androidTestImplementation Testing.android_work
 }
