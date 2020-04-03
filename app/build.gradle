@@ -81,7 +81,6 @@ dependencies {
     implementation Dependencies.preference
     implementation Dependencies.work
     implementation Dependencies.apache_codec
-    implementation Dependencies.picasso
     /**
      * Test Dependencies
      */

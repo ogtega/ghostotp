@@ -34,16 +34,12 @@
     <string name="message_key_too_short">Secret is too short</string>
     <string name="message_key_invalid_chars">Secret is invalid</string>
     <string name="message_otp_copied">Code copied to clipboard</string>
+
     <string name="message_account_deletion">
         Removing this account will remove your ability to generate codes,
         however it will not turn off 2-factor authentication. This may prevent you from signing into
         your account.
     </string>
-
-    <string name="hint_steam_captcha">Enter the text above</string>
-    <string name="hint_steam_steamguard">Enter your SteamGuard code</string>
-
-    <string name="description_steam_captcha">Image containing a captcha code</string>
 
     <string name="preference_night_mode_key">night_mode</string>
     <string name="preference_night_mode_title">Night mode</string>

@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Steam Auth</string>
+    <string name="action_next">Next</string>
+    <string name="label_password">Password</string>
+    <string name="label_username">Username</string>
+    <string name="hint_phone_number">Phone number</string>
+    <string name="hint_steam_captcha">Enter the text above</string>
+    <string name="hint_steam_steamguard">Enter your SteamGuard code</string>
+    <string name="description_steam_captcha">Image containing a captcha code</string>
 </resources>

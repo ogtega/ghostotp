@@ -55,7 +55,8 @@ data class Account(
 
     fun getProgress(): Float =
         (System.currentTimeMillis() - (epoch * DateUtils.SECOND_IN_MILLIS))
-            .rem(period * DateUtils.SECOND_IN_MILLIS).toFloat() / (period * DateUtils.SECOND_IN_MILLIS)
+            .rem(period * DateUtils.SECOND_IN_MILLIS)
+            .toFloat() / (period * DateUtils.SECOND_IN_MILLIS)
             .toFloat()
 
     class TypeStringConverter {

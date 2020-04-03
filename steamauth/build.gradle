@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -30,9 +34,13 @@ dependencies {
     implementation Dependencies.coroutines_core
     implementation Dependencies.coroutines_android
     implementation Dependencies.okhttp
+    implementation Dependencies.fragment
+    implementation Dependencies.constraint_layout
     implementation Dependencies.appcompat
     implementation Dependencies.androidx
+    implementation Dependencies.material
     implementation Dependencies.apache_codec
+    implementation Dependencies.picasso
 
     testImplementation Testing.junit
 

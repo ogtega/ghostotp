@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="keyline_0">2dp</dimen>
+    <dimen name="keyline_1">4dp</dimen>
+    <dimen name="keyline_2">8dp</dimen>
+    <dimen name="keyline_4">16dp</dimen>
+    <dimen name="keyline_5">24dp</dimen>
+
+    <dimen name="layout_default_margin">@dimen/keyline_2</dimen>
+    <dimen name="activity_default_margin">@dimen/keyline_4</dimen>
+    <dimen name="component_label_horizontal_margin">@dimen/keyline_4</dimen>
+</resources>
