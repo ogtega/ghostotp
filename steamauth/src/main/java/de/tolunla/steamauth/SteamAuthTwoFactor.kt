@@ -2,8 +2,6 @@ package de.tolunla.steamauth
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.Request
@@ -17,7 +15,7 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
     private val client = SteamAuthUtils.getClient()
     private val headers = SteamAuthUtils.getHeaders()
 
-    suspend fun enableTwoFactor(): JSONObject {
+    suspend fun enableTwoFactor(): TwoFactorResult {
 
         val formBody = FormBody.Builder()
             .add("steamid", loginResult.steamID)
@@ -56,19 +54,36 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
             client.newCall(request).execute().use { res ->
                 if (!res.isSuccessful) throw IOException("/AddAuthenticator failed")
 
-                return@withContext JSONObject(
+                val json = JSONObject(
                     JSONObject(res.body?.string() ?: "")
                         .optString("response", "{}")
+                )
+
+                Log.d("2fa", json.toString())
+
+                return@withContext TwoFactorResult(
+                    serverTime = json.optInt("server_time", 0),
+                    sharedSecret = json.optString("shared_secret", ""),
+                    identitySecret = json.optString("identity_secret", ""),
+                    secretOne = json.optString("secret_1", ""),
+                    status = json.optInt("status", 0)
                 )
             }
         }
     }
-
-    fun getLoginResult() = loginResult
 
     suspend fun finalizeTwoFactor() = withContext(Dispatchers.IO) {
     }
 
     suspend fun disableTwoFactor() = withContext(Dispatchers.IO) {
     }
+
+    data class TwoFactorResult(
+        val serverTime: Int,
+        val sharedSecret: String,
+        val identitySecret: String,
+        val secretOne: String,
+        val status: Int,
+        val success: Boolean = status == 1
+    )
 }
