@@ -11,7 +11,9 @@ import de.tolunla.steamauth.SteamAuthTwoFactor
 import de.tolunla.steamauth.databinding.FragmentSteamLoginBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SteamLoginFragment : Fragment() {
 
@@ -19,8 +21,8 @@ class SteamLoginFragment : Fragment() {
     private lateinit var binding: FragmentSteamLoginBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSteamLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -30,20 +32,28 @@ class SteamLoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonAdd.setOnClickListener {
-            login()
+            GlobalScope.launch {
+                val result = login()
+                if (result.success) {
+                    SteamAuthTwoFactor(result).enableTwoFactor()
+                    findNavController().navigateUp()
+                }
+            }
         }
     }
 
-    private fun login() = GlobalScope.launch(Dispatchers.Main) {
-        val res = SteamAuthLogin(
-            binding.inputUsername.text.toString(),
-            binding.inputPassword.text.toString()
-        ).doLogin(
-            emailAuth = binding.inputCode.text.toString(),
-            twoFactorCode = binding.inputCode.text.toString(),
-            captcha = binding.inputCaptcha.text.toString(),
-            captchaGid = captchaGid
-        )
+    private suspend fun login(): SteamAuthLogin.LoginResult {
+        val res = withContext(Dispatchers.IO) {
+            return@withContext SteamAuthLogin(
+                binding.inputUsername.text.toString(),
+                binding.inputPassword.text.toString()
+            ).doLogin(
+                emailAuth = binding.inputCode.text.toString(),
+                twoFactorCode = binding.inputCode.text.toString(),
+                captcha = binding.inputCaptcha.text.toString(),
+                captchaGid = captchaGid
+            )
+        }
 
         captchaGid = res.captchaGid
 
@@ -58,9 +68,6 @@ class SteamLoginFragment : Fragment() {
         binding.layoutCodeInput.visibility =
             if (res.emailCode || res.mobileCode) View.VISIBLE else View.GONE
 
-        if (res.success) {
-            val steamAuthTwoFactor = SteamAuthTwoFactor(res)
-            steamAuthTwoFactor.enableTwoFactor()
-        }
+        return res
     }
 }

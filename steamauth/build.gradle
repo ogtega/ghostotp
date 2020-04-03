@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+
 android {
     compileSdkVersion 29
     buildToolsVersion Versions.build_tools
@@ -35,6 +37,7 @@ dependencies {
     implementation Dependencies.coroutines_android
     implementation Dependencies.okhttp
     implementation Dependencies.fragment
+    implementation Dependencies.navigation_fragment
     implementation Dependencies.constraint_layout
     implementation Dependencies.appcompat
     implementation Dependencies.androidx

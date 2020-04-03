@@ -2,7 +2,7 @@ object Dependencies {
     val androidx = "androidx.core:core-ktx:1.2.0"
 
     val fragment = "androidx.fragment:fragment-ktx:1.2.2"
-    val preference =  "androidx.preference:preference-ktx:1.1.0"
+    val preference = "androidx.preference:preference-ktx:1.1.0"
     val work = "androidx.work:work-runtime-ktx:${Versions.work}"
     val appcompat = "androidx.appcompat:appcompat:1.1.0"
     val constraint_layout = "androidx.constraintlayout:constraintlayout:1.1.3"

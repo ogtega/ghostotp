@@ -2,6 +2,8 @@ package de.tolunla.steamauth
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.Request
@@ -15,7 +17,7 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
     private val client = SteamAuthUtils.getClient()
     private val headers = SteamAuthUtils.getHeaders()
 
-    suspend fun enableTwoFactor() = withContext(Dispatchers.IO) {
+    suspend fun enableTwoFactor(): JSONObject {
 
         val formBody = FormBody.Builder()
             .add("steamid", loginResult.steamID)
@@ -50,18 +52,19 @@ class SteamAuthTwoFactor(private val loginResult: SteamAuthLogin.LoginResult) {
         "status":1
         }
          */
+        return withContext(Dispatchers.IO) {
+            client.newCall(request).execute().use { res ->
+                if (!res.isSuccessful) throw IOException("/AddAuthenticator failed")
 
-        client.newCall(request).execute().use { res ->
-            if (!res.isSuccessful) throw IOException("/AddAuthenticator failed")
-
-            val data = JSONObject(
-                JSONObject(res.body?.string() ?: "")
-                    .optString("response", "{}")
-            )
-
-            Log.d("AddAuthenticator", data.toString())
+                return@withContext JSONObject(
+                    JSONObject(res.body?.string() ?: "")
+                        .optString("response", "{}")
+                )
+            }
         }
     }
+
+    fun getLoginResult() = loginResult
 
     suspend fun finalizeTwoFactor() = withContext(Dispatchers.IO) {
     }
