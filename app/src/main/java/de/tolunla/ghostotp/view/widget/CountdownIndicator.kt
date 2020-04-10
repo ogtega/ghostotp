@@ -1,4 +1,4 @@
-package de.tolunla.countdownview
+package de.tolunla.ghostotp.view.widget
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,8 +7,9 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.toColorInt
+import de.tolunla.ghostotp.R
 
-class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class CountdownIndicator(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var mColor: Int = "#3060c0".toColorInt() // Color used to paint the indicator's arc
     private val mPaint: Paint
@@ -17,11 +18,12 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
     private var mDrawingRect: RectF? = null
 
     init {
-        context.theme.obtainStyledAttributes(attrs, R.styleable.CountdownView, 0, 0).apply {
+        context.theme.obtainStyledAttributes(attrs,
+            R.styleable.CountdownIndicator, 0, 0).apply {
             try {
-                mColor = getColor(R.styleable.CountdownView_color, mColor)
-                mStartAngle = getInt(R.styleable.CountdownView_startAngle, mStartAngle)
-                mPhase = getFloat(R.styleable.CountdownView_phase, mPhase)
+                mColor = getColor(R.styleable.CountdownIndicator_color, mColor)
+                mStartAngle = getInt(R.styleable.CountdownIndicator_startAngle, mStartAngle)
+                mPhase = getFloat(R.styleable.CountdownIndicator_phase, mPhase)
             } finally {
                 recycle()
             }

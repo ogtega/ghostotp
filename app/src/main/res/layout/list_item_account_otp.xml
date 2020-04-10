@@ -33,7 +33,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/account_code" />
 
-            <de.tolunla.countdownview.CountdownView
+            <de.tolunla.ghostotp.view.widget.CountdownIndicator
                 android:id="@+id/countdown_indicator"
                 android:layout_width="16dp"
                 android:layout_height="16dp"

@@ -3,4 +3,10 @@
     <attr name="alphaEmphasisHigh" format="float" />
     <attr name="alphaEmphasisMedium" format="float" />
     <attr name="alphaEmphasisDisabled" format="float" />
+
+    <declare-styleable name="CountdownIndicator">
+        <attr name="color" format="color" />
+        <attr name="startAngle" format="integer" />
+        <attr name="phase" format="float" />
+    </declare-styleable>
 </resources>
