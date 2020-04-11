@@ -41,16 +41,7 @@ class SteamAuthFragment() : Fragment() {
                     postLogin(login)
 
                     if (login.success) {
-                        twoFactorResult = if (twoFactorResult != null)
-                            twoFactorResult else SteamTwoFactor(login).enableTwoFactor()
-
-                        twoFactorResult?.let { tfa ->
-                            postTFA(tfa)
-
-                            if (tfa.success) {
-                                // TODO: Send the result to the activity
-                            }
-                        }
+                        // TODO: Launch a fragment for activating SteamGuard
                     }
                 }
             }

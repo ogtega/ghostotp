@@ -67,6 +67,36 @@ class SteamTwoFactor(private val loginResult: SteamLoginResult) {
     }
 
     fun finalizeTwoFactor(secret: String, smsCode: String) {
-        SteamGuard.generateAuthCode(secret, 0)
+        val code = SteamGuard.generateAuthCode(secret, 0)
+        val time = System.currentTimeMillis().div(1000).toInt()
+
+        val formBody = FormBody.Builder()
+            .add("steamid", loginResult.steamID)
+            .add("access_token", loginResult.oathToken)
+            .add("authenticator_code", code)
+            .add("authenticator_time", time.toString())
+            .add("activation_code", smsCode)
+            .build()
+
+        val request = Request.Builder()
+            .url("https://api.steampowered.com/ITwoFactorService/FinalizeAddAuthenticator/v1/")
+            .post(formBody)
+            .build()
+
+        client.newCall(request).execute().use {res ->
+            if (!res.isSuccessful) throw IOException("/FinalizeAddAuthenticator failed")
+
+            val json = JSONObject(
+                JSONObject(res.body?.string() ?: "")
+                    .optString("response", "{}")
+            )
+
+            Log.d("2fa", json.toString())
+
+            // TODO: if (json.getInt("status") == 89) Invalid activation code
+            // TODO: if (json.getBoolean("want_more"))
+
+            // TODO: if (!json.getBoolean("success"))
+        }
     }
 }

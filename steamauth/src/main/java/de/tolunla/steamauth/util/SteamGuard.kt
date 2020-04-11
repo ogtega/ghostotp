@@ -7,7 +7,7 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
-class SteamGuard() {
+class SteamGuard {
     companion object {
 
         private val STEAMCHARS = charArrayOf(
@@ -37,11 +37,11 @@ class SteamGuard() {
 
             val bytes = ByteBuffer.wrap(raw.slice(start..start+4).toByteArray())
 
-            val fullcode = bytes.int and 0x7fffffff and -0x1
+            val fullCode = bytes.int and 0x7fffffff and -0x1
 
             for(i in 0..4) {
-                code += STEAMCHARS[fullcode.rem(STEAMCHARS.size)]
-                fullcode.div(STEAMCHARS.size)
+                code += STEAMCHARS[fullCode.rem(STEAMCHARS.size)]
+                fullCode.div(STEAMCHARS.size)
             }
 
             return code
