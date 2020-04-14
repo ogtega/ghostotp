@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/steam_login_dest"
-        android:name="de.tolunla.steamauth.view.fragment.SteamLoginFragment"
+        android:name="de.tolunla.steamauth.view.SteamLoginFragment"
         android:label="@string/label_steam_login" />
 
 </navigation>

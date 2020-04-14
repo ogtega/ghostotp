@@ -9,16 +9,16 @@ import java.io.IOException
 import java.util.*
 import kotlin.math.floor
 
-class SteamTwoFactor(private val loginResult: SteamLoginResult) {
+class SteamGuard(private val steamID: String, private val token: String) {
     private val client = getClient()
 
-    fun enableTwoFactor(): SteamAuthResult {
+    fun enableTwoFactor(): SteamGuardResult {
         val formBody = FormBody.Builder()
-            .add("steamid", loginResult.steamID)
-            .add("access_token", loginResult.oathToken)
+            .add("steamid", steamID)
+            .add("access_token", token)
             .add("authenticator_time", floor(Date().time.div(1000.0)).toString())
             .add("authenticator_type", "1")
-            .add("device_identifier", getDeviceId(loginResult.steamID))
+            .add("device_identifier", getDeviceId(steamID))
             .add("sms_phone_id", "1")
             .build()
 
@@ -56,7 +56,7 @@ class SteamTwoFactor(private val loginResult: SteamLoginResult) {
 
             Log.d("2fa", json.toString())
 
-            return SteamAuthResult(
+            return SteamGuardResult(
                 serverTime = json.optInt("server_time", 0),
                 sharedSecret = json.optString("shared_secret", ""),
                 identitySecret = json.optString("identity_secret", ""),
@@ -67,12 +67,12 @@ class SteamTwoFactor(private val loginResult: SteamLoginResult) {
     }
 
     fun finalizeTwoFactor(secret: String, smsCode: String) {
-        val code = SteamGuard.generateAuthCode(secret, 0)
+        val code = SteamGuardUtils.generateAuthCode(secret, 0)
         val time = System.currentTimeMillis().div(1000).toInt()
 
         val formBody = FormBody.Builder()
-            .add("steamid", loginResult.steamID)
-            .add("access_token", loginResult.oathToken)
+            .add("steamid", steamID)
+            .add("access_token", token)
             .add("authenticator_code", code)
             .add("authenticator_time", time.toString())
             .add("activation_code", smsCode)

@@ -34,7 +34,7 @@ fun getDeviceId(steamID: String): String {
             "-${raw.substring(20..31)}"
 }
 
-data class SteamAuthResult(
+data class SteamGuardResult(
     val serverTime: Int,
     val sharedSecret: String,
     val identitySecret: String,

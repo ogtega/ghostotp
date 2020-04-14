@@ -1,4 +1,4 @@
-package de.tolunla.steamauth.view.fragment
+package de.tolunla.steamauth.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class SteamLoginFragment : Fragment() {
+class SteamLoginFragment(private val listener: SteamLoginListener) : Fragment() {
     private lateinit var code: String
     private lateinit var captcha: String
     private lateinit var username: String
@@ -43,7 +43,7 @@ class SteamLoginFragment : Fragment() {
             binding.layoutUsernameInput.error = null
             binding.layoutPasswordInput.error = null
 
-            login()
+            doLogin()
         }
     }
 
@@ -59,7 +59,7 @@ class SteamLoginFragment : Fragment() {
         }
     }
 
-    private fun login() {
+    private fun doLogin() {
         val steamLogin = SteamLogin(username, password)
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -76,12 +76,14 @@ class SteamLoginFragment : Fragment() {
 
                 launch(Dispatchers.Main) { postLogin() }
             } else {
-                Snackbar.make(
-                    binding.root,
-                    "Successfully logged in.",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                listener.onSuccess(loginResult.oathToken, loginResult.steamID, username)
             }
+        }
+    }
+
+    companion object {
+        interface SteamLoginListener {
+            fun onSuccess(token: String, steamID: String, username: String)
         }
     }
 }

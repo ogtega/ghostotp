@@ -7,7 +7,7 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
-class SteamGuard {
+class SteamGuardUtils {
     companion object {
 
         private val STEAMCHARS = charArrayOf(
