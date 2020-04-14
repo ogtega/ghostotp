@@ -1,6 +1,7 @@
 # Ghost Mobile Authenticator
 
 [![Android CI](https://github.com/ogtega/ghostotp/workflows/Android%20CI/badge.svg)](https://github.com/ogtega/ghostotp/actions?query=workflow%3A%22Android+CI%22)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/037ae12006514ce8a1aed27102a320de)](https://app.codacy.com/manual/tolunlade/ghostotp?utm_source=github.com&utm_medium=referral&utm_content=ogtega/ghostotp&utm_campaign=Badge_Grade_Dashboard)
 [![GitHub top language](https://img.shields.io/github/languages/top/ogtega/ghostotp)](https://github.com/ogtega/ghostotp#)
 [![GitHub](https://img.shields.io/github/license/ogtega/ghostotp)](https://github.com/ogtega/ghostotp/blob/master/LICENSE)
 
