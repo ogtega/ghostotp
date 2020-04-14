@@ -13,11 +13,22 @@ import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import javax.crypto.Cipher
 
+/**
+ * Class responsible for making all login related api requests.
+ *
+ * @property username the username of the account logging in.
+ * @property password the password of the account logging in.
+ * @constructor Creates an login object with a user's credentials.
+ */
 class SteamLogin(private val username: String, private val password: String) {
 
     private val client = getClient()
     private var captchaGid: String = ""
 
+    /**
+     * Sends the login api request with provided arguments
+     * @return the result of the login request.
+     */
     fun doLogin(captcha: String = "", emailAuth: String = "", mobileCode: String = ""): SteamLoginResult {
         val rsaObj = JSONObject(getRSAKey())
 

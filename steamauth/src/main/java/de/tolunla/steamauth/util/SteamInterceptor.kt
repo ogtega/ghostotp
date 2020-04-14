@@ -4,6 +4,9 @@ import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * This class contains the information all steam api requests need.
+ */
 class SteamInterceptor : Interceptor {
 
     private val referer =

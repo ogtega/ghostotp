@@ -9,9 +9,20 @@ import java.io.IOException
 import java.util.*
 import kotlin.math.floor
 
+/**
+ * Class responsible for making all login related api requests.
+ *
+ * @property steamID the id of the account where enabling SteamGuard.
+ * @property token steam Oauth token.
+ * @constructor Creates an steamguard object with a user's credentials.
+ */
 class SteamGuard(private val steamID: String, private val token: String) {
     private val client = getClient()
 
+    /**
+     * Sends the api request to enable SteamGuard
+     * @return the result of the request.
+     */
     fun enableTwoFactor(): SteamGuardResult {
         val formBody = FormBody.Builder()
             .add("steamid", steamID)
@@ -66,6 +77,9 @@ class SteamGuard(private val steamID: String, private val token: String) {
         }
     }
 
+    /**
+     * Sends the api request to finalize SteamGuard
+     */
     fun finalizeTwoFactor(secret: String, smsCode: String) {
         val code = SteamGuardUtils.generateAuthCode(secret, 0)
         val time = System.currentTimeMillis().div(1000).toInt()
