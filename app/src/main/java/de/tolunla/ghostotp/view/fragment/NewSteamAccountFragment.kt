@@ -7,12 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.tolunla.ghostotp.databinding.FragmentNewSteamAccountBinding
 import de.tolunla.steamguard.util.SteamGuardResult
+import de.tolunla.steamguard.view.SteamGuardFragment
 import de.tolunla.steamguard.view.SteamGuardFragment.Companion.SteamGuardListener
 import de.tolunla.steamguard.view.SteamLoginFragment
 import de.tolunla.steamguard.view.SteamLoginFragment.Companion.SteamLoginListener
 
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
 
+    private lateinit var token: String
+    private lateinit var steamID: String
+    private lateinit var username: String
+    private lateinit var steamGuardResult: SteamGuardResult
     private lateinit var binding: FragmentNewSteamAccountBinding
 
     override fun onCreateView(
@@ -33,7 +38,13 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     }
 
     override fun onLoginSuccess(token: String, steamID: String, username: String) {
-        TODO("Not yet implemented")
+        this.token = token
+        this.steamID = steamID
+        this.username = username
+
+        val  ft = childFragmentManager.beginTransaction()
+        ft.replace(binding.fragment.id, SteamGuardFragment(token, steamID))
+        ft.commit()
     }
 
     override fun onSteamGuardSuccess(result: SteamGuardResult) {

@@ -17,7 +17,11 @@ class SteamGuardFragment(private val token: String, private val steamId: String)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is SteamGuardListener) listener = context
+
+        parentFragment?.let {
+            if (it is SteamGuardListener) listener = it
+            else activity?.onBackPressed()
+        }
     }
 
     override fun onCreateView(
