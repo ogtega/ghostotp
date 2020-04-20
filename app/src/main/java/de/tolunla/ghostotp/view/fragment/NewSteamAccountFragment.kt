@@ -1,6 +1,7 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,6 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     }
 
     override fun onSteamGuardSuccess(result: SteamGuardResult) {
-        TODO("Not yet implemented")
+        Log.i("Steam", "$username: ${result.sharedSecret}")
     }
 }

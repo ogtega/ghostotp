@@ -49,8 +49,6 @@ class SteamGuard(private val steamID: String, private val token: String) {
                     .optString("response", "{}")
             )
 
-            Log.d("2fa", json.toString())
-
             return SteamGuardResult(
                 serverTime = json.optInt("server_time", 0),
                 sharedSecret = json.optString("shared_secret", ""),
