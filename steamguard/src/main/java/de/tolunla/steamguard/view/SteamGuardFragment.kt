@@ -2,11 +2,12 @@ package de.tolunla.steamguard.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.snackbar.Snackbar
+import de.tolunla.steamguard.R
 import de.tolunla.steamguard.SteamGuard
 import de.tolunla.steamguard.databinding.FragmentSteamGuardBinding
 import de.tolunla.steamguard.util.SteamGuardResult
@@ -14,11 +15,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class SteamGuardFragment(private val token: String, private val steamId: String) :
+class SteamGuardFragment(token: String, steamId: String) :
     DialogFragment() {
 
     private val steamGuard = SteamGuard(steamId, token)
 
+    private lateinit var result: SteamGuardResult
     private lateinit var binding: FragmentSteamGuardBinding
     private lateinit var listener: SteamGuardListener
 
@@ -43,7 +45,7 @@ class SteamGuardFragment(private val token: String, private val steamId: String)
         super.onViewCreated(view, savedInstanceState)
 
         GlobalScope.launch(Dispatchers.IO) {
-            val steamGuardResult = steamGuard.enableTwoFactor()
+            result = steamGuard.enableTwoFactor()
 
             /**
              * response.status:
@@ -51,8 +53,20 @@ class SteamGuardFragment(private val token: String, private val steamId: String)
              * 84 - RateLimitExceeded
              */
 
-            Log.i("Steam", "success: ${steamGuardResult.success}, ${steamGuardResult.status}")
-            listener.onSteamGuardSuccess(steamGuardResult)
+            if (result.status != 1) {
+                Snackbar.make(
+                    binding.root, when (result.status) {
+                        2 -> R.string.phone_not_attached
+                        84 -> R.string.rate_limit_exceeded
+                        else -> R.string.unexpected_error
+                    }
+                    , Snackbar.LENGTH_LONG
+                ).show()
+
+                launch(Dispatchers.Main) { activity?.onBackPressed() }
+            } else {
+                listener.onSteamGuardSuccess(result)
+            }
         }
     }
 

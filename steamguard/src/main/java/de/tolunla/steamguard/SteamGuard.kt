@@ -1,6 +1,5 @@
 package de.tolunla.steamguard
 
-import android.util.Log
 import de.tolunla.steamguard.util.SteamGuardResult
 import de.tolunla.steamguard.util.SteamGuardUtils
 import de.tolunla.steamguard.util.getClient

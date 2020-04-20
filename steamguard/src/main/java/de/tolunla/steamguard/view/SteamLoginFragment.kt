@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import de.tolunla.steamguard.R
 import de.tolunla.steamguard.SteamLogin
 import de.tolunla.steamguard.databinding.FragmentSteamLoginBinding
 import de.tolunla.steamguard.util.SteamLoginResult
@@ -72,8 +73,8 @@ class SteamLoginFragment : Fragment() {
         binding.layoutCodeInput.visibility = if (loginResult.emailCode) View.VISIBLE else View.GONE
 
         if (!loginResult.captcha && !loginResult.mobileCode && !loginResult.emailCode) {
-            binding.layoutUsernameInput.error = "Invalid username or password"
-            binding.layoutPasswordInput.error = "Invalid username or password"
+            binding.layoutUsernameInput.error = getString(R.string.invalid_username_password)
+            binding.layoutPasswordInput.error = getString(R.string.invalid_username_password)
         }
     }
 
@@ -87,7 +88,7 @@ class SteamLoginFragment : Fragment() {
                 if (loginResult.mobileCode) {
                     Snackbar.make(
                         binding.root,
-                        "Please remove the authenticator associated to this account.",
+                        R.string.remove_authenticator,
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
