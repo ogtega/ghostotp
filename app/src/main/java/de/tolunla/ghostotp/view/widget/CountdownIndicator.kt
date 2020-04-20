@@ -18,8 +18,10 @@ class CountdownIndicator(context: Context, attrs: AttributeSet) : View(context, 
     private var mDrawingRect: RectF? = null
 
     init {
-        context.theme.obtainStyledAttributes(attrs,
-            R.styleable.CountdownIndicator, 0, 0).apply {
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.CountdownIndicator, 0, 0
+        ).apply {
             try {
                 mColor = getColor(R.styleable.CountdownIndicator_color, mColor)
                 mStartAngle = getInt(R.styleable.CountdownIndicator_startAngle, mStartAngle)

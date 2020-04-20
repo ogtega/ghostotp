@@ -14,7 +14,7 @@
             app:destination="@id/new_account_dest" />
         <action
             android:id="@+id/action_new_account_sheet_dest_to_steam_login_dest"
-            app:destination="@id/steam_login_dest" />
+            app:destination="@id/new_steam_account_dest" />
     </dialog>
 
     <dialog
@@ -50,8 +50,8 @@
         tools:layout="@layout/fragment_new_account" />
 
     <fragment
-        android:id="@+id/steam_login_dest"
-        android:name="de.tolunla.steamauth.view.SteamLoginFragment"
+        android:id="@+id/new_steam_account_dest"
+        android:name="de.tolunla.ghostotp.view.fragment.NewSteamAccountFragment"
         android:label="@string/label_steam_login" />
 
 </navigation>

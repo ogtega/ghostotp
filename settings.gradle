@@ -1,1 +1,1 @@
-include ':app', ':steamauth'
+include ':app', ':steamguard'
