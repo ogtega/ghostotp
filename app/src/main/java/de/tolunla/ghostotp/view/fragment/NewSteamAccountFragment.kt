@@ -7,20 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.tolunla.ghostotp.databinding.FragmentNewSteamAccountBinding
-import de.tolunla.ghostotp.db.AppDatabase
-import de.tolunla.ghostotp.db.AppDatabase_Impl
-import de.tolunla.steamguard.util.SteamGuardResult
 import de.tolunla.steamguard.view.SteamGuardFragment
 import de.tolunla.steamguard.view.SteamGuardFragment.Companion.SteamGuardListener
 import de.tolunla.steamguard.view.SteamLoginFragment
 import de.tolunla.steamguard.view.SteamLoginFragment.Companion.SteamLoginListener
+import org.json.JSONObject
 
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
 
     private lateinit var token: String
     private lateinit var steamID: String
     private lateinit var username: String
-    private lateinit var result: SteamGuardResult
     private lateinit var binding: FragmentNewSteamAccountBinding
 
     override fun onCreateView(
@@ -50,10 +47,10 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
         ft.commit()
     }
 
-    override fun onSteamGuardSuccess(result: SteamGuardResult) {
+    override fun onSteamGuardSuccess(result: JSONObject) {
         context?.let {
             // AppDatabase.getInstance(it).accountDao().insert()
         }
-        Log.i("Steam", "$username: ${result.sharedSecret}")
+        Log.i("Steam", "$username: ${result.toString()}")
     }
 }

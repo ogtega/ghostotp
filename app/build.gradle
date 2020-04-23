@@ -69,7 +69,7 @@ dependencies {
      * Room Persistence Library
      */
     kapt Annotations.room
-    implementation Dependencies.room_ktx
+    implementation Dependencies.room
     implementation Dependencies.room_runtime
     /**
      * Navigation Components

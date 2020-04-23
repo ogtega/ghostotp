@@ -10,17 +10,17 @@ import com.google.android.material.snackbar.Snackbar
 import de.tolunla.steamguard.R
 import de.tolunla.steamguard.SteamGuard
 import de.tolunla.steamguard.databinding.FragmentSteamGuardBinding
-import de.tolunla.steamguard.util.SteamGuardResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class SteamGuardFragment(token: String, steamId: String) :
     DialogFragment() {
 
     private val steamGuard = SteamGuard(steamId, token)
 
-    private lateinit var result: SteamGuardResult
+    private lateinit var result: JSONObject
     private lateinit var binding: FragmentSteamGuardBinding
     private lateinit var listener: SteamGuardListener
 
@@ -47,15 +47,11 @@ class SteamGuardFragment(token: String, steamId: String) :
         GlobalScope.launch(Dispatchers.IO) {
             result = steamGuard.enableTwoFactor()
 
-            /**
-             * response.status:
-             * 02 - Phone number not attached to account
-             * 84 - RateLimitExceeded
-             */
+            val status = result.optInt("status", -1)
 
-            if (result.status != 1) {
+            if (status != 1) {
                 Snackbar.make(
-                    binding.root, when (result.status) {
+                    binding.root, when (status) {
                         2 -> R.string.phone_not_attached
                         84 -> R.string.rate_limit_exceeded
                         else -> R.string.unexpected_error
@@ -72,7 +68,7 @@ class SteamGuardFragment(token: String, steamId: String) :
 
     companion object {
         interface SteamGuardListener {
-            fun onSteamGuardSuccess(result: SteamGuardResult)
+            fun onSteamGuardSuccess(result: JSONObject)
         }
     }
 }

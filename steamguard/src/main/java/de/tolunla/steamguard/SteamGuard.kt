@@ -1,6 +1,5 @@
 package de.tolunla.steamguard
 
-import de.tolunla.steamguard.util.SteamGuardResult
 import de.tolunla.steamguard.util.SteamGuardUtils
 import de.tolunla.steamguard.util.getClient
 import de.tolunla.steamguard.util.getDeviceId
@@ -25,7 +24,7 @@ class SteamGuard(private val steamID: String, private val token: String) {
      * Sends the api request to enable SteamGuard
      * @return the result of the request.
      */
-    fun enableTwoFactor(): SteamGuardResult {
+    fun enableTwoFactor(): JSONObject {
         val formBody = FormBody.Builder()
             .add("steamid", steamID)
             .add("access_token", token)
@@ -43,17 +42,9 @@ class SteamGuard(private val steamID: String, private val token: String) {
         client.newCall(request).execute().use { res ->
             if (!res.isSuccessful) throw IOException("/AddAuthenticator failed")
 
-            val json = JSONObject(
+            return JSONObject(
                 JSONObject(res.body?.string() ?: "")
                     .optString("response", "{}")
-            )
-
-            return SteamGuardResult(
-                serverTime = json.optInt("server_time", 0),
-                sharedSecret = json.optString("shared_secret", ""),
-                identitySecret = json.optString("identity_secret", ""),
-                secretOne = json.optString("secret_1", ""),
-                status = json.optInt("status", 0)
             )
         }
     }
