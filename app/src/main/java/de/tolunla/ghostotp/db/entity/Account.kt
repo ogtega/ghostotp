@@ -11,7 +11,6 @@ import org.apache.commons.codec.binary.Hex
 import java.util.*
 
 @Entity(tableName = "accounts")
-@Suppress("DataClassPrivateConstructor")
 data class Account(
     val name: String, val secret: String, val crypto: Crypto = Crypto.SHA1, val digits: Int = 6,
     val type: Type, val issuer: String = "", val epoch: Long = 0L, val period: Int = 30,
