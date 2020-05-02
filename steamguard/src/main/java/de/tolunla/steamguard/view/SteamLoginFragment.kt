@@ -88,7 +88,7 @@ class SteamLoginFragment : Fragment() {
         val steamLogin = SteamLogin(username, password)
 
         GlobalScope.launch(Dispatchers.IO) {
-            loginResult = steamLogin.doLogin(captcha, code, code)
+            loginResult = steamLogin.doLogin(captcha, code)
 
             if (!loginResult.success) {
                 if (loginResult.mobileCode) {

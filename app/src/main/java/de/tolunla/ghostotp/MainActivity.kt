@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity() {
         // Used to know when we are at a "top level" destination
         appBarConfig = AppBarConfiguration.Builder(
             R.id.account_list_dest,
-            R.id.new_account_sheet_dest,
-            R.id.option_menu_sheet_dest
+            R.id.new_account_sheet_dest
         ).build()
 
         setupNavigation()
