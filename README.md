@@ -9,6 +9,7 @@ An android app designed to managing multiple authenticators for many platforms.
 
 ## Features
 - Displays multiple OTP codes simultaneously
+- Support for SteamGuard authentication code generation
 
 ## Getting Started
 ```bash
