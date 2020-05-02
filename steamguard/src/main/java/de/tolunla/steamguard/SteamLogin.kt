@@ -76,6 +76,10 @@ class SteamLogin(private val username: String, private val password: String) {
         }
     }
 
+    /**
+     * Sends a request for an rsa key used for password encryption
+     * @return the result provided public key.
+     */
     private fun getRSAKey(): String {
         val formBody = FormBody.Builder()
             .add("username", username)
@@ -92,6 +96,10 @@ class SteamLogin(private val username: String, private val password: String) {
         }
     }
 
+    /**
+     * Method used to encrypt the user's plaintext password
+     * @return the encrypted password.
+     */
     private fun encryptPassword(rsaObj: JSONObject): String {
         val authMod = rsaObj.getString("publickey_mod")
         val authExp = rsaObj.getString("publickey_exp")

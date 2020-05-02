@@ -7,7 +7,6 @@ import de.tolunla.ghostotp.model.OTPAccount
 
 class DataRepository private constructor(private val database: AppDatabase) {
     companion object {
-
         @Volatile
         private var INSTANCE: DataRepository? = null
 

@@ -61,11 +61,17 @@ class CountdownIndicator(context: Context, attrs: AttributeSet) : View(context, 
         }
     }
 
+    /**
+     * Sets the phase of the indicator
+     */
     fun setPhase(phase: Float) {
         mPhase = phase
         invalidate()
     }
 
+    /**
+     * Sets the color of the indicator
+     */
     fun setColor(color: Int) {
         mPaint.color = color
     }

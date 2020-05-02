@@ -65,6 +65,9 @@ class SteamLoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Called after doLogin() { Used to prompt the user of errors }
+     */
     private fun postLogin() {
         binding.layoutCaptcha.visibility = if (loginResult.captcha) View.VISIBLE else View.GONE
         if (loginResult.captcha) Picasso.get().load(loginResult.captchaURL)
@@ -78,6 +81,9 @@ class SteamLoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Sends the login api request
+     */
     private fun doLogin() {
         val steamLogin = SteamLogin(username, password)
 
@@ -102,6 +108,9 @@ class SteamLoginFragment : Fragment() {
 
     companion object {
         interface SteamLoginListener {
+            /**
+             * Called once we successfully complete the login api call
+             */
             fun onLoginSuccess(token: String, steamID: String, username: String)
         }
     }

@@ -20,6 +20,10 @@ class SteamGuardUtils {
             return (System.currentTimeMillis() / 1000L) + offset
         }
 
+        /**
+         * Generates the 2FA code for SteamGuard
+         * @return the 2FA code.
+         */
         fun generateAuthCode(secret: String, offset: Int): String {
             var code = ""
             val keyBytes = Base64.decode(secret, Base64.DEFAULT)

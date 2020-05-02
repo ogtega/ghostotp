@@ -86,8 +86,14 @@ class SteamGuardFragment(token: String, steamId: String) :
     companion object {
         interface SteamGuardListener {
 
+            /**
+             * Called once we receive the SteamGuard json from steam
+             */
             fun onSteamGuardReceived(result: JSONObject)
 
+            /**
+             * Called once the activation is completed
+             */
             suspend fun onSteamGuardComplete(success: Boolean)
         }
     }

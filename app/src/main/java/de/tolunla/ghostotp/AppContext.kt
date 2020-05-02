@@ -15,6 +15,9 @@ class AppContext : Application() {
     }
 }
 
+/**
+ * Sets the application's preference for day/night mode
+ */
 fun setNightMode(nightMode: Boolean) {
     AppCompatDelegate.setDefaultNightMode(
         if (nightMode)
