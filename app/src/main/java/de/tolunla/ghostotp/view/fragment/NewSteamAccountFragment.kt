@@ -42,7 +42,7 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
         this.steamID = steamID
         this.username = username
 
-        val  ft = childFragmentManager.beginTransaction()
+        val ft = childFragmentManager.beginTransaction()
         ft.replace(binding.fragment.id, SteamGuardFragment(token, steamID))
         ft.commit()
     }

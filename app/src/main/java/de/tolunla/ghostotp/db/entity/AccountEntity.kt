@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type.*
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
-import de.tolunla.ghostotp.model.SteamAccount
 import org.json.JSONObject
 
 @Entity(tableName = "accounts")
@@ -16,9 +15,10 @@ data class AccountEntity(
 ) {
     enum class Type { HOTP, TOTP, STEAM }
 
-    @Ignore val data = JSONObject(json)
+    @Ignore
+    val data = JSONObject(json)
 
-    fun getAccount() : Account = when (type) {
+    fun getAccount(): Account = when (type) {
         HOTP -> OTPAccount(
             id = id,
             name = name,
