@@ -1,20 +1,16 @@
 package de.tolunla.steamguard.view
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog.Builder
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import de.tolunla.steamguard.R
 import de.tolunla.steamguard.SteamGuard
 import de.tolunla.steamguard.databinding.FragmentSteamGuardBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
 
 class SteamGuardFragment(token: String, steamId: String) :
@@ -46,6 +42,8 @@ class SteamGuardFragment(token: String, steamId: String) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.buttonAdd.isEnabled = false
+
         GlobalScope.launch(Dispatchers.IO) {
             result = steamGuard.enableTwoFactor()
 
@@ -57,20 +55,37 @@ class SteamGuardFragment(token: String, steamId: String) :
                         2 -> R.string.phone_not_attached
                         84 -> R.string.rate_limit_exceeded
                         else -> R.string.unexpected_error
-                    }
-                    , Snackbar.LENGTH_LONG
+                    }, Snackbar.LENGTH_LONG
                 ).show()
 
                 launch(Dispatchers.Main) { activity?.onBackPressed() }
-            } else {
-                listener.onSteamGuardSuccess(result)
+            }
+
+            listener.onSteamGuardReceived(result)
+            launch(Dispatchers.Main) { binding.buttonAdd.isEnabled = true }
+        }
+
+        binding.buttonAdd.setOnClickListener {
+
+            GlobalScope.launch(Dispatchers.Main) {
+                val success = async(Dispatchers.IO) {
+                    return@async steamGuard.finalizeTwoFactor(
+                        result.getString("shared_secret"),
+                        binding.inputSmsCode.text.toString()
+                    )
+                }
+
+                listener.onSteamGuardComplete(success.await())
             }
         }
     }
 
     companion object {
         interface SteamGuardListener {
-            fun onSteamGuardSuccess(result: JSONObject)
+
+            fun onSteamGuardReceived(result: JSONObject)
+
+            suspend fun onSteamGuardComplete(success: Boolean)
         }
     }
 }

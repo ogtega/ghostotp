@@ -2,6 +2,7 @@ package de.tolunla.steamguard.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class SteamLoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonAdd.setOnClickListener {
+        binding.buttonContinue.setOnClickListener {
             code = binding.inputCode.text.toString()
             captcha = binding.inputCaptcha.text.toString()
             username = binding.inputUsername.text.toString()

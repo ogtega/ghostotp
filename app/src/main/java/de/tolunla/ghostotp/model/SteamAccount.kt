@@ -6,7 +6,7 @@ import de.tolunla.steamguard.util.SteamGuardUtils
 import org.json.JSONObject
 
 class SteamAccount(
-    id: Int? = null,
+    id: Long? = null,
     name: String,
     issuer: String = "Steam",
     type: Type = Type.STEAM,

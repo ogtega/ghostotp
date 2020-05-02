@@ -1,25 +1,28 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewSteamAccountBinding
-import de.tolunla.ghostotp.db.AppDatabase
-import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.model.SteamAccount
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import de.tolunla.steamguard.view.SteamGuardFragment
 import de.tolunla.steamguard.view.SteamGuardFragment.Companion.SteamGuardListener
 import de.tolunla.steamguard.view.SteamLoginFragment
 import de.tolunla.steamguard.view.SteamLoginFragment.Companion.SteamLoginListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
 
+    private var accountId: Long = -1
     private lateinit var token: String
     private lateinit var steamID: String
     private lateinit var username: String
@@ -61,17 +64,24 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
         ft.commit()
     }
 
-    override fun onSteamGuardSuccess(result: JSONObject) {
-        context?.let {
-            val account = SteamAccount(
+    override fun onSteamGuardReceived(result: JSONObject) {
+        accountId = accountViewModel.insert(
+            SteamAccount(
                 name = result.getString("account_name"),
                 sharedSecret = result.getString("shared_secret"),
                 revocationCode = result.getString("revocation_code"),
                 identitySecret = result.getString("identity_secret")
             )
+        )
+    }
 
-            accountViewModel.insert(account)
+    override suspend fun onSteamGuardComplete(success: Boolean) {
+        if (!success) {
+            accountViewModel.delete(accountId)
         }
-        Log.i("Steam", "$username: ${result.toString()}")
+
+        GlobalScope.launch(Dispatchers.Main) {
+            findNavController().navigate(R.id.account_list_dest)
+        }
     }
 }

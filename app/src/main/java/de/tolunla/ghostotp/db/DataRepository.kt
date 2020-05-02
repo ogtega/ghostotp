@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
+import kotlinx.coroutines.Deferred
 
 class DataRepository private constructor(private val database: AppDatabase) {
     companion object {
@@ -19,13 +20,16 @@ class DataRepository private constructor(private val database: AppDatabase) {
     val accounts = database.accountDao().getAll()
 
     @WorkerThread
-    fun insertAccount(account: Account) {
-        database.accountDao().insert(account.toEntity())
-    }
+    fun insertAccount(account: Account): Long = database.accountDao().insert(account.toEntity())
 
     @WorkerThread
     fun deleteAccount(account: Account) {
-        account.id?.let { database.accountDao().delete(it) }
+        account.id?.let { deleteAccount(it) }
+    }
+
+    @WorkerThread
+    fun deleteAccount(id: Long) {
+       database.accountDao().delete(id)
     }
 
     @WorkerThread

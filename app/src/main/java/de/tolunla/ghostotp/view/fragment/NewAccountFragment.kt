@@ -99,7 +99,6 @@ class NewAccountFragment : Fragment(), TextWatcher {
     }
 
     private fun validateSecret(toSubmit: Boolean = false): Boolean {
-        // TODO: Determine if Google's discarding of the last incomplete chunk is wanted behavior
         try {
 
             val bytes = Base32().decode(getSecretKey())

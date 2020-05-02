@@ -11,6 +11,7 @@ import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AccountViewModel(context: Application) : AndroidViewModel(context) {
 
@@ -28,8 +29,12 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
         repository.deleteAccount(account)
     }
 
-    fun insert(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertAccount(account)
+    fun delete(id: Long) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteAccount(id)
+    }
+
+    fun insert(account: Account): Long = runBlocking(Dispatchers.IO) {
+        return@runBlocking repository.insertAccount(account)
     }
 
     fun update(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {

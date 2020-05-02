@@ -1,5 +1,6 @@
 package de.tolunla.steamguard
 
+import android.util.Log
 import de.tolunla.steamguard.util.SteamLoginResult
 import de.tolunla.steamguard.util.getClient
 import okhttp3.FormBody
@@ -32,7 +33,7 @@ class SteamLogin(private val username: String, private val password: String) {
     fun doLogin(
         captcha: String = "",
         emailAuth: String = "",
-        mobileCode: String = ""
+        code: String = ""
     ): SteamLoginResult {
         val rsaObj = JSONObject(getRSAKey())
 
@@ -42,7 +43,7 @@ class SteamLogin(private val username: String, private val password: String) {
             .add("captchagid", captchaGid)
             .add("captcha_text", captcha)
             .add("emailauth", emailAuth)
-            .add("twofactorcode", mobileCode)
+            .add("twofactorcode", "")
             .add("rsatimestamp", rsaObj.getString("timestamp"))
             .add("remember_login", "true")
             .add("loginfriendlyname", "#login_emailauth_friendlyname_mobile")
@@ -60,6 +61,8 @@ class SteamLogin(private val username: String, private val password: String) {
             if (!res.isSuccessful) throw IOException("/dologin failed")
             val data = JSONObject(res.body?.string() ?: "")
             val oath = JSONObject(data.optString("oauth", "{}"))
+
+            Log.d("Login", data.toString())
 
             return SteamLoginResult(
                 success = data.optBoolean("success", false),

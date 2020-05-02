@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
 class OTPAccount(
-    id: Int? = null,
+    id: Long? = null,
     name: String,
     val secret: String,
     val crypto: String = "SHA1",

@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 @Entity(tableName = "accounts")
 data class AccountEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int? = null,
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val name: String, val issuer: String = "", val json: String, val type: Type
 ) {
     enum class Type { HOTP, TOTP, STEAM }
