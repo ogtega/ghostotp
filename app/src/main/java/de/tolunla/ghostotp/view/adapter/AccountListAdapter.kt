@@ -18,14 +18,17 @@ import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.LayoutDialogInputBinding
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
-import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.*
+import de.tolunla.ghostotp.model.Account
+import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
 class AccountListAdapter(val context: Context) :
     RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
-    private var accountList = emptyList<Account>()
+    private var accountList = emptyList<AccountEntity>()
 
     private val mClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     private val mInflater = LayoutInflater.from(context)
@@ -50,7 +53,7 @@ class AccountListAdapter(val context: Context) :
     /**
      * Updates the account list and notifies the adapter of changes
      */
-    fun setAccounts(accounts: List<Account>) {
+    fun setAccounts(accounts: List<AccountEntity>) {
         val diffCallback = AccountDiffCallback(accountList, accounts)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -71,7 +74,7 @@ class AccountListAdapter(val context: Context) :
         }
 
         holder.binding.root.setOnClickListener {
-            if (holder.account.type == Account.Type.HOTP) {
+            if (holder.account.type == HOTP) {
                 holder.refresh()
 
                 // Re-enable the refresh button 6 seconds later
@@ -90,11 +93,11 @@ class AccountListAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        val account: Account = accountList[position]
+        val account: Account = accountList[position].getAccount()
 
         holder.bind(account)
 
-        if (account.type != Account.Type.HOTP) {
+        if (account.type != HOTP) {
             mTOTPHolders.add(holder)
         }
     }
@@ -124,31 +127,36 @@ class AccountListAdapter(val context: Context) :
 
         fun bind(account: Account) {
             this.account = account
-            binding.accountName.text = account.label
+            binding.accountName.text = account.getLabel()
 
-            if (account.type == Account.Type.HOTP) {
-                binding.accountCode.text = "- ".repeat(account.digits)
-                binding.timeBased = false
-            } else {
-                binding.timeBased = true
-                refresh()
+            if (account is OTPAccount && account.type == HOTP) {
+                bind(account)
+                return
             }
+
+            binding.timeBased = true
+            refresh()
+        }
+
+        private fun bind(account: OTPAccount) {
+            binding.accountCode.text = "- ".repeat(account.digits)
+            binding.timeBased = false
         }
 
         fun refresh() {
             when (account.type) {
-                Account.Type.TOTP -> {
+                TOTP -> {
                     binding.countdownIndicator.setPhase(1 - account.getProgress())
                 }
-
-                Account.Type.HOTP -> {
+                HOTP -> {
                     binding.root.isEnabled = false
-                    mViewModel.increaseStep(account)
+                    mViewModel.increaseStep(account as OTPAccount)
                 }
+                STEAM -> TODO()
             }
 
             // Set the code based off the current time, then update the code text
-            code = account.oneTimePassword.generateCode()
+            code = account.generateCode()
             binding.accountCode.text = code
         }
 
@@ -196,7 +204,8 @@ class AccountListAdapter(val context: Context) :
                 setTitle(title)
 
                 setPositiveButton(R.string.action_rename) { _, _ ->
-                    val updated = account.copy(name = binding.etInput.text.toString())
+                    val updated = account.toEntity()
+                        .copy(name = binding.etInput.text.toString())
                     mViewModel.update(updated)
                 }
 
@@ -240,9 +249,7 @@ class AccountListAdapter(val context: Context) :
             Snackbar.make(
                 view, context.getText(R.string.message_otp_copied),
                 Snackbar.LENGTH_LONG
-            )
-                .setAnchorView(R.id.fab)
-                .show()
+            ).setAnchorView(R.id.fab).show()
         }
     }
 }

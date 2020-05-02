@@ -12,10 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentNewAccountBinding
-import de.tolunla.ghostotp.db.entity.Account
-import de.tolunla.ghostotp.db.entity.Account.Type
+import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import org.apache.commons.codec.binary.Base32
+import org.json.JSONObject
 
 class NewAccountFragment : Fragment(), TextWatcher {
 
@@ -53,11 +54,14 @@ class NewAccountFragment : Fragment(), TextWatcher {
             adaptTypeSpinner()
 
             buttonAdd.setOnClickListener {
-                if (validateSecret(true)) {
 
-                    accountViewModel.insert(
-                        Account(getAccountName(), getSecretKey(), type = getAuthType())
-                    )
+                if (validateSecret(true)) {
+                    val json = JSONObject(mapOf("secret" to getSecretKey())).toString()
+
+                    val entity =
+                        AccountEntity(name = getAccountName(), json = json, type = getAuthType())
+
+                    accountViewModel.insert(entity.getAccount())
 
                     findNavController().navigateUp()
                 }

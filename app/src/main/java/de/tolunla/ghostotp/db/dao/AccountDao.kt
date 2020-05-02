@@ -2,23 +2,23 @@ package de.tolunla.ghostotp.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import de.tolunla.ghostotp.db.entity.Account
+import de.tolunla.ghostotp.db.entity.AccountEntity
 
 @Dao
 interface AccountDao {
 
     @Query("SELECT * FROM accounts WHERE id = :id")
-    suspend fun getById(id: String): Account
+    suspend fun getById(id: Int): AccountEntity
 
     @Query("SELECT * FROM accounts ORDER BY name")
-    fun getAll(): LiveData<List<Account>>
+    fun getAll(): LiveData<List<AccountEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(account: Account): Long
+    fun insert(account: AccountEntity): Long
 
     @Update
-    fun update(account: Account)
+    fun update(account: AccountEntity)
 
-    @Delete
-    fun delete(account: Account)
+    @Query("DELETE FROM accounts WHERE id = :accountID")
+    fun delete(accountID: Int)
 }
