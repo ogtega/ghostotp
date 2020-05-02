@@ -6,7 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import de.tolunla.ghostotp.databinding.FragmentNewSteamAccountBinding
+import de.tolunla.ghostotp.db.AppDatabase
+import de.tolunla.ghostotp.db.entity.AccountEntity
+import de.tolunla.ghostotp.model.SteamAccount
+import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import de.tolunla.steamguard.view.SteamGuardFragment
 import de.tolunla.steamguard.view.SteamGuardFragment.Companion.SteamGuardListener
 import de.tolunla.steamguard.view.SteamLoginFragment
@@ -18,7 +23,16 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     private lateinit var token: String
     private lateinit var steamID: String
     private lateinit var username: String
+    private lateinit var accountViewModel: AccountViewModel
     private lateinit var binding: FragmentNewSteamAccountBinding
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        activity?.let {
+            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +63,14 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
 
     override fun onSteamGuardSuccess(result: JSONObject) {
         context?.let {
-            // AppDatabase.getInstance(it).accountDao().insert()
+            val account = SteamAccount(
+                name = result.getString("account_name"),
+                sharedSecret = result.getString("shared_secret"),
+                revocationCode = result.getString("revocation_code"),
+                identitySecret = result.getString("identity_secret")
+            )
+
+            accountViewModel.insert(account)
         }
         Log.i("Steam", "$username: ${result.toString()}")
     }

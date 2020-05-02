@@ -1,16 +1,32 @@
 package de.tolunla.ghostotp.model
 
-class SteamAccount : Account(TODO(), TODO(), TODO(), TODO()) {
+import android.text.format.DateUtils
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import de.tolunla.steamguard.util.SteamGuardUtils
+import org.json.JSONObject
 
-    override fun getProgress(): Float {
-        TODO("Not yet implemented")
-    }
+class SteamAccount(
+    id: Int? = null,
+    name: String,
+    issuer: String = "Steam",
+    type: Type = Type.STEAM,
+    private val sharedSecret: String,
+    private val revocationCode: String,
+    private val identitySecret: String
+) : Account(id, name, issuer, type) {
 
-    override fun generateCode(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getProgress(): Float = System.currentTimeMillis()
+        .rem(30 * DateUtils.SECOND_IN_MILLIS)
+        .toFloat() / (30 * DateUtils.SECOND_IN_MILLIS)
+        .toFloat()
 
-    override fun getJSON(): String {
-        TODO("Not yet implemented")
-    }
+    override fun generateCode(): String = SteamGuardUtils.generateAuthCode(sharedSecret, 0)
+
+    override fun getJSON() = JSONObject(
+        mapOf(
+            "shared_secret" to sharedSecret,
+            "revocation_code" to revocationCode,
+            "identity_secret" to identitySecret
+        )
+    ).toString()
 }

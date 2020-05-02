@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type.*
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
+import de.tolunla.ghostotp.model.SteamAccount
 import org.json.JSONObject
 
 @Entity(tableName = "accounts")
@@ -43,7 +44,15 @@ data class AccountEntity(
             period = data.optInt("period", 30),
             step = -1L
         )
-        STEAM -> TODO()
+        STEAM -> SteamAccount(
+            id = id,
+            name = name,
+            issuer = issuer,
+            type = type,
+            sharedSecret = data.getString("shared_secret"),
+            revocationCode = data.getString("revocation_code"),
+            identitySecret = data.getString("identity_secret")
+        )
     }
 
     class TypeStringConverter {

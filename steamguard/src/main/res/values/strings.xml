@@ -2,6 +2,7 @@
     <string name="action_next">Next</string>
     <string name="label_password">Password</string>
     <string name="label_username">Username</string>
+    <string name="hint_sms_code">Enter the code sent to your phone</string>
     <string name="hint_phone_number">Phone number</string>
     <string name="hint_steam_captcha">Enter the text above</string>
     <string name="hint_steam_steamguard">Enter your SteamGuard code</string>

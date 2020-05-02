@@ -152,7 +152,7 @@ class AccountListAdapter(val context: Context) :
                     binding.root.isEnabled = false
                     mViewModel.increaseStep(account as OTPAccount)
                 }
-                STEAM -> TODO()
+                STEAM -> binding.countdownIndicator.setPhase(1 - account.getProgress())
             }
 
             // Set the code based off the current time, then update the code text

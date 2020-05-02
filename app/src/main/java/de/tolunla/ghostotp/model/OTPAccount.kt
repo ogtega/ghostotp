@@ -8,10 +8,8 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
-private val DIGITS_POWER = arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000)
-
 class OTPAccount(
-    id: Int?,
+    id: Int? = null,
     name: String,
     val secret: String,
     val crypto: String = "SHA1",
@@ -22,6 +20,8 @@ class OTPAccount(
     val period: Int = 30,
     var step: Long = -1L
 ) : Account(id, name, issuer, type) {
+
+    private val DIGITS_POWER = arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000)
 
     override fun getProgress(): Float {
         if (type == Type.HOTP) return 0f
