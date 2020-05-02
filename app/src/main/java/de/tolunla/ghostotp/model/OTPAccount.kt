@@ -2,6 +2,8 @@ package de.tolunla.ghostotp.model
 
 import android.text.format.DateUtils
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import org.apache.commons.codec.binary.Base32
+import org.apache.commons.codec.binary.Hex
 import org.json.JSONObject
 import java.nio.ByteBuffer
 import javax.crypto.Mac
@@ -18,6 +20,7 @@ class OTPAccount(
     issuer: String = "",
     val epoch: Long = -1L,
     val period: Int = 30,
+    val hex: Boolean = false,
     var step: Long = -1L
 ) : Account(id, name, issuer, type) {
 
@@ -33,10 +36,12 @@ class OTPAccount(
     }
 
     override fun generateCode(): String {
+        val bytes = if (!hex) Base32().decode(secret) else Hex.decodeHex(secret)
+
         val code = if (type == Type.HOTP) {
-            getHash(secret.toByteArray(), step).truncate()
+            getHash(bytes, step).truncate()
         } else {
-            getHash(secret.toByteArray(), System.currentTimeMillis().toSteps()).truncate()
+            getHash(bytes, System.currentTimeMillis().toSteps()).truncate()
         }
 
         return code.addPadding(digits)
@@ -49,7 +54,8 @@ class OTPAccount(
             "digits" to digits,
             "epoch" to epoch,
             "period" to period,
-            "step" to step
+            "step" to step,
+            "hex" to hex
         )
     ).toString()
 

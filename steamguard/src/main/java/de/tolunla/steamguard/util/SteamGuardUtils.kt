@@ -1,6 +1,6 @@
 package de.tolunla.steamguard.util
 
-import org.apache.commons.codec.binary.Base64
+import android.util.Base64
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.crypto.Mac
@@ -22,7 +22,7 @@ class SteamGuardUtils {
 
         fun generateAuthCode(secret: String, offset: Int): String {
             var code = ""
-            val keyBytes = Base64.decodeBase64(secret)
+            val keyBytes = Base64.decode(secret, Base64.DEFAULT)
             val keySpec = SecretKeySpec(keyBytes, "HmacSHA1")
 
             val mac = Mac.getInstance("HmacSHA1")
