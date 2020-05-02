@@ -4,7 +4,6 @@ import androidx.annotation.WorkerThread
 import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
-import kotlinx.coroutines.Deferred
 
 class DataRepository private constructor(private val database: AppDatabase) {
     companion object {
@@ -29,7 +28,7 @@ class DataRepository private constructor(private val database: AppDatabase) {
 
     @WorkerThread
     fun deleteAccount(id: Long) {
-       database.accountDao().delete(id)
+        database.accountDao().delete(id)
     }
 
     @WorkerThread

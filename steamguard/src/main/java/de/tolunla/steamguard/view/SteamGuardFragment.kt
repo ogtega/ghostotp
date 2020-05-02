@@ -10,7 +10,10 @@ import com.google.android.material.snackbar.Snackbar
 import de.tolunla.steamguard.R
 import de.tolunla.steamguard.SteamGuard
 import de.tolunla.steamguard.databinding.FragmentSteamGuardBinding
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class SteamGuardFragment(token: String, steamId: String) :
