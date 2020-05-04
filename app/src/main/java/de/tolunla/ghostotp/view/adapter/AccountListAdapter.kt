@@ -19,7 +19,7 @@ import de.tolunla.ghostotp.databinding.LayoutDialogInputBinding
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
 import de.tolunla.ghostotp.db.entity.AccountEntity
-import de.tolunla.ghostotp.db.entity.AccountEntity.Type.*
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.HOTP
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
@@ -76,6 +76,7 @@ class AccountListAdapter(val context: Context) :
         holder.binding.root.setOnClickListener {
             if (holder.account.type == HOTP) {
                 holder.refresh()
+                holder.timeout = System.currentTimeMillis() + DateUtils.MINUTE_IN_MILLIS
 
                 // Re-enable the refresh button 6 seconds later
                 mHandler.postDelayed({
@@ -84,8 +85,10 @@ class AccountListAdapter(val context: Context) :
 
                 // Clear the displayed HOTP code after 1 minute
                 mHandler.postDelayed({
+                    if (holder.timeout > System.currentTimeMillis()) return@postDelayed
+
                     holder.bind(holder.account)
-                }, 1 * DateUtils.MINUTE_IN_MILLIS)
+                }, DateUtils.MINUTE_IN_MILLIS)
             }
         }
 
@@ -123,6 +126,7 @@ class AccountListAdapter(val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         var code: String = ""
+        var timeout: Long = -1
         lateinit var account: Account
 
         fun bind(account: Account) {
@@ -145,14 +149,11 @@ class AccountListAdapter(val context: Context) :
 
         fun refresh() {
             when (account.type) {
-                TOTP -> {
-                    binding.countdownIndicator.setPhase(1 - account.getProgress())
-                }
                 HOTP -> {
                     binding.root.isEnabled = false
                     mViewModel.increaseStep(account as OTPAccount)
                 }
-                STEAM -> binding.countdownIndicator.setPhase(1 - account.getProgress())
+                else -> binding.countdownIndicator.setPhase(1 - account.getProgress())
             }
 
             // Set the code based off the current time, then update the code text

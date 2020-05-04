@@ -9,6 +9,7 @@ import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
+import kotlin.math.pow
 
 class OTPAccount(
     id: Long? = null,
@@ -23,9 +24,6 @@ class OTPAccount(
     val hex: Boolean = false,
     var step: Long = -1L
 ) : Account(id, name, issuer, type) {
-
-    private val DIGITS_POWER =
-        arrayOf(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000)
 
     override fun getProgress(): Float {
         if (type == Type.HOTP) return 0f
@@ -72,7 +70,7 @@ class OTPAccount(
 
         binary.put(0, binary[0].and(0x7F))
 
-        return binary.int.rem(DIGITS_POWER[digits])
+        return binary.int.rem(10.0.pow(digits).toInt())
     }
 
     private fun Long.toSteps(): Long {
