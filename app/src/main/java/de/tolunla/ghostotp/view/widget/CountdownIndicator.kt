@@ -48,16 +48,13 @@ class CountdownIndicator(context: Context, attrs: AttributeSet) : View(context, 
             mDrawingRect = RectF(1f, 1f, size, size)
         }
 
-        canvas?.let {
-            it.apply {
-                mDrawingRect?.let { rect ->
-                    if (sweepAngle < 360) {
-                        drawArc(rect, sweepStart, sweepAngle, true, mPaint)
-                    } else {
-                        drawOval(rect, mPaint)
-                    }
-                }
-            }
+        val c = canvas ?: return
+        val rect = mDrawingRect ?: return
+
+        if (sweepAngle < 360) {
+            c.drawArc(rect, sweepStart, sweepAngle, true, mPaint)
+        } else {
+            c.drawOval(rect, mPaint)
         }
     }
 

@@ -6,6 +6,11 @@ import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.apache.commons.codec.digest.DigestUtils
 
+
+/**
+ * Gets an instance of a okHTTP client configured for steam
+ * @return OkHttpClient with steam cookies
+ */
 fun getClient(): OkHttpClient {
     return OkHttpClient.Builder().addInterceptor(SteamInterceptor()).cookieJar(
         object : CookieJar {
@@ -28,6 +33,11 @@ fun getClient(): OkHttpClient {
     ).build()
 }
 
+/**
+ * Generates a deviceID for steam using a steamID
+ * @param steamID a steamID64 string
+ * @return a standardized deviceID for the current user
+ */
 fun getDeviceId(steamID: String): String {
     val raw = DigestUtils.sha1Hex(steamID)
     return "android:${raw.substring(0..7)}" +

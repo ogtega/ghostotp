@@ -14,11 +14,16 @@ data class AccountEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val name: String, val issuer: String = "", val json: String, val type: Type
 ) {
+    // Enum of all account types
     enum class Type { HOTP, TOTP, STEAM }
 
     @Ignore
     val data = JSONObject(json)
 
+    /**
+     * Get the Account object the entity represents
+     * @return Account object based off entity type and details
+     */
     fun getAccount(): Account = when (type) {
         HOTP -> OTPAccount(
             id = id,
@@ -57,6 +62,7 @@ data class AccountEntity(
         )
     }
 
+    // Used by the DAO to convert between Type and String
     class TypeStringConverter {
         @androidx.room.TypeConverter
         fun typeToString(type: Type): String {

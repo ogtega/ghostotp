@@ -14,6 +14,9 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import de.tolunla.ghostotp.databinding.ActivityMainBinding
 
+/**
+ * The main activity that contains all fragments
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfig: AppBarConfiguration

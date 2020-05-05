@@ -10,6 +10,9 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.tolunla.ghostotp.databinding.SheetNewAccountBinding
 
+/**
+ * Fragment containing all options for creating a new account
+ */
 class NewAccountSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: SheetNewAccountBinding

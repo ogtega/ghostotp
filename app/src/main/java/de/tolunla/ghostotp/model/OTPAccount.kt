@@ -11,6 +11,9 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 import kotlin.math.pow
 
+/**
+ * Class used to represent all rfc4226 and rfc6238 One Time Passwords
+ */
 class OTPAccount(
     id: Long? = null,
     name: String,

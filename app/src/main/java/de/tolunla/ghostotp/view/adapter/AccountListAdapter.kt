@@ -25,6 +25,10 @@ import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
+/**
+ * Class used to adapt views for the account list
+ * @param context context of the activity/fragment
+ */
 class AccountListAdapter(val context: Context) :
     RecyclerView.Adapter<AccountListAdapter.AccountViewHolder>() {
 
@@ -49,6 +53,7 @@ class AccountListAdapter(val context: Context) :
 
     /**
      * Updates the account list and notifies the adapter of changes
+     * @param accounts list of accounts that will be displayed
      */
     fun setAccounts(accounts: List<AccountEntity>) {
         val diffCallback = AccountDiffCallback(accountList, accounts)
@@ -58,6 +63,10 @@ class AccountListAdapter(val context: Context) :
         diffResult.dispatchUpdatesTo(this)
     }
 
+    /**
+     * Sets the viewmodel that will be used by the adapter
+     * @param viewModel instance of the class that holds Account information
+     */
     fun setViewModel(viewModel: AccountViewModel) {
         mViewModel = viewModel
     }

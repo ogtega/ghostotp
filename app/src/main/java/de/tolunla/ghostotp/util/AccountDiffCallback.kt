@@ -3,6 +3,11 @@ package de.tolunla.ghostotp.util
 import androidx.recyclerview.widget.DiffUtil
 import de.tolunla.ghostotp.db.entity.AccountEntity
 
+/**
+ * Class used for getting the difference of two AccountEntity lists
+ * @param oldList the old list
+ * @param newList the new and updated list
+ */
 class AccountDiffCallback(
     private val oldList: List<AccountEntity>,
     private val newList: List<AccountEntity>

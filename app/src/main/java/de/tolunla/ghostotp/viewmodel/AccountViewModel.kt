@@ -13,6 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * Class used to hold the Account info used by the application
+ * @param context application context
+ */
 class AccountViewModel(context: Application) : AndroidViewModel(context) {
 
     private val repository: DataRepository
@@ -25,22 +29,44 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
         allAccounts = repository.accounts
     }
 
-    fun delete(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteAccount(account)
+    /**
+     * Deletes accounts using the repository
+     * @param account Account to be deleted
+     */
+    fun delete(account: Account) {
+        val id = account.id ?: return
+        delete(id)
     }
 
+    /**
+     * Deletes accounts using the repository
+     * @param account Account to be deleted
+     */
     fun delete(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAccount(id)
     }
 
+    /**
+     * Inserts a new account into the database
+     * @param account Account to be inserted into the database
+     * @return the account id of the inserted account.
+     */
     fun insert(account: Account): Long = runBlocking(Dispatchers.IO) {
         repository.insertAccount(account)
     }
 
+    /**
+     * Updates a single AccountEntity in the database
+     * @param account AccountEntity to be updated
+     */
     fun update(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateAccount(account)
     }
 
+    /**
+     * Increments a OTPAccount's steps then save it in the database
+     * @param account OTPAccount object who's step will increase
+     */
     fun increaseStep(account: OTPAccount) = viewModelScope.launch(Dispatchers.IO) {
         repository.increaseStep(account)
     }

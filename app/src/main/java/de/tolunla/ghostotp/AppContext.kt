@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 
+/**
+ * Class used as the applications entry point
+ */
 class AppContext : Application() {
 
     override fun onCreate() {

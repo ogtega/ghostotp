@@ -21,6 +21,11 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        /**
+         * Gets the singleton instance of the application database
+         * @param context the application context
+         * @return a room database instance
+         */
         fun getInstance(context: Context): AppDatabase = INSTANCE ?: synchronized(this) {
             INSTANCE ?: buildDatabase(context)
         }
