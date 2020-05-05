@@ -9,12 +9,17 @@ import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.model.SteamAccount
 import org.json.JSONObject
 
+/**
+ * Class representing an account table entry
+ */
 @Entity(tableName = "accounts")
 data class AccountEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val name: String, val issuer: String = "", val json: String, val type: Type
 ) {
-    // Enum of all account types
+    /**
+     * Enum of all account types
+     */
     enum class Type { HOTP, TOTP, STEAM }
 
     @Ignore
@@ -62,13 +67,25 @@ data class AccountEntity(
         )
     }
 
-    // Used by the DAO to convert between Type and String
+    /**
+     * Used by the DAO to convert between Type and String
+     */
     class TypeStringConverter {
+        /**
+         * Converts Type to String
+         * @param type Type enum to be converted
+         * @return a string representation of a Type
+         */
         @androidx.room.TypeConverter
         fun typeToString(type: Type): String {
             return type.name
         }
 
+        /**
+         * Converts String to Type
+         * @param str String to be converted
+         * @return a Type matching the string
+         */
         @androidx.room.TypeConverter
         fun stringToType(str: String): Type {
             return valueOf(str)

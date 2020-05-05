@@ -18,6 +18,9 @@ import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import org.apache.commons.codec.binary.Base32
 import org.json.JSONObject
 
+/**
+ * Fragment where the user inputs new OTPAccount information
+ */
 class NewAccountFragment : Fragment(), TextWatcher {
 
     private var prev = 0  // Pointer for the previous secret key character location
@@ -143,7 +146,9 @@ class NewAccountFragment : Fragment(), TextWatcher {
         }
     }
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        // no-op
+    }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         s?.let {

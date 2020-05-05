@@ -16,10 +16,8 @@ import javax.crypto.Cipher
 
 /**
  * Class responsible for making all login related api requests.
- *
- * @property username the username of the account logging in.
- * @property password the password of the account logging in.
- * @constructor Creates an login object with a user's credentials.
+ * @param username the username of the account logging in.
+ * @param password the password of the account logging in.
  */
 class SteamLogin(private val username: String, private val password: String) {
 

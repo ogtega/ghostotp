@@ -10,6 +10,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import de.tolunla.ghostotp.R
 
+/**
+ * Fragment for application settings screen
+ */
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private val nightModeListener = Preference.OnPreferenceChangeListener { _, newVal ->

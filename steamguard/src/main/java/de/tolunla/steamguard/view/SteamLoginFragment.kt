@@ -18,9 +18,6 @@ import kotlinx.coroutines.launch
 
 /**
  * Class responsible for making all login related api requests.
- *
- * @property listener listening interface for when login is complete.
- * @constructor Creates an steamguard object with a user's credentials.
  */
 class SteamLoginFragment : Fragment() {
     private lateinit var code: String
@@ -65,9 +62,6 @@ class SteamLoginFragment : Fragment() {
         }
     }
 
-    /**
-     * Called after doLogin() { Used to prompt the user of errors }
-     */
     private fun postLogin() {
         binding.layoutCaptcha.visibility = if (loginResult.captcha) View.VISIBLE else View.GONE
         if (loginResult.captcha) Picasso.get().load(loginResult.captchaURL)
@@ -81,9 +75,6 @@ class SteamLoginFragment : Fragment() {
         }
     }
 
-    /**
-     * Sends the login api request
-     */
     private fun doLogin() {
         val steamLogin = SteamLogin(username, password)
 

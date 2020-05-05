@@ -47,6 +47,9 @@ fun getDeviceId(steamID: String): String {
             "-${raw.substring(20..31)}"
 }
 
+/**
+ * Data class for the state of a steam login
+ */
 data class SteamLoginResult(
     val success: Boolean,
     val emailCode: Boolean,

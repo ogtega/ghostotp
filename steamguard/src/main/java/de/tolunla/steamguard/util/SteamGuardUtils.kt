@@ -7,6 +7,9 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
+/**
+ * Utility class used to generate SteamGuard codes
+ */
 class SteamGuardUtils {
     companion object {
 

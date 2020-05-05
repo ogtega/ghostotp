@@ -12,6 +12,10 @@ import de.tolunla.ghostotp.db.entity.AccountEntity.Type
  */
 abstract class Account(val id: Long?, val name: String, val issuer: String, val type: Type) {
 
+    /**
+     * Gets the label displayed to the user
+     * @return generated account label
+     */
     fun getLabel(): String {
         if (issuer.isEmpty()) return name
         return "$issuer ($name)"

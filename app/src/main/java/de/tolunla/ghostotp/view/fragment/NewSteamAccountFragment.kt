@@ -20,6 +20,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+/**
+ * Fragment where the user inputs their steam account credentials
+ */
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
 
     private var accountId: Long = -1

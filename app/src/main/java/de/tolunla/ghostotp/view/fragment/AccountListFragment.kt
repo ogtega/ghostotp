@@ -10,6 +10,9 @@ import de.tolunla.ghostotp.databinding.FragmentAccountListBinding
 import de.tolunla.ghostotp.view.adapter.AccountListAdapter
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
+/**
+ * Fragment that acts as the application's home screen
+ */
 class AccountListFragment : Fragment() {
 
     private lateinit var accountAdapter: AccountListAdapter

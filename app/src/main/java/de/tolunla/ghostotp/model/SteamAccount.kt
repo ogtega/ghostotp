@@ -5,6 +5,9 @@ import de.tolunla.ghostotp.db.entity.AccountEntity.Type
 import de.tolunla.steamguard.util.SteamGuardUtils
 import org.json.JSONObject
 
+/**
+ * Class containing SteamGuard information
+ */
 class SteamAccount(
     id: Long? = null,
     name: String,

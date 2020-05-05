@@ -5,6 +5,9 @@ import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 
+/**
+ * Class managing the retrieval of data in the application
+ */
 class DataRepository private constructor(private val database: AppDatabase) {
     companion object {
         @Volatile

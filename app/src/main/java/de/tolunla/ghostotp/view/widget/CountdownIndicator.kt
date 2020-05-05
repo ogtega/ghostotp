@@ -9,6 +9,11 @@ import android.view.View
 import androidx.core.graphics.toColorInt
 import de.tolunla.ghostotp.R
 
+/**
+ * View used to indicate the circular progress
+ * @param context
+ * @param attrs attribute set used by the view
+ */
 class CountdownIndicator(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var mColor: Int = "#3060c0".toColorInt() // Color used to paint the indicator's arc

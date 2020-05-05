@@ -12,10 +12,8 @@ import kotlin.math.floor
 
 /**
  * Class responsible for making all login related api requests.
- *
- * @property steamID the id of the account where enabling SteamGuard.
- * @property token steam Oauth token.
- * @constructor Creates an steamguard object with a user's credentials.
+ * @param steamID the id of the account where enabling SteamGuard.
+ * @param token steam Oauth token.
  */
 class SteamGuard(private val steamID: String, private val token: String) {
     private val client = getClient()

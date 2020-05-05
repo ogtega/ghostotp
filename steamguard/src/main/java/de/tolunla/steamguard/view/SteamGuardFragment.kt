@@ -16,6 +16,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+/**
+ * Fragment where the user activates SteamGuard
+ * @param token steam session token
+ * @param steamId user steamID64
+ */
 class SteamGuardFragment(token: String, steamId: String) :
     DialogFragment() {
 
@@ -72,7 +77,7 @@ class SteamGuardFragment(token: String, steamId: String) :
 
             GlobalScope.launch(Dispatchers.Main) {
                 val success = async(Dispatchers.IO) {
-                    return@async steamGuard.finalizeTwoFactor(
+                    steamGuard.finalizeTwoFactor(
                         result.getString("shared_secret"),
                         binding.inputSmsCode.text.toString()
                     )

@@ -127,6 +127,10 @@ class AccountListAdapter(val context: Context) :
 
     override fun getItemCount(): Int = accountList.size
 
+    /**
+     * Class containing view objects and variables for accounts
+     * @param binding binding of a ListItem view
+     */
     inner class AccountViewHolder(val binding: ListItemAccountOtpBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -134,6 +138,10 @@ class AccountListAdapter(val context: Context) :
         var timeout: Long = -1
         lateinit var account: Account
 
+        /**
+         * Binds an Account to the ViewHolder
+         * @param account the account that's bound
+         */
         fun bind(account: Account) {
             this.account = account
             binding.accountName.text = account.getLabel()
@@ -147,11 +155,18 @@ class AccountListAdapter(val context: Context) :
             refresh()
         }
 
+        /**
+         * Binds a OTPAccount to the ViewHolder
+         * @param account the account that's bound
+         */
         private fun bind(account: OTPAccount) {
             binding.accountCode.text = "- ".repeat(account.digits)
             binding.timeBased = false
         }
 
+        /**
+         * Refreshes the views within the holder
+         */
         fun refresh() {
             when (account.type) {
                 HOTP -> {
@@ -166,6 +181,10 @@ class AccountListAdapter(val context: Context) :
             binding.accountCode.text = code
         }
 
+        /**
+         * Shows the bottom sheet for managing an account
+         * @param parent view parent of the holder
+         */
         fun showActionSheet(parent: View) {
             val binding = SheetAccountActionBinding.inflate(mInflater)
             val dialog = BottomSheetDialog(context)

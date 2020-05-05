@@ -85,9 +85,6 @@ class OTPAccount(
         return ByteBuffer.allocate(8).putLong(this).array()
     }
 
-    /**
-     * Method used to add n 0s before generated code (where n is the digits needed for a complete code)
-     */
     private fun Int.addPadding(digits: Int): String {
         val code = this.toString()
         return "${"0".repeat(digits - code.length)}$code"

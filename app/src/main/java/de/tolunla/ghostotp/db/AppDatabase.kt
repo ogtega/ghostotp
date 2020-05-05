@@ -8,12 +8,16 @@ import androidx.room.TypeConverters
 import de.tolunla.ghostotp.db.dao.AccountDao
 import de.tolunla.ghostotp.db.entity.AccountEntity
 
-@TypeConverters(
-    AccountEntity.TypeStringConverter::class
-)
+/**
+ * Singleton instance of the app's room database
+ */
+@TypeConverters(AccountEntity.TypeStringConverter::class)
 @Database(entities = [AccountEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
+    /**
+     * Gets the database access object for accounts
+     */
     abstract fun accountDao(): AccountDao
 
     companion object {
