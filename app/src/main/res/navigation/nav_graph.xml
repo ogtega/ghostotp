@@ -11,14 +11,14 @@
         tools:layout="@layout/sheet_new_account">
         <action
             android:id="@+id/action_new_account_sheet_dest_to_new_account_dest"
+            app:destination="@id/new_account_dest"
             app:enterAnim="@transition/fragment_fade_scale"
-            app:exitAnim="@transition/fragment_fade_scale"
-            app:destination="@id/new_account_dest" />
+            app:exitAnim="@transition/fragment_fade_scale" />
         <action
             android:id="@+id/action_new_account_sheet_dest_to_steam_login_dest"
+            app:destination="@id/new_steam_account_dest"
             app:enterAnim="@transition/fragment_fade_scale"
-            app:exitAnim="@transition/fragment_fade_scale"
-            app:destination="@id/new_steam_account_dest" />
+            app:exitAnim="@transition/fragment_fade_scale" />
     </dialog>
 
     <fragment
@@ -28,14 +28,14 @@
         tools:layout="@layout/fragment_account_list">
         <action
             android:id="@+id/action_account_list_dest_to_new_account_sheet_dest"
+            app:destination="@id/new_account_sheet_dest"
             app:enterAnim="@transition/fragment_fade_scale"
-            app:exitAnim="@transition/fragment_fade_scale"
-            app:destination="@id/new_account_sheet_dest" />
+            app:exitAnim="@transition/fragment_fade_scale" />
         <action
             android:id="@+id/action_account_list_dest_to_settings_dest"
+            app:destination="@id/settings_dest"
             app:enterAnim="@transition/fragment_fade_scale"
-            app:exitAnim="@transition/fragment_fade_scale"
-            app:destination="@id/settings_dest" />
+            app:exitAnim="@transition/fragment_fade_scale" />
     </fragment>
 
     <fragment
