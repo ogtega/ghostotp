@@ -34,7 +34,7 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
     }
 
     fun insert(account: Account): Long = runBlocking(Dispatchers.IO) {
-        return@runBlocking repository.insertAccount(account)
+        repository.insertAccount(account)
     }
 
     fun update(account: AccountEntity) = viewModelScope.launch(Dispatchers.IO) {

@@ -7,7 +7,7 @@
         android:title="@string/action_manually_enter_key" />
 
     <item
-        android:id="@+id/new_steam_account_dest"
+        android:id="@id/new_steam_account_dest"
         android:icon="@drawable/ic_steam_24dp"
         android:title="@string/action_add_steam_guard" />
 

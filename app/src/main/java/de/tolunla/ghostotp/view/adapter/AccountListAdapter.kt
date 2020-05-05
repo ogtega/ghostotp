@@ -42,10 +42,7 @@ class AccountListAdapter(val context: Context) :
      */
     private val updateTOTPCodes = object : Runnable {
         override fun run() {
-            mTOTPHolders.forEach {
-                it.refresh()
-            }
-
+            mTOTPHolders.forEach(AccountViewHolder::refresh)
             mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
         }
     }
@@ -85,9 +82,8 @@ class AccountListAdapter(val context: Context) :
 
                 // Clear the displayed HOTP code after 1 minute
                 mHandler.postDelayed({
-                    if (holder.timeout > System.currentTimeMillis()) return@postDelayed
-
-                    holder.bind(holder.account)
+                    if (holder.timeout < System.currentTimeMillis())
+                        holder.bind(holder.account)
                 }, DateUtils.MINUTE_IN_MILLIS)
             }
         }
