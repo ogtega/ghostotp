@@ -1,12 +1,14 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.experimental.UseExperimental
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat.getMainExecutor
@@ -14,6 +16,9 @@ import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.mlkit.vision.barcode.Barcode
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
 import de.tolunla.ghostotp.databinding.FragmentBarcodeBinding
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
@@ -67,8 +72,10 @@ class BarcodeFragment : Fragment() {
             imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { pixels ->
-                        Log.d(TAG, "Average luminosity: $pixels")
+                    it.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
+                        barcode?.let {
+                            // TODO: Import from key uri
+                        }
                     })
                 }
 
@@ -78,8 +85,15 @@ class BarcodeFragment : Fragment() {
 
             try {
                 cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
-                preview?.setSurfaceProvider(binding.viewFinder.createSurfaceProvider(camera?.cameraInfo))
+                camera = cameraProvider.bindToLifecycle(
+                    this,
+                    cameraSelector,
+                    preview,
+                    imageAnalyzer
+                )
+                preview?.setSurfaceProvider(
+                    binding.viewFinder.createSurfaceProvider(camera?.cameraInfo)
+                )
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
@@ -106,22 +120,24 @@ class BarcodeFragment : Fragment() {
         }
     }
 
-    private class LuminosityAnalyzer(private val listener: (pixels: Int) -> Unit) : ImageAnalysis.Analyzer {
+    private class BarcodeAnalyzer(private val listener: (barcode: Barcode?) -> Unit) :
+        ImageAnalysis.Analyzer {
 
-        private fun ByteBuffer.toByteArray(): ByteArray {
-            rewind()    // Rewind the buffer to zero
-            val data = ByteArray(remaining())
-            get(data)   // Copy the buffer into a byte array
-            return data // Return the byte array
-        }
+        @androidx.camera.core.ExperimentalGetImage
+        override fun analyze(proxy: ImageProxy) {
+            val mediaImage = proxy.image
 
-        override fun analyze(image: ImageProxy) {
-            val buffer = image.planes[0].buffer
-            val data = buffer.toByteArray()
-            val pixels = data.map { it.toInt() and 0xFF }
-
-            listener(pixels.size)
-            image.close()
+            mediaImage?.let {
+                val image = InputImage.fromMediaImage(mediaImage, proxy.imageInfo.rotationDegrees)
+                BarcodeScanning.getClient().process(image)
+                    .addOnSuccessListener { barcodes ->
+                        listener(barcodes.firstOrNull { it.valueType == Barcode.TYPE_TEXT })
+                        proxy.close()
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "Use case binding failed", it)
+                    }
+            }
         }
     }
 }

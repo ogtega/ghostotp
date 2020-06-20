@@ -99,6 +99,7 @@ dependencies {
     implementation Dependencies.camerax_core
     implementation Dependencies.camerax_lifecycle
     implementation Dependencies.camerax_view
+    implementation Dependencies.mlkit_barcode
     /**
      * Miscellaneous Libraries
      */
