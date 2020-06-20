@@ -20,6 +20,7 @@ import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import de.tolunla.ghostotp.databinding.FragmentBarcodeBinding
+import java.net.URLDecoder
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -65,16 +66,15 @@ class BarcodeFragment : Fragment() {
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            preview = Preview.Builder()
-                .setTargetResolution(Size(1080, 1920))
-                .build()
+            preview = Preview.Builder().build()
 
             imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
                     it.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
                         barcode?.let {
-                            // TODO: Import from key uri
+                            val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
+                            // TODO: Use the URI to create a new account
                         }
                     })
                 }
@@ -136,6 +136,7 @@ class BarcodeFragment : Fragment() {
                     }
                     .addOnFailureListener {
                         Log.e(TAG, "Use case binding failed", it)
+                        proxy.close()
                     }
             }
         }
