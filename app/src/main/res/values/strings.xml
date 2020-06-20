@@ -31,9 +31,9 @@
 
     <string name="message_remove_account">Remove %1$s?</string>
     <string name="message_rename_account">Rename %1$s?</string>
-    <string name="message_key_too_short">Secret is too short</string>
-    <string name="message_key_invalid_chars">Secret is invalid</string>
-    <string name="message_otp_copied">Code copied to clipboard</string>
+    <string name="message_key_too_short">Secret is too short.</string>
+    <string name="message_key_invalid_chars">Secret is invalid.</string>
+    <string name="message_otp_copied">Code copied to clipboard.</string>
 
     <string name="message_account_deletion">
         Removing this account will remove your ability to generate codes,

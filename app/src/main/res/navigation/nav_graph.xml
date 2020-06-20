@@ -39,6 +39,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/scan_barcode_dest"
+        android:name="de.tolunla.ghostotp.view.fragment.BarcodeFragment"
+        android:label="@string/action_scan_barcode"
+        tools:layout="@layout/fragment_barcode" />
+
+    <fragment
         android:id="@+id/settings_dest"
         android:name="de.tolunla.ghostotp.view.fragment.SettingsFragment"
         android:label="@string/settings_dest_label" />

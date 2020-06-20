@@ -9,6 +9,7 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -271,10 +272,11 @@ class AccountListAdapter(val context: Context) :
             mClipboard.setPrimaryClip(clipData)
 
             // Notify the user that we've copied the OTP
-            Snackbar.make(
-                view, context.getText(R.string.message_otp_copied),
-                Snackbar.LENGTH_LONG
-            ).setAnchorView(R.id.fab).show()
+            Toast.makeText(
+                context,
+                context.getText(R.string.message_otp_copied),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }

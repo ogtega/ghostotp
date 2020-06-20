@@ -94,6 +94,12 @@ dependencies {
     implementation Dependencies.navigation_fragment
     implementation Dependencies.navigation_ui
     /**
+     * Barcode Library
+     */
+    implementation Dependencies.camerax_core
+    implementation Dependencies.camerax_lifecycle
+    implementation Dependencies.camerax_view
+    /**
      * Miscellaneous Libraries
      */
     implementation Dependencies.androidx

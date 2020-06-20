@@ -26,4 +26,10 @@ object Dependencies {
     val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     val okhttp = "com.squareup.okhttp3:okhttp:4.5.0"
+
+    val mlkit_barcode = "com.google.mlkit:barcode-scanning:16.0.0"
+
+    val camerax_core = "androidx.camera:camera-camera2:${Versions.camerax}"
+    val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
+    val camerax_view = "androidx.camera:camera-view:1.0.0-alpha10"
 }
