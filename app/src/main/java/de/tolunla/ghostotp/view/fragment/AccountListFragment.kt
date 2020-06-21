@@ -60,6 +60,16 @@ class AccountListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        accountAdapter.resumeUpdates()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        accountAdapter.pauseUpdates()
+        super.onPause()
+    }
+
     override fun onDestroyView() {
         binding.accountList.adapter = null
         super.onDestroyView()

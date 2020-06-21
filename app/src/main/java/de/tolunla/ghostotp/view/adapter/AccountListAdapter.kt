@@ -64,6 +64,14 @@ class AccountListAdapter(val context: Context) :
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun resumeUpdates() {
+        mHandler.post(updateTOTPCodes)
+    }
+
+    fun pauseUpdates() {
+        mHandler.removeCallbacks(updateTOTPCodes)
+    }
+
     /**
      * Sets the viewmodel that will be used by the adapter
      * @param viewModel instance of the class that holds Account information

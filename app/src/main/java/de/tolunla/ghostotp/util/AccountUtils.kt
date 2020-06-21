@@ -12,13 +12,13 @@ class AccountUtils {
         fun accountFromUri(uri: Uri): Account? {
             var name = ""
 
-            "/.*:.*".toRegex().find(uri.path ?: "")?.let {
-                name = it.groupValues[2]
+            "/.*:(.*)".toRegex().find(uri.path ?: "")?.let {
+                name = it.groupValues[1]
             }
 
             if (name.isEmpty()) return null
 
-            return when (uri.scheme) {
+            return when (uri.authority) {
                 "totp" -> otpFromUri(uri, name, Type.TOTP)
                 "hotp" -> otpFromUri(uri, name, Type.HOTP)
                 "steam" -> steamFromUri(uri, name)

@@ -13,12 +13,14 @@ import androidx.core.content.ContextCompat.getMainExecutor
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import de.tolunla.ghostotp.databinding.FragmentBarcodeBinding
 import de.tolunla.ghostotp.util.AccountUtils
+import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import java.net.URLDecoder
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -29,6 +31,7 @@ class BarcodeFragment : Fragment() {
     private var camera: Camera? = null
 
     private lateinit var binding: FragmentBarcodeBinding
+    private lateinit var accountViewModel: AccountViewModel
     private lateinit var cameraExecutor: ExecutorService
 
     companion object {
@@ -48,6 +51,10 @@ class BarcodeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        activity?.let {
+            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+        }
 
         if (allPermissionsGranted()) {
             startCamera()
@@ -71,7 +78,11 @@ class BarcodeFragment : Fragment() {
                 .also {
                     it.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
                         val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
-                        AccountUtils.accountFromUri(Uri.parse(data))
+                        AccountUtils.accountFromUri(Uri.parse(data))?.let { account ->
+                            accountViewModel.insert(account)
+                            it.clearAnalyzer()
+                            binding.root.findNavController().navigateUp()
+                        }
                     })
                 }
 
