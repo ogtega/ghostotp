@@ -22,7 +22,7 @@ class OTPAccount(
     val digits: Int = 6,
     type: Type,
     issuer: String = "",
-    val epoch: Long = -1L,
+    val epoch: Long = 0L,
     val period: Int = 30,
     val hex: Boolean = false,
     var step: Long = -1L

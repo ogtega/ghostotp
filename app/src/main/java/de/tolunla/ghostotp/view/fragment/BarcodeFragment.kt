@@ -1,14 +1,12 @@
 package de.tolunla.ghostotp.view.fragment
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.experimental.UseExperimental
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat.getMainExecutor
@@ -20,8 +18,8 @@ import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import de.tolunla.ghostotp.databinding.FragmentBarcodeBinding
+import de.tolunla.ghostotp.util.AccountUtils
 import java.net.URLDecoder
-import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -72,10 +70,8 @@ class BarcodeFragment : Fragment() {
                 .build()
                 .also {
                     it.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
-                        barcode?.let {
-                            val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
-                            // TODO: Use the URI to create a new account
-                        }
+                        val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
+                        AccountUtils.accountFromUri(Uri.parse(data))
                     })
                 }
 
@@ -120,7 +116,7 @@ class BarcodeFragment : Fragment() {
         }
     }
 
-    private class BarcodeAnalyzer(private val listener: (barcode: Barcode?) -> Unit) :
+    private class BarcodeAnalyzer(private val listener: (barcode: Barcode) -> Unit) :
         ImageAnalysis.Analyzer {
 
         @androidx.camera.core.ExperimentalGetImage
@@ -131,7 +127,10 @@ class BarcodeFragment : Fragment() {
                 val image = InputImage.fromMediaImage(mediaImage, proxy.imageInfo.rotationDegrees)
                 BarcodeScanning.getClient().process(image)
                     .addOnSuccessListener { barcodes ->
-                        listener(barcodes.firstOrNull { it.valueType == Barcode.TYPE_TEXT })
+                        barcodes.firstOrNull {
+                            it.valueType == Barcode.TYPE_TEXT
+                        }?.let(listener)
+
                         proxy.close()
                     }
                     .addOnFailureListener {
