@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) ||
-                super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

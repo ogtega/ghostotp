@@ -41,7 +41,8 @@ class SteamGuardFragment(token: String, steamId: String) :
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?, savedInstanceState: Bundle?
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSteamGuardBinding.inflate(inflater, container, false)
         return binding.root
@@ -59,11 +60,13 @@ class SteamGuardFragment(token: String, steamId: String) :
 
             if (status != 1) {
                 Snackbar.make(
-                    binding.root, when (status) {
+                    binding.root,
+                    when (status) {
                         2 -> R.string.phone_not_attached
                         84 -> R.string.rate_limit_exceeded
                         else -> R.string.unexpected_error
-                    }, Snackbar.LENGTH_LONG
+                    },
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 launch(Dispatchers.Main) { activity?.onBackPressed() }

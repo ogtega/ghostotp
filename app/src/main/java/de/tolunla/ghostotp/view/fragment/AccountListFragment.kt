@@ -27,11 +27,14 @@ class AccountListFragment : Fragment() {
 
             accountAdapter.setViewModel(accountViewModel)
 
-            accountViewModel.allAccounts.observe(viewLifecycleOwner, Observer { accounts ->
-                accounts?.let {
-                    accountAdapter.setAccounts(accounts)
+            accountViewModel.allAccounts.observe(
+                viewLifecycleOwner,
+                Observer { accounts ->
+                    accounts?.let {
+                        accountAdapter.setAccounts(accounts)
+                    }
                 }
-            })
+            )
         }
     }
 

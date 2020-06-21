@@ -6,7 +6,6 @@ import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.apache.commons.codec.digest.DigestUtils
 
-
 /**
  * Gets an instance of a okHTTP client configured for steam
  * @return OkHttpClient with steam cookies
@@ -41,10 +40,10 @@ fun getClient(): OkHttpClient {
 fun getDeviceId(steamID: String): String {
     val raw = DigestUtils.sha1Hex(steamID)
     return "android:${raw.substring(0..7)}" +
-            "-${raw.substring(8..11)}" +
-            "-${raw.substring(12..15)}" +
-            "-${raw.substring(16..19)}" +
-            "-${raw.substring(20..31)}"
+        "-${raw.substring(8..11)}" +
+        "-${raw.substring(12..15)}" +
+        "-${raw.substring(16..19)}" +
+        "-${raw.substring(20..31)}"
 }
 
 /**
@@ -56,7 +55,7 @@ data class SteamLoginResult(
     val mobileCode: Boolean,
     val captcha: Boolean,
     private val captchaGid: String,
-    val captchaURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid=${captchaGid}",
+    val captchaURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid=$captchaGid",
     val oathToken: String,
     val steamID: String
 )

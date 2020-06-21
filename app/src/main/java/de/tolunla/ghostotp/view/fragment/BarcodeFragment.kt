@@ -68,43 +68,49 @@ class BarcodeFragment : Fragment() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+        cameraProviderFuture.addListener(
+            Runnable {
+                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            preview = Preview.Builder().build()
+                preview = Preview.Builder().build()
 
-            imageAnalyzer = ImageAnalysis.Builder()
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
-                        val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
-                        AccountUtils.accountFromUri(Uri.parse(data))?.let { account ->
-                            accountViewModel.insert(account)
-                            it.clearAnalyzer()
-                            binding.root.findNavController().navigateUp()
-                        }
-                    })
+                imageAnalyzer = ImageAnalysis.Builder()
+                    .build()
+                    .also {
+                        it.setAnalyzer(
+                            cameraExecutor,
+                            BarcodeAnalyzer { barcode ->
+                                val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
+                                AccountUtils.accountFromUri(Uri.parse(data))?.let { account ->
+                                    accountViewModel.insert(account)
+                                    it.clearAnalyzer()
+                                    binding.root.findNavController().navigateUp()
+                                }
+                            }
+                        )
+                    }
+
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build()
+
+                try {
+                    cameraProvider.unbindAll()
+                    camera = cameraProvider.bindToLifecycle(
+                        this,
+                        cameraSelector,
+                        preview,
+                        imageAnalyzer
+                    )
+                    preview?.setSurfaceProvider(
+                        binding.viewFinder.createSurfaceProvider(camera?.cameraInfo)
+                    )
+                } catch (exc: Exception) {
+                    Log.e(TAG, "Use case binding failed", exc)
                 }
-
-            val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-
-            try {
-                cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    preview,
-                    imageAnalyzer
-                )
-                preview?.setSurfaceProvider(
-                    binding.viewFinder.createSurfaceProvider(camera?.cameraInfo)
-                )
-            } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
-            }
-        }, getMainExecutor(requireContext()))
+            },
+            getMainExecutor(requireContext())
+        )
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -115,8 +121,10 @@ class BarcodeFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults:
+            IntArray
     ) {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {

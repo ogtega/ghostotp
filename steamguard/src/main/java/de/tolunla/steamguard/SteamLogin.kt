@@ -3,16 +3,16 @@ package de.tolunla.steamguard
 import android.util.Log
 import de.tolunla.steamguard.util.SteamLoginResult
 import de.tolunla.steamguard.util.getClient
-import okhttp3.FormBody
-import okhttp3.Request
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.codec.binary.StringUtils
-import org.json.JSONObject
 import java.io.IOException
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import javax.crypto.Cipher
+import okhttp3.FormBody
+import okhttp3.Request
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.binary.StringUtils
+import org.json.JSONObject
 
 /**
  * Class responsible for making all login related api requests.

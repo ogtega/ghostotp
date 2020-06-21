@@ -34,6 +34,6 @@ class NewAccountSheet : BottomSheetDialogFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(findNavController()) ||
-                super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
     }
 }

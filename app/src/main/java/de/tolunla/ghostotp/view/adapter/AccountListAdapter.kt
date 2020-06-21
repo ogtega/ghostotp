@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.LayoutDialogInputBinding
 import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
@@ -94,15 +93,21 @@ class AccountListAdapter(val context: Context) :
                 holder.timeout = System.currentTimeMillis() + DateUtils.MINUTE_IN_MILLIS
 
                 // Re-enable the refresh button 6 seconds later
-                mHandler.postDelayed({
-                    holder.binding.root.isEnabled = true
-                }, 6 * DateUtils.SECOND_IN_MILLIS)
+                mHandler.postDelayed(
+                    {
+                        holder.binding.root.isEnabled = true
+                    },
+                    6 * DateUtils.SECOND_IN_MILLIS
+                )
 
                 // Clear the displayed HOTP code after 1 minute
-                mHandler.postDelayed({
-                    if (holder.timeout < System.currentTimeMillis())
-                        holder.bind(holder.account)
-                }, DateUtils.MINUTE_IN_MILLIS)
+                mHandler.postDelayed(
+                    {
+                        if (holder.timeout < System.currentTimeMillis())
+                            holder.bind(holder.account)
+                    },
+                    DateUtils.MINUTE_IN_MILLIS
+                )
             }
         }
 

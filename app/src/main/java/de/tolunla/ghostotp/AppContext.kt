@@ -29,5 +29,4 @@ fun setNightMode(context: Context) {
             }
         )
     }
-
 }

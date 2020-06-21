@@ -1,8 +1,8 @@
 package de.tolunla.ghostotp.util
 
 import android.net.Uri
-import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.model.SteamAccount
 

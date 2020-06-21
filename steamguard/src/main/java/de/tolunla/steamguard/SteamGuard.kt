@@ -3,12 +3,12 @@ package de.tolunla.steamguard
 import de.tolunla.steamguard.util.SteamGuardUtils
 import de.tolunla.steamguard.util.getClient
 import de.tolunla.steamguard.util.getDeviceId
-import okhttp3.FormBody
-import okhttp3.Request
-import org.json.JSONObject
 import java.io.IOException
 import java.util.*
 import kotlin.math.floor
+import okhttp3.FormBody
+import okhttp3.Request
+import org.json.JSONObject
 
 /**
  * Class responsible for making all login related api requests.

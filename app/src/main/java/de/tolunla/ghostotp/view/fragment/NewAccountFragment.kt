@@ -23,7 +23,7 @@ import org.json.JSONObject
  */
 class NewAccountFragment : Fragment(), TextWatcher {
 
-    private var prev = 0  // Pointer for the previous secret key character location
+    private var prev = 0 // Pointer for the previous secret key character location
     private var current = 1 // Pointer to the current secret key character location
     private val base32Chars = Regex("[A-Za-z2-7=]") // Used to match legal base32 chars
 
@@ -108,9 +108,11 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
             if (bytes.size < 10) {
 
-                binding.layoutKeyInput.error = (if (toSubmit) getString(
-                    R.string.message_key_too_short
-                ) else null)
+                binding.layoutKeyInput.error = (
+                    if (toSubmit) getString(
+                        R.string.message_key_too_short
+                    ) else null
+                    )
                 return false
             }
 
@@ -124,7 +126,6 @@ class NewAccountFragment : Fragment(), TextWatcher {
             return false
         }
     }
-
 
     override fun afterTextChanged(s: Editable?) {
         validateSecret()

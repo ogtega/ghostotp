@@ -15,7 +15,10 @@ import org.json.JSONObject
 @Entity(tableName = "accounts")
 data class AccountEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
-    val name: String, val issuer: String = "", val json: String, val type: Type
+    val name: String,
+    val issuer: String = "",
+    val json: String,
+    val type: Type
 ) {
     /**
      * Enum of all account types
