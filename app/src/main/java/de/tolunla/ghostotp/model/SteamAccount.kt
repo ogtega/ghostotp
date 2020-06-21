@@ -2,7 +2,7 @@ package de.tolunla.ghostotp.model
 
 import android.text.format.DateUtils
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type
-import de.tolunla.steamguard.util.SteamGuardUtils
+import de.tolunla.steamguard.util.generateAuthCode
 import org.json.JSONObject
 
 /**
@@ -23,7 +23,7 @@ class SteamAccount(
         .toFloat() / (30 * DateUtils.SECOND_IN_MILLIS)
         .toFloat()
 
-    override fun generateCode(): String = SteamGuardUtils.generateAuthCode(sharedSecret, 0)
+    override fun generateCode(): String = generateAuthCode(sharedSecret, 0)
 
     override fun getJSON() = JSONObject(
         mapOf(

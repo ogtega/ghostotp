@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -41,10 +40,7 @@ class AccountListAdapter(val context: Context) :
 
     private lateinit var mViewModel: AccountViewModel
 
-    /**
-     * A task that runs periodically to update TOTP codes
-     */
-    private val updateTOTPCodes = object : Runnable {
+    private val codeUpdateRunnable = object : Runnable {
         override fun run() {
             mTOTPHolders.forEach(AccountViewHolder::refresh)
             mHandler.postDelayed(this, System.currentTimeMillis().rem(200L))
@@ -63,12 +59,18 @@ class AccountListAdapter(val context: Context) :
         diffResult.dispatchUpdatesTo(this)
     }
 
+    /**
+     * Begins background code updates
+     */
     fun resumeUpdates() {
-        mHandler.post(updateTOTPCodes)
+        mHandler.post(codeUpdateRunnable)
     }
 
+    /**
+     * Stops background code updates
+     */
     fun pauseUpdates() {
-        mHandler.removeCallbacks(updateTOTPCodes)
+        mHandler.removeCallbacks(codeUpdateRunnable)
     }
 
     /**
@@ -83,7 +85,7 @@ class AccountListAdapter(val context: Context) :
         val holder = AccountViewHolder(ListItemAccountOtpBinding.inflate(mInflater, parent, false))
 
         holder.binding.root.setOnLongClickListener {
-            holder.showActionSheet(parent)
+            holder.showActionSheet()
             true
         }
 
@@ -131,11 +133,11 @@ class AccountListAdapter(val context: Context) :
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        mHandler.post(updateTOTPCodes)
+        mHandler.post(codeUpdateRunnable)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        mHandler.removeCallbacks(updateTOTPCodes)
+        mHandler.removeCallbacks(codeUpdateRunnable)
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
@@ -169,10 +171,6 @@ class AccountListAdapter(val context: Context) :
             refresh()
         }
 
-        /**
-         * Binds a OTPAccount to the ViewHolder
-         * @param account the account that's bound
-         */
         private fun bind(account: OTPAccount) {
             binding.accountCode.text = "- ".repeat(account.digits)
             binding.timeBased = false
@@ -197,9 +195,8 @@ class AccountListAdapter(val context: Context) :
 
         /**
          * Shows the bottom sheet for managing an account
-         * @param parent view parent of the holder
          */
-        fun showActionSheet(parent: View) {
+        fun showActionSheet() {
             val binding = SheetAccountActionBinding.inflate(mInflater)
             val dialog = BottomSheetDialog(context)
 
@@ -214,7 +211,7 @@ class AccountListAdapter(val context: Context) :
                     }
 
                     R.id.action_copy_account -> {
-                        copyCode(parent)
+                        copyCode()
                     }
 
                     R.id.action_delete_account -> {
@@ -280,7 +277,7 @@ class AccountListAdapter(val context: Context) :
             }
         }
 
-        private fun copyCode(view: View) {
+        private fun copyCode() {
             val clipData = ClipData.newPlainText("text", code)
             mClipboard.setPrimaryClip(clipData)
 

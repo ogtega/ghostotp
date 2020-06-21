@@ -1,6 +1,6 @@
 package de.tolunla.steamguard
 
-import de.tolunla.steamguard.util.SteamGuardUtils
+import de.tolunla.steamguard.util.generateAuthCode
 import de.tolunla.steamguard.util.getClient
 import de.tolunla.steamguard.util.getDeviceId
 import java.io.IOException
@@ -51,7 +51,7 @@ class SteamGuard(private val steamID: String, private val token: String) {
      * Sends the api request to finalize SteamGuard
      */
     fun finalizeTwoFactor(secret: String, smsCode: String): Boolean {
-        val code = SteamGuardUtils.generateAuthCode(secret, 0)
+        val code = generateAuthCode(secret, 0)
         val time = System.currentTimeMillis().div(1000).toInt()
 
         val formBody = FormBody.Builder()

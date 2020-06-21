@@ -7,4 +7,5 @@ object Versions {
     val build_tools = "29.0.3"
     val coroutines = "1.3.5"
     val camerax = "1.0.0-beta03"
+    val ndk = "21.3.6528147"
 }

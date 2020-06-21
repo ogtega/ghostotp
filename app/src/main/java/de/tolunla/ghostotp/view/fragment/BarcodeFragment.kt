@@ -19,12 +19,15 @@ import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import de.tolunla.ghostotp.databinding.FragmentBarcodeBinding
-import de.tolunla.ghostotp.util.AccountUtils
+import de.tolunla.ghostotp.util.accountFromUri
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 import java.net.URLDecoder
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+/**
+ * Fragment used to scan new otp accounts
+ */
 class BarcodeFragment : Fragment() {
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
@@ -81,7 +84,7 @@ class BarcodeFragment : Fragment() {
                             cameraExecutor,
                             BarcodeAnalyzer { barcode ->
                                 val data = URLDecoder.decode(barcode.rawValue, "UTF-8")
-                                AccountUtils.accountFromUri(Uri.parse(data))?.let { account ->
+                                accountFromUri(Uri.parse(data))?.let { account ->
                                     accountViewModel.insert(account)
                                     it.clearAnalyzer()
                                     binding.root.findNavController().navigateUp()
