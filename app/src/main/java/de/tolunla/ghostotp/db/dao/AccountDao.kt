@@ -22,7 +22,7 @@ interface AccountDao {
      * Gets all accounts in the database
      * @return a list of AccountEntity
      */
-    @Query("SELECT * FROM accounts ORDER BY name")
+    @Query("SELECT * FROM accounts ORDER BY LOWER(issuer || name)")
     fun getAll(): LiveData<List<AccountEntity>>
 
     /**
