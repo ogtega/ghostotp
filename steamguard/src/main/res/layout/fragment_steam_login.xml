@@ -40,7 +40,7 @@
                             android:id="@+id/input_username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text|textVisiblePassword"
+                            android:inputType="textNoSuggestions|text"
                             android:singleLine="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -78,6 +78,7 @@
                         android:id="@+id/input_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:singleLine="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -117,6 +118,7 @@
                             android:id="@+id/input_captcha"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="textNoSuggestions|text"
                             android:singleLine="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>

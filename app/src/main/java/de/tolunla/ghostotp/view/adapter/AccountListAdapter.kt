@@ -21,6 +21,7 @@ import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type.HOTP
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
+import de.tolunla.ghostotp.model.SteamAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
@@ -200,6 +201,10 @@ class AccountListAdapter(val context: Context) :
             val binding = SheetAccountActionBinding.inflate(mInflater)
             val dialog = BottomSheetDialog(context)
 
+            if (account.type == AccountEntity.Type.STEAM) {
+                binding.navView.menu.findItem(R.id.action_edit_account).isEnabled = false
+            }
+
             dialog.setContentView(binding.root)
 
             binding.navView.setNavigationItemSelectedListener { item ->
@@ -263,7 +268,17 @@ class AccountListAdapter(val context: Context) :
 
             with(builder) {
                 setTitle(title)
-                setMessage(R.string.message_account_deletion)
+
+                setMessage(
+                    context.getString(R.string.message_account_deletion) +
+                        when (account.type) {
+                            AccountEntity.Type.STEAM -> context.getString(
+                                R.string.message_steam_deletion_recovery_code,
+                                (account as SteamAccount).getRevocationCode()
+                            )
+                            else -> ""
+                        }
+                )
 
                 setPositiveButton(R.string.action_remove) { _, _ ->
                     mViewModel.delete(account)

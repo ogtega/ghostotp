@@ -1,6 +1,5 @@
 package de.tolunla.steamguard
 
-import android.util.Log
 import de.tolunla.steamguard.util.SteamLoginResult
 import de.tolunla.steamguard.util.getClient
 import java.io.IOException
@@ -61,12 +60,11 @@ class SteamLogin(private val username: String, private val password: String) {
             val data = JSONObject(res.body?.string() ?: "")
             val oath = JSONObject(data.optString("oauth", "{}"))
 
-            Log.d("Login", data.toString())
-
             return SteamLoginResult(
                 success = data.optBoolean("success", false),
                 emailCode = data.optBoolean("emailauth_needed", false),
-                mobileCode = data.optBoolean("requires_twofactor", false),
+                emailDomain = data.optString("emaildomain", ""),
+                require2fa = data.optBoolean("requires_twofactor", false),
                 captcha = data.optBoolean("captcha_needed", false),
                 captchaGid = data.optString("captcha_gid", "-1"),
                 oathToken = oath.optString("oauth_token", ""),

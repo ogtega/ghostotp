@@ -69,8 +69,10 @@ class SteamLoginFragment : Fragment() {
             .into(binding.imageCaptcha)
 
         binding.layoutCodeInput.visibility = if (loginResult.emailCode) View.VISIBLE else View.GONE
+        binding.layoutCodeInput.helperText =
+            getString(R.string.hint_steam_email, loginResult.emailDomain)
 
-        if (!loginResult.captcha && !loginResult.mobileCode && !loginResult.emailCode) {
+        if (!loginResult.captcha && !loginResult.require2fa && !loginResult.emailCode) {
             binding.layoutUsernameInput.error = getString(R.string.invalid_username_password)
             binding.layoutPasswordInput.error = getString(R.string.invalid_username_password)
         }
@@ -83,7 +85,7 @@ class SteamLoginFragment : Fragment() {
             loginResult = steamLogin.doLogin(captcha, code)
 
             if (!loginResult.success) {
-                if (loginResult.mobileCode) {
+                if (loginResult.require2fa) {
                     Snackbar.make(
                         binding.root,
                         R.string.remove_authenticator,

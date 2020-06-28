@@ -52,7 +52,8 @@ fun getDeviceId(steamID: String): String {
 data class SteamLoginResult(
     val success: Boolean,
     val emailCode: Boolean,
-    val mobileCode: Boolean,
+    val emailDomain: String,
+    val require2fa: Boolean,
     val captcha: Boolean,
     private val captchaGid: String,
     val captchaURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid=$captchaGid",

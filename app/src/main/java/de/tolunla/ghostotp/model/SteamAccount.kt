@@ -32,4 +32,6 @@ class SteamAccount(
             "identity_secret" to identitySecret
         )
     ).toString()
+
+    fun getRevocationCode() = revocationCode
 }

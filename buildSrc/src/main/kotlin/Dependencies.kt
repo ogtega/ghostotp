@@ -24,7 +24,8 @@ object Dependencies {
     val picasso = "com.squareup.picasso:picasso:2.71828"
 
     val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
-    val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    val coroutines_android =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     val okhttp = "com.squareup.okhttp3:okhttp:4.5.0"
 
     val mlkit_barcode = "com.google.mlkit:barcode-scanning:16.0.0"

@@ -83,6 +83,8 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
             accountViewModel.delete(accountId)
         }
 
+        // TODO: Display a dialog containing the revocation code
+
         GlobalScope.launch(Dispatchers.Main) {
             findNavController().navigate(R.id.account_list_dest)
         }
