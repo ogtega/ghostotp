@@ -13,6 +13,7 @@
     <string name="description_steam_captcha">Image containing a captcha code</string>
     <string name="unexpected_error">UnexpectedError occurred</string>
     <string name="invalid_username_password">Invalid username or password</string>
+    <string name="invalid_username">Username too short</string>
     <string name="hint_steam_email">A code was sent to your email at %1$s</string>
 
 </resources>

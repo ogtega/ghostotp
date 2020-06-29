@@ -66,7 +66,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
 
                     accountViewModel.insert(entity.getAccount())
 
-                    findNavController().navigateUp()
+                    findNavController().navigate(R.id.account_list_dest)
                 }
             }
 
