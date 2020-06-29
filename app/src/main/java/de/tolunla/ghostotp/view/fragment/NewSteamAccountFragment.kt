@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import de.tolunla.ghostotp.R
+import de.tolunla.ghostotp.databinding.DialogSteamRecoveryCodeBinding
 import de.tolunla.ghostotp.databinding.FragmentNewSteamAccountBinding
 import de.tolunla.ghostotp.model.SteamAccount
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
@@ -25,18 +27,18 @@ import org.json.JSONObject
  */
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
 
-    private var accountId: Long = -1
-    private lateinit var token: String
-    private lateinit var steamID: String
-    private lateinit var username: String
-    private lateinit var accountViewModel: AccountViewModel
+    private lateinit var mToken: String
+    private lateinit var mSteamID: String
+    private lateinit var mUsername: String
+    private lateinit var mViewModel: AccountViewModel
     private lateinit var binding: FragmentNewSteamAccountBinding
+    private lateinit var account: SteamAccount
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+            mViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
         }
     }
 
@@ -58,9 +60,9 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     }
 
     override fun onLoginSuccess(token: String, steamID: String, username: String) {
-        this.token = token
-        this.steamID = steamID
-        this.username = username
+        this.mToken = token
+        this.mSteamID = steamID
+        this.mUsername = username
 
         val ft = childFragmentManager.beginTransaction()
         ft.replace(binding.fragment.id, SteamGuardFragment(token, steamID))
@@ -68,25 +70,37 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     }
 
     override fun onSteamGuardReceived(result: JSONObject) {
-        accountId = accountViewModel.insert(
-            SteamAccount(
-                name = result.getString("account_name"),
-                sharedSecret = result.getString("shared_secret"),
-                revocationCode = result.getString("revocation_code"),
-                identitySecret = result.getString("identity_secret")
-            )
+        account = SteamAccount(
+            name = result.getString("account_name"),
+            sharedSecret = result.getString("shared_secret"),
+            revocationCode = result.getString("revocation_code"),
+            identitySecret = result.getString("identity_secret")
         )
+
+        mViewModel.insert(account)
     }
 
     override suspend fun onSteamGuardComplete(success: Boolean) {
         if (!success) {
-            accountViewModel.delete(accountId)
+            mViewModel.delete(account)
         }
 
-        // TODO: Display a dialog containing the revocation code
+        val dialogBinding = DialogSteamRecoveryCodeBinding.inflate(layoutInflater)
+        dialogBinding.code = account.getRevocationCode()
 
         GlobalScope.launch(Dispatchers.Main) {
             findNavController().navigate(R.id.account_list_dest)
+            val builder = AlertDialog.Builder(requireContext())
+
+            with(builder) {
+                setTitle(R.string.label_steam_recovery_code)
+
+                setView(dialogBinding.root)
+
+                setPositiveButton(R.string.action_done) { _, _ -> }
+
+                show()
+            }
         }
     }
 }

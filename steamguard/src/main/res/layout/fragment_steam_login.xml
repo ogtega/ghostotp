@@ -78,7 +78,7 @@
                         android:id="@+id/input_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textNoSuggestions|textCapCharacters"
+                        android:inputType="text|textCapCharacters"
                         android:singleLine="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>

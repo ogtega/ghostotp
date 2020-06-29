@@ -263,7 +263,7 @@ class AccountListAdapter(val context: Context) :
             val builder = AlertDialog.Builder(context)
 
             val title = String.format(
-                context.resources.getString(R.string.message_remove_account), account.name
+                context.resources.getString(R.string.message_remove_account), account.getLabel()
             )
 
             with(builder) {
