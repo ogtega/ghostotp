@@ -19,6 +19,9 @@
             app:destination="@id/new_steam_account_dest"
             app:enterAnim="@transition/fragment_fade_scale"
             app:exitAnim="@transition/fragment_fade_scale" />
+        <action
+            android:id="@+id/action_new_account_sheet_dest_to_scan_barcode_dest"
+            app:destination="@id/scan_barcode_dest" />
     </dialog>
 
     <fragment
