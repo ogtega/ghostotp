@@ -1,5 +1,5 @@
 object Versions {
-    val kotlin = "1.3.61"
+    val kotlin = "1.3.72"
     val lifecycle = "2.2.0"
     val navigation = "2.2.1"
     val room = "2.2.5"
