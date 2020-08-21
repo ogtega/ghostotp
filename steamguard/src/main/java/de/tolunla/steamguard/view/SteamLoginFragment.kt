@@ -2,6 +2,7 @@ package de.tolunla.steamguard.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,11 @@ import kotlinx.coroutines.launch
  * Class responsible for making all login related api requests.
  */
 class SteamLoginFragment : Fragment() {
-    private lateinit var loginResult: SteamLoginResult
-
+    private var loginResult = SteamLoginResult()
     private lateinit var binding: FragmentSteamLoginBinding
     private lateinit var listener: SteamLoginListener
+
+    val captchaBaseURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid="
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,6 +53,7 @@ class SteamLoginFragment : Fragment() {
             binding.layoutPasswordInput.error = null
 
             if (validateUsername() && validatePassword()) {
+                binding.buttonContinue.isEnabled = false
                 doLogin()
             } else {
                 invalidateCredentials()
@@ -60,7 +63,7 @@ class SteamLoginFragment : Fragment() {
 
     private fun postLogin() {
         binding.layoutCaptcha.visibility = if (loginResult.captcha) View.VISIBLE else View.GONE
-        if (loginResult.captcha) Picasso.get().load(loginResult.captchaURL)
+        if (loginResult.captcha) Picasso.get().load(captchaBaseURL + loginResult.captchaGid)
             .into(binding.imageCaptcha)
 
         binding.layoutCodeInput.visibility = if (loginResult.emailCode) View.VISIBLE else View.GONE
@@ -70,6 +73,8 @@ class SteamLoginFragment : Fragment() {
         if (!loginResult.captcha && !loginResult.require2fa && !loginResult.emailCode) {
             invalidateCredentials()
         }
+
+        binding.buttonContinue.isEnabled = true
     }
 
     private fun validateUsername(): Boolean = getUsername().length >= 5
@@ -81,7 +86,7 @@ class SteamLoginFragment : Fragment() {
     }
 
     private fun getUsername(): String = binding.inputUsername.text.toString()
-    private fun getPassword(): String = binding.inputUsername.text.toString()
+    private fun getPassword(): String = binding.inputPassword.text.toString()
     private fun getCaptcha(): String = binding.inputCaptcha.text.toString()
     private fun getCode(): String = binding.inputCode.text.toString()
 
@@ -89,7 +94,7 @@ class SteamLoginFragment : Fragment() {
         val steamLogin = SteamLogin(getUsername(), getPassword())
 
         GlobalScope.launch(Dispatchers.IO) {
-            loginResult = steamLogin.doLogin(getCaptcha(), getCode())
+            loginResult = steamLogin.doLogin(getCaptcha(), getCode(), loginResult)
 
             if (!loginResult.success) {
                 if (loginResult.require2fa) {
@@ -99,6 +104,11 @@ class SteamLoginFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
+
+                Log.d(
+                    this.javaClass.canonicalName,
+                    "${getUsername()} ${getPassword()} ${getCaptcha()} : ${loginResult}"
+                )
 
                 launch(Dispatchers.Main) { postLogin() }
             } else {

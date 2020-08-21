@@ -2,16 +2,16 @@ package de.tolunla.steamguard
 
 import de.tolunla.steamguard.util.SteamLoginResult
 import de.tolunla.steamguard.util.getClient
-import java.io.IOException
-import java.math.BigInteger
-import java.security.KeyFactory
-import java.security.spec.RSAPublicKeySpec
-import javax.crypto.Cipher
 import okhttp3.FormBody
 import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.StringUtils
 import org.json.JSONObject
+import java.io.IOException
+import java.math.BigInteger
+import java.security.KeyFactory
+import java.security.spec.RSAPublicKeySpec
+import javax.crypto.Cipher
 
 /**
  * Class responsible for making all login related api requests.
@@ -21,7 +21,6 @@ import org.json.JSONObject
 class SteamLogin(private val username: String, private val password: String) {
 
     private val client = getClient()
-    private var captchaGid: String = ""
 
     /**
      * Sends the login api request with provided arguments
@@ -31,14 +30,15 @@ class SteamLogin(private val username: String, private val password: String) {
      */
     fun doLogin(
         captcha: String = "",
-        emailAuth: String = ""
+        emailAuth: String = "",
+        prevResult: SteamLoginResult
     ): SteamLoginResult {
         val rsaObj = JSONObject(getRSAKey())
 
         val formBody = FormBody.Builder()
             .add("username", username)
             .add("password", encryptPassword(rsaObj))
-            .add("captchagid", captchaGid)
+            .add("captchagid", prevResult.captchaGid)
             .add("captcha_text", captcha)
             .add("emailauth", emailAuth)
             .add("twofactorcode", "")
@@ -66,7 +66,7 @@ class SteamLogin(private val username: String, private val password: String) {
                 emailDomain = data.optString("emaildomain", ""),
                 require2fa = data.optBoolean("requires_twofactor", false),
                 captcha = data.optBoolean("captcha_needed", false),
-                captchaGid = data.optString("captcha_gid", "-1"),
+                captchaGid = data.optString("captcha_gid", prevResult.captchaGid),
                 oathToken = oath.optString("oauth_token", ""),
                 steamID = oath.optString("steamid", "")
             )

@@ -33,4 +33,6 @@ object Dependencies {
     val camerax_core = "androidx.camera:camera-camera2:${Versions.camerax}"
     val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
     val camerax_view = "androidx.camera:camera-view:1.0.0-alpha10"
+
+    val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
 }

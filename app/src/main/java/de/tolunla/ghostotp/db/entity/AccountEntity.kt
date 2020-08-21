@@ -3,7 +3,10 @@ package de.tolunla.ghostotp.db.entity
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import de.tolunla.ghostotp.db.entity.AccountEntity.Type.*
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.HOTP
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.STEAM
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.TOTP
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.valueOf
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.model.SteamAccount

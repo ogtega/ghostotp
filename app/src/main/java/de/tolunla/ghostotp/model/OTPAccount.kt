@@ -2,14 +2,14 @@ package de.tolunla.ghostotp.model
 
 import android.text.format.DateUtils
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type
+import org.apache.commons.codec.binary.Base32
+import org.apache.commons.codec.binary.Hex
+import org.json.JSONObject
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 import kotlin.math.pow
-import org.apache.commons.codec.binary.Base32
-import org.apache.commons.codec.binary.Hex
-import org.json.JSONObject
 
 /**
  * Class used to represent all rfc4226 and rfc6238 One Time Passwords
