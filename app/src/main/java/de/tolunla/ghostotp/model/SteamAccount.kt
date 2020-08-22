@@ -15,7 +15,7 @@ class SteamAccount(
     type: Type = Type.STEAM,
     private val sharedSecret: String,
     private val revocationCode: String,
-    private val identitySecret: String
+    val identitySecret: String
 ) : Account(id, name, issuer, type) {
 
     override fun getProgress(): Float = System.currentTimeMillis()

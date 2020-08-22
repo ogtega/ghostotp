@@ -25,7 +25,7 @@ class SteamLoginFragment : Fragment() {
     private lateinit var binding: FragmentSteamLoginBinding
     private lateinit var listener: SteamLoginListener
 
-    val captchaBaseURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid="
+    private val captchaBaseURL: String = "https://steamcommunity.com/login/rendercaptcha/?gid="
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -107,7 +107,7 @@ class SteamLoginFragment : Fragment() {
 
                 Log.d(
                     this.javaClass.canonicalName,
-                    "${getUsername()} ${getPassword()} ${getCaptcha()} : ${loginResult}"
+                    "${getUsername()} ${getPassword()} ${getCaptcha()} : $loginResult"
                 )
 
                 launch(Dispatchers.Main) { postLogin() }

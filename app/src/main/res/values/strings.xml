@@ -30,6 +30,7 @@
     <string name="label_username">Username</string>
     <string name="label_steam_login">Steam Sign In</string>
     <string name="label_steam_recovery_code">Recovery Code</string>
+    <string name="label_confirmations">Confirmations</string>
 
     <string name="message_remove_account">Remove %1$s?</string>
     <string name="message_rename_account">Rename %1$s?</string>

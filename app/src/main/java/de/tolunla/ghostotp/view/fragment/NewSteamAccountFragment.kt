@@ -71,6 +71,7 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
 
     override fun onSteamGuardReceived(result: JSONObject) {
         account = SteamAccount(
+            id = this.mSteamID.toLong(),
             name = result.getString("account_name"),
             sharedSecret = result.getString("shared_secret"),
             revocationCode = result.getString("revocation_code"),

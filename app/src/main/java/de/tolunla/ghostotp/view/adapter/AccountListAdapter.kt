@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -19,10 +20,12 @@ import de.tolunla.ghostotp.databinding.ListItemAccountOtpBinding
 import de.tolunla.ghostotp.databinding.SheetAccountActionBinding
 import de.tolunla.ghostotp.db.entity.AccountEntity
 import de.tolunla.ghostotp.db.entity.AccountEntity.Type.HOTP
+import de.tolunla.ghostotp.db.entity.AccountEntity.Type.STEAM
 import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.model.SteamAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
+import de.tolunla.ghostotp.view.fragment.AccountListFragmentDirections
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
 /**
@@ -111,6 +114,18 @@ class AccountListAdapter(val context: Context) :
                     },
                     DateUtils.MINUTE_IN_MILLIS
                 )
+            }
+
+            if (holder.account.type == STEAM) {
+                val account = holder.account as SteamAccount
+
+                val action =
+                    AccountListFragmentDirections.actionAccountListDestToSteamConfirmationDest(
+                        account.id.toString(),
+                        account.identitySecret
+                    )
+
+                findNavController(parent).navigate(action)
             }
         }
 
@@ -201,7 +216,7 @@ class AccountListAdapter(val context: Context) :
             val binding = SheetAccountActionBinding.inflate(mInflater)
             val dialog = BottomSheetDialog(context)
 
-            if (account.type == AccountEntity.Type.STEAM) {
+            if (account.type == STEAM) {
                 binding.navView.menu.findItem(R.id.action_edit_account).isEnabled = false
             }
 
@@ -272,7 +287,7 @@ class AccountListAdapter(val context: Context) :
                 setMessage(
                     context.getString(R.string.message_account_deletion) +
                         when (account.type) {
-                            AccountEntity.Type.STEAM -> context.getString(
+                            STEAM -> context.getString(
                                 R.string.message_steam_deletion_recovery_code,
                                 (account as SteamAccount).getRevocationCode()
                             )

@@ -6,6 +6,7 @@ import java.nio.ByteOrder
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
+import kotlin.math.min
 
 private val STEAMCHARS = charArrayOf(
     '2', '3', '4', '5', '6', '7', '8', '9', 'B', 'C',
@@ -29,11 +30,11 @@ fun generateAuthCode(secret: String, offset: Int): String {
     val mac = Mac.getInstance("HmacSHA1")
     mac.init(keySpec)
 
-    val byteData = ByteBuffer.allocate(8)
-    byteData.putInt(4, getCurrentTime(offset).toInt() / 30)
-    byteData.order(ByteOrder.BIG_ENDIAN)
+    val buffer = ByteBuffer.allocate(8)
+    buffer.order(ByteOrder.BIG_ENDIAN)
+    buffer.putInt(4, getCurrentTime(offset).toInt() / 30)
 
-    val raw = mac.doFinal(byteData.array())
+    val raw = mac.doFinal(buffer.array())
     val start = (raw[19] and 0x0F)
 
     val bytes = ByteBuffer.wrap(raw.slice(start..start + 4).toByteArray())
@@ -46,4 +47,26 @@ fun generateAuthCode(secret: String, offset: Int): String {
     }
 
     return code
+}
+
+/**
+ * Generates a confirmation key used for trades
+ * @return the confirmation key.
+ */
+fun generateConfKey(identitySecret: String, time: Long, tag: String = "conf"): String {
+    val keyBytes = Base64.decode(identitySecret, Base64.DEFAULT)
+    val keySpec = SecretKeySpec(keyBytes, "HmacSHA1")
+
+    val mac = Mac.getInstance("HmacSHA1")
+    mac.init(keySpec)
+
+    val buffer = ByteBuffer.allocate(8 + min(tag.length, 32))
+    buffer.order(ByteOrder.BIG_ENDIAN)
+
+    buffer.putLong(time)
+    buffer.put(tag.toByteArray())
+
+    val raw = mac.doFinal(buffer.array())
+
+    return Base64.encodeToString(raw, Base64.NO_WRAP)
 }

@@ -31,7 +31,7 @@ class SteamLogin(private val username: String, private val password: String) {
     fun doLogin(
         captcha: String = "",
         emailAuth: String = "",
-        prevResult: SteamLoginResult
+        prevResult: SteamLoginResult = SteamLoginResult()
     ): SteamLoginResult {
         val rsaObj = JSONObject(getRSAKey())
 
