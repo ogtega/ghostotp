@@ -122,7 +122,8 @@ class AccountListAdapter(val context: Context) :
                 val action =
                     AccountListFragmentDirections.actionAccountListDestToSteamConfirmationDest(
                         account.id.toString(),
-                        account.identitySecret
+                        account.identitySecret,
+                        account.cookies
                     )
 
                 findNavController(parent).navigate(action)

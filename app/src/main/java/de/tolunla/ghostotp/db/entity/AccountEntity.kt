@@ -69,7 +69,8 @@ data class AccountEntity(
             type = type,
             sharedSecret = data.getString("shared_secret"),
             revocationCode = data.getString("revocation_code"),
-            identitySecret = data.getString("identity_secret")
+            identitySecret = data.getString("identity_secret"),
+            cookies = data.optString("cookies", "{}")
         )
     }
 

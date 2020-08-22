@@ -67,6 +67,9 @@
         <argument
             android:name="secret_key"
             app:argType="string" />
+        <argument
+            android:name="cookies"
+            app:argType="string" />
     </fragment>
 
 </navigation>

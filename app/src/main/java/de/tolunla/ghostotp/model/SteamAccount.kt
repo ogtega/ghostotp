@@ -15,7 +15,8 @@ class SteamAccount(
     type: Type = Type.STEAM,
     private val sharedSecret: String,
     private val revocationCode: String,
-    val identitySecret: String
+    val identitySecret: String,
+    val cookies: String = ""
 ) : Account(id, name, issuer, type) {
 
     override fun getProgress(): Float = System.currentTimeMillis()
@@ -29,7 +30,8 @@ class SteamAccount(
         mapOf(
             "shared_secret" to sharedSecret,
             "revocation_code" to revocationCode,
-            "identity_secret" to identitySecret
+            "identity_secret" to identitySecret,
+            "cookies" to cookies,
         )
     ).toString()
 

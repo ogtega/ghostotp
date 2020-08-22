@@ -26,10 +26,9 @@ import org.json.JSONObject
  * Fragment where the user inputs their steam account credentials
  */
 class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListener {
-
-    private lateinit var mToken: String
     private lateinit var mSteamID: String
     private lateinit var mUsername: String
+    private lateinit var mCookies: String
     private lateinit var mViewModel: AccountViewModel
     private lateinit var binding: FragmentNewSteamAccountBinding
     private lateinit var account: SteamAccount
@@ -59,10 +58,10 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
         ft.commit()
     }
 
-    override fun onLoginSuccess(token: String, steamID: String, username: String) {
-        this.mToken = token
+    override fun onLoginSuccess(token: String, steamID: String, username: String, cookies: String) {
         this.mSteamID = steamID
         this.mUsername = username
+        this.mCookies = cookies
 
         val ft = childFragmentManager.beginTransaction()
         ft.replace(binding.fragment.id, SteamGuardFragment(token, steamID))
@@ -75,7 +74,8 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
             name = result.getString("account_name"),
             sharedSecret = result.getString("shared_secret"),
             revocationCode = result.getString("revocation_code"),
-            identitySecret = result.getString("identity_secret")
+            identitySecret = result.getString("identity_secret"),
+            cookies = mCookies
         )
 
         mViewModel.insert(account)

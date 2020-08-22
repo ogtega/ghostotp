@@ -2,7 +2,6 @@ package de.tolunla.steamguard.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -105,14 +104,14 @@ class SteamLoginFragment : Fragment() {
                     ).show()
                 }
 
-                Log.d(
-                    this.javaClass.canonicalName,
-                    "${getUsername()} ${getPassword()} ${getCaptcha()} : $loginResult"
-                )
-
                 launch(Dispatchers.Main) { postLogin() }
             } else {
-                listener.onLoginSuccess(loginResult.oathToken, loginResult.steamID, getUsername())
+                listener.onLoginSuccess(
+                    loginResult.oathToken,
+                    loginResult.steamID,
+                    getUsername(),
+                    loginResult.cookies
+                )
             }
         }
     }
@@ -122,7 +121,7 @@ class SteamLoginFragment : Fragment() {
             /**
              * Called once we successfully complete the login api call
              */
-            fun onLoginSuccess(token: String, steamID: String, username: String)
+            fun onLoginSuccess(token: String, steamID: String, username: String, cookies: String)
         }
     }
 }

@@ -3,6 +3,7 @@ package de.tolunla.steamguard
 import de.tolunla.steamguard.util.SteamLoginResult
 import de.tolunla.steamguard.util.getClient
 import okhttp3.FormBody
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.StringUtils
@@ -59,6 +60,24 @@ class SteamLogin(private val username: String, private val password: String) {
             if (!res.isSuccessful) throw IOException("/dologin failed")
             val data = JSONObject(res.body?.string() ?: "")
             val oath = JSONObject(data.optString("oauth", "{}"))
+            val cookieMap = mutableMapOf<Any?, Any?>()
+
+            val cookies = client.cookieJar.loadForRequest("https://steamcommunity.com".toHttpUrl())
+                .toMutableList()
+
+            cookies.addAll(client.cookieJar.loadForRequest("http://steamcommunity.com".toHttpUrl()))
+
+            for (cookie in cookies) {
+                if (cookie.name in setOf(
+                        "steamLogin",
+                        "steamLoginSecure",
+                        "steamMachineAuth",
+                        "sessionid"
+                    )
+                ) {
+                    cookieMap.put(cookie.name, cookie.value)
+                }
+            }
 
             return SteamLoginResult(
                 success = data.optBoolean("success", false),
@@ -68,6 +87,7 @@ class SteamLogin(private val username: String, private val password: String) {
                 captcha = data.optBoolean("captcha_needed", false),
                 captchaGid = data.optString("captcha_gid", prevResult.captchaGid),
                 oathToken = oath.optString("oauth_token", ""),
+                cookies = JSONObject(cookieMap).toString(),
                 steamID = oath.optString("steamid", "")
             )
         }

@@ -3,7 +3,6 @@ package de.tolunla.ghostotp.view.fragment
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ class SteamConfirmationFragment : Fragment() {
 
     private lateinit var binding: FragmentSteamConfirmationsBinding
 
-    val args: SteamConfirmationFragmentArgs by navArgs()
+    private val args: SteamConfirmationFragmentArgs by navArgs()
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
@@ -29,18 +28,17 @@ class SteamConfirmationFragment : Fragment() {
     ): View? {
         binding = FragmentSteamConfirmationsBinding.inflate(inflater, container, false)
         binding.webView.settings.javaScriptEnabled = true
-        binding.webView.webViewClient = getWebViewClient()
+        binding.webView.settings.loadsImagesAutomatically = true
+
+        binding.webView.webViewClient = getWebViewClient(args.steamId, args.cookies)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val time = System.currentTimeMillis() / 1000L
-
-        Log.d(
-            this.javaClass.canonicalName, "${args.secretKey} ${
-                generateConfKey(
-                    args.secretKey,
-                    time,
-                )
-            }"
-        )
 
         binding.webView.loadUrl(
             Uri.parse("${confBaseURL}/conf").buildUpon()
@@ -54,7 +52,5 @@ class SteamConfirmationFragment : Fragment() {
                 .appendQueryParameter("tag", "conf")
                 .build().toString()
         )
-
-        return binding.root
     }
 }

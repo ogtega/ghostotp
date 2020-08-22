@@ -11,12 +11,14 @@ import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apache.commons.codec.digest.DigestUtils
+import org.json.JSONObject
+import java.io.IOException
 
 /**
  * Gets an instance of a okHTTP client configured for steam
  * @return OkHttpClient with steam cookies
  */
-fun getClient(): OkHttpClient {
+fun getClient(cookies: List<Cookie> = mutableListOf()): OkHttpClient {
     return OkHttpClient.Builder().addInterceptor(SteamInterceptor()).cookieJar(
         object : CookieJar {
 
@@ -24,8 +26,12 @@ fun getClient(): OkHttpClient {
                 Cookie.Builder().domain("steamcommunity.com").name("mobileClientVersion")
                     .value("0 (2.1.3)").build(),
                 Cookie.Builder().domain("steamcommunity.com").name("mobileClient")
-                    .value("android").build()
+                    .value("android").build(),
             )
+
+            init {
+                cookieStore.addAll(cookies)
+            }
 
             override fun loadForRequest(url: HttpUrl): List<Cookie> {
                 return cookieStore
@@ -38,29 +44,49 @@ fun getClient(): OkHttpClient {
     ).build()
 }
 
-fun getWebViewClient(): WebViewClient {
-    val client = getClient()
+fun getWebViewClient(steamID: String, cookies: String): WebViewClient {
+    val cookieJSON = JSONObject(cookies)
+
+    val client = getClient(
+        mutableListOf(
+            Cookie.Builder().domain("steamcommunity.com").name("steamLogin")
+                .value(cookieJSON.optString("steamLogin", "")).build(),
+            Cookie.Builder().domain("steamcommunity.com").name("steamLoginSecure")
+                .value(cookieJSON.optString("steamLoginSecure", "")).build(),
+            Cookie.Builder().domain("steamcommunity.com").name("steamMachineAuth${steamID}").value(
+                cookieJSON.optString("steamMachineAuth${steamID}", "")
+            ).build()
+        )
+    )
 
     return object : WebViewClient() {
         override fun shouldInterceptRequest(
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
+            val regex = """(https:/steamcommunity.com/mobileconf/conf).*""".toRegex()
+
+            if (regex.matches(request?.url.toString())
+            ) return super.shouldInterceptRequest(view, request)
+
             return request?.let {
                 request.requestHeaders.remove("X-Requested-With")
                 request.requestHeaders.remove("Referer")
                 request.requestHeaders.remove("User-Agent")
 
                 val req =
-                    Request.Builder().url(it.url.toString()).headers(it.requestHeaders.toHeaders())
+                    Request.Builder().url(it.url.toString())
+                        .headers(it.requestHeaders.toHeaders())
                         .build()
 
                 client.newCall(req).execute().use { res ->
+                    if (!res.isSuccessful) throw IOException("Unexpected code $res")
+
                     res.body?.use { body ->
                         WebResourceResponse(
                             res.header("content-type", "text/plain"),
                             res.header("content-encoding", "utf-8"),
-                            body.string().byteInputStream()
+                            body.bytes().inputStream()
                         )
                     }
                 }
@@ -94,5 +120,6 @@ data class SteamLoginResult(
     val captcha: Boolean = false,
     val captchaGid: String = "",
     val oathToken: String = "",
+    val cookies: String = "{}",
     val steamID: String = ""
 )
