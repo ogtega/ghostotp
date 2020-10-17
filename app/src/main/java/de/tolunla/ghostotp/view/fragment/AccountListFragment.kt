@@ -33,7 +33,7 @@ class AccountListFragment : Fragment() {
 
             accountViewModel.allAccounts.observe(
                 viewLifecycleOwner,
-                Observer { accounts ->
+                { accounts ->
                     accounts?.let {
                         accountAdapter.setAccounts(accounts)
                     }
