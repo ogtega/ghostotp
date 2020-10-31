@@ -14,6 +14,10 @@ import de.tolunla.steamguard.util.getDeviceId
 import de.tolunla.steamguard.util.getWebViewClient
 
 class SteamConfirmationFragment : Fragment() {
+    /**
+     * TODO: Must use args.steamId to refresh the session cookies as seen here
+     * https://github.com/winauth/SteamAuth/blob/master/index.js#L509
+     */
     private val confBaseURL = "https://steamcommunity.com/mobileconf"
 
     private lateinit var binding: FragmentSteamConfirmationsBinding

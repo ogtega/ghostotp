@@ -29,6 +29,7 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     private lateinit var mSteamID: String
     private lateinit var mUsername: String
     private lateinit var mCookies: String
+    private lateinit var oathToken: String
     private lateinit var mViewModel: AccountViewModel
     private lateinit var binding: FragmentNewSteamAccountBinding
     private lateinit var account: SteamAccount
@@ -58,9 +59,16 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
         ft.commit()
     }
 
-    override fun onLoginSuccess(token: String, steamID: String, username: String, cookies: String) {
+    override fun onLoginSuccess(
+        token: String,
+        steamID: String,
+        username: String,
+        oathToken: String,
+        cookies: String
+    ) {
         this.mSteamID = steamID
         this.mUsername = username
+        this.oathToken = oathToken
         this.mCookies = cookies
 
         val ft = childFragmentManager.beginTransaction()
@@ -75,6 +83,7 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
             sharedSecret = result.getString("shared_secret"),
             revocationCode = result.getString("revocation_code"),
             identitySecret = result.getString("identity_secret"),
+            oathToken = this.oathToken,
             cookies = mCookies
         )
 

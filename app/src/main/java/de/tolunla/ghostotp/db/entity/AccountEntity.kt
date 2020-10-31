@@ -70,6 +70,7 @@ data class AccountEntity(
             sharedSecret = data.getString("shared_secret"),
             revocationCode = data.getString("revocation_code"),
             identitySecret = data.getString("identity_secret"),
+            oathToken = data.optString("oath_token", ""),
             cookies = data.optString("cookies", "{}")
         )
     }

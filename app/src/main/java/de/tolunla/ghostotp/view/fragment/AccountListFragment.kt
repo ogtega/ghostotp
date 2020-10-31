@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.databinding.FragmentAccountListBinding

@@ -16,6 +16,7 @@ class SteamAccount(
     private val sharedSecret: String,
     private val revocationCode: String,
     val identitySecret: String,
+    val oathToken: String = "",
     val cookies: String = ""
 ) : Account(id, name, issuer, type) {
 
@@ -31,7 +32,8 @@ class SteamAccount(
             "shared_secret" to sharedSecret,
             "revocation_code" to revocationCode,
             "identity_secret" to identitySecret,
-            "cookies" to cookies,
+            "oauth_token" to oathToken,
+            "cookies" to cookies
         )
     ).toString()
 

@@ -42,7 +42,7 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
      * Deletes accounts using the repository
      * @param account Account to be deleted
      */
-    fun delete(id: Long) = viewModelScope.launch(Dispatchers.IO) {
+    private fun delete(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAccount(id)
     }
 

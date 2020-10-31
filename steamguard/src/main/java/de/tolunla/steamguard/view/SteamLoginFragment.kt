@@ -110,6 +110,7 @@ class SteamLoginFragment : Fragment() {
                     loginResult.oathToken,
                     loginResult.steamID,
                     getUsername(),
+                    loginResult.oathToken,
                     loginResult.cookies
                 )
             }
@@ -121,7 +122,13 @@ class SteamLoginFragment : Fragment() {
             /**
              * Called once we successfully complete the login api call
              */
-            fun onLoginSuccess(token: String, steamID: String, username: String, cookies: String)
+            fun onLoginSuccess(
+                token: String,
+                steamID: String,
+                username: String,
+                oathToken: String,
+                cookies: String
+            )
         }
     }
 }
