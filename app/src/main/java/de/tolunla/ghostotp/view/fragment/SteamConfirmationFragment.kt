@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import de.tolunla.ghostotp.databinding.FragmentSteamConfirmationsBinding
@@ -41,6 +42,7 @@ class SteamConfirmationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        WebView.setWebContentsDebuggingEnabled(true)
 
         val time = System.currentTimeMillis() / 1000L
 
@@ -56,5 +58,10 @@ class SteamConfirmationFragment : Fragment() {
                 .appendQueryParameter("tag", "conf")
                 .build().toString()
         )
+    }
+
+    override fun onDestroyView() {
+        binding.webView.destroy()
+        super.onDestroyView()
     }
 }

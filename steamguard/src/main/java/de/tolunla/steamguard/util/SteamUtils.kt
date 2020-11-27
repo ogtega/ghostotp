@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apache.commons.codec.digest.DigestUtils
 import org.json.JSONObject
+import java.io.IOException
 
 /**
  * Gets an instance of a okHTTP client configured for steam
@@ -63,11 +64,6 @@ fun getWebViewClient(steamID: String, cookies: String): WebViewClient {
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-            // val regex = """(https:/steamcommunity.com/mobileconf/conf).*""".toRegex()
-
-            // if (!regex.matches(request?.url.toString())
-            // ) return super.shouldInterceptRequest(view, request)
-
             return request?.let {
                 request.requestHeaders.remove("X-Requested-With")
                 request.requestHeaders.remove("Referer")
@@ -79,11 +75,11 @@ fun getWebViewClient(steamID: String, cookies: String): WebViewClient {
                         .build()
 
                 client.newCall(req).execute().use { res ->
-                    // if (!res.isSuccessful) throw IOException("Unexpected code $res")
+                    if (!res.isSuccessful) throw IOException("Unexpected error $res ${res.header("location")}")
 
                     res.body?.use { body ->
                         WebResourceResponse(
-                            res.header("content-type", "text/plain"),
+                            res.header("content-type", "text/html"),
                             res.header("content-encoding", "utf-8"),
                             body.bytes().inputStream()
                         )
