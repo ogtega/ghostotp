@@ -45,7 +45,7 @@ class AccountListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         binding = FragmentAccountListBinding.inflate(inflater, container, false)
         return binding.root

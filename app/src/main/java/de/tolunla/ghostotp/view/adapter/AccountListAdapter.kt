@@ -116,18 +116,18 @@ class AccountListAdapter(val context: Context) :
                 )
             }
 
-            if (holder.account.type == STEAM) {
-                val account = holder.account as SteamAccount
-
-                val action =
-                    AccountListFragmentDirections.actionAccountListDestToSteamConfirmationDest(
-                        account.id.toString(),
-                        account.identitySecret,
-                        account.cookies
-                    )
-
-                findNavController(parent).navigate(action)
-            }
+            // if (holder.account.type == STEAM) {
+            //     val account = holder.account as SteamAccount
+            //
+            //     val action =
+            //         AccountListFragmentDirections.actionAccountListDestToSteamConfirmationDest(
+            //             account.id.toString(),
+            //             account.identitySecret,
+            //             account.cookies
+            //         )
+            //
+            //     findNavController(parent).navigate(action)
+            // }
         }
 
         return holder

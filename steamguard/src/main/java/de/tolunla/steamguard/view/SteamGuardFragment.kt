@@ -43,7 +43,7 @@ class SteamGuardFragment(token: String, steamId: String) :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSteamGuardBinding.inflate(inflater, container, false)
         return binding.root
     }
