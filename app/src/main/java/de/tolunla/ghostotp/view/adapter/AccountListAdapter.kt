@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -25,7 +24,6 @@ import de.tolunla.ghostotp.model.Account
 import de.tolunla.ghostotp.model.OTPAccount
 import de.tolunla.ghostotp.model.SteamAccount
 import de.tolunla.ghostotp.util.AccountDiffCallback
-import de.tolunla.ghostotp.view.fragment.AccountListFragmentDirections
 import de.tolunla.ghostotp.viewmodel.AccountViewModel
 
 /**
@@ -115,19 +113,6 @@ class AccountListAdapter(val context: Context) :
                     DateUtils.MINUTE_IN_MILLIS
                 )
             }
-
-            // if (holder.account.type == STEAM) {
-            //     val account = holder.account as SteamAccount
-            //
-            //     val action =
-            //         AccountListFragmentDirections.actionAccountListDestToSteamConfirmationDest(
-            //             account.id.toString(),
-            //             account.identitySecret,
-            //             account.cookies
-            //         )
-            //
-            //     findNavController(parent).navigate(action)
-            // }
         }
 
         return holder

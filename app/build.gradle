@@ -16,6 +16,7 @@ android {
     compileSdkVersion 30
     ndkVersion Versions.ndk
     buildToolsVersion Versions.build_tools
+    kotlinOptions.useIR = true
 
     defaultConfig {
         applicationId "de.tolunla.ghostotp"

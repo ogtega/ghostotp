@@ -31,9 +31,6 @@
         <action
             android:id="@+id/action_account_list_dest_to_settings_dest"
             app:destination="@id/settings_dest" />
-        <action
-            android:id="@+id/action_account_list_dest_to_steam_confirmation_dest"
-            app:destination="@id/steam_confirmation_dest" />
     </fragment>
 
     <fragment
@@ -57,19 +54,5 @@
         android:id="@+id/new_steam_account_dest"
         android:name="de.tolunla.ghostotp.view.fragment.NewSteamAccountFragment"
         android:label="@string/label_steam_login" />
-    <fragment
-        android:id="@+id/steam_confirmation_dest"
-        android:name="de.tolunla.ghostotp.view.fragment.SteamConfirmationFragment"
-        android:label="@string/label_confirmations">
-        <argument
-            android:name="steam_id"
-            app:argType="string" />
-        <argument
-            android:name="secret_key"
-            app:argType="string" />
-        <argument
-            android:name="cookies"
-            app:argType="string" />
-    </fragment>
 
 </navigation>

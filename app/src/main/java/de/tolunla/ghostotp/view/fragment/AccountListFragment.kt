@@ -22,25 +22,6 @@ class AccountListFragment : Fragment() {
     private lateinit var accountViewModel: AccountViewModel
     private lateinit var binding: FragmentAccountListBinding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
-
-            accountAdapter.setViewModel(accountViewModel)
-
-            accountViewModel.allAccounts.observe(
-                viewLifecycleOwner,
-                { accounts ->
-                    accounts?.let {
-                        accountAdapter.setAccounts(accounts)
-                    }
-                }
-            )
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +44,21 @@ class AccountListFragment : Fragment() {
             accountAdapter = AccountListAdapter(it)
             binding.accountList.adapter = accountAdapter
             accountAdapter.onAttachedToRecyclerView(binding.accountList)
+        }
+
+        activity?.let {
+            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+
+            accountAdapter.setViewModel(accountViewModel)
+
+            accountViewModel.allAccounts.observe(
+                viewLifecycleOwner,
+                { accounts ->
+                    accounts?.let {
+                        accountAdapter.setAccounts(accounts)
+                    }
+                }
+            )
         }
     }
 

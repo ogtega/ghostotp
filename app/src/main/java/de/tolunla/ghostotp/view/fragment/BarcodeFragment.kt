@@ -51,7 +51,7 @@ class BarcodeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentBarcodeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -76,10 +76,12 @@ class BarcodeFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener(
-            Runnable {
+            {
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-                preview = Preview.Builder().build()
+                preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
 
                 imageAnalyzer = ImageAnalysis.Builder()
                     .build()
@@ -108,9 +110,6 @@ class BarcodeFragment : Fragment() {
                         cameraSelector,
                         preview,
                         imageAnalyzer
-                    )
-                    preview?.setSurfaceProvider(
-                        binding.viewFinder.createSurfaceProvider(camera?.cameraInfo)
                     )
                 } catch (exc: Exception) {
                     Log.e(TAG, "Use case binding failed", exc)

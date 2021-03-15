@@ -43,7 +43,7 @@ class NewAccountFragment : Fragment(), TextWatcher {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentNewAccountBinding.inflate(layoutInflater, container, false)
         return binding.root
