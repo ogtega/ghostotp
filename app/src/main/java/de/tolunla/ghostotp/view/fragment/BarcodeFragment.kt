@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -43,8 +44,29 @@ class BarcodeFragment : Fragment() {
 
     companion object {
         private const val TAG = "BarcodeFragment"
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.let {
+            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+        }
+
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { permission ->
+                if (permission) {
+                    startCamera()
+                } else {
+                    binding.root.findNavController().navigateUp()
+                }
+            }.launch(CAMERA_PERMISSION)
+        }
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     override fun onCreateView(
@@ -54,22 +76,6 @@ class BarcodeFragment : Fragment() {
     ): View {
         binding = FragmentBarcodeBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
-        }
-
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
-
-        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     private fun startCamera() {
@@ -119,27 +125,11 @@ class BarcodeFragment : Fragment() {
         )
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        when (checkSelfPermission(requireContext(), it)) {
+    private fun allPermissionsGranted() =
+        when (checkSelfPermission(requireContext(), CAMERA_PERMISSION)) {
             PermissionChecker.PERMISSION_GRANTED -> true
             else -> false
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults:
-        IntArray
-    ) {
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                binding.root.findNavController().navigateUp()
-            }
-        }
-    }
 
     private class BarcodeAnalyzer(private val listener: (barcode: Barcode) -> Unit) :
         ImageAnalysis.Analyzer {

@@ -1,8 +1,12 @@
 package de.tolunla.ghostotp
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -34,7 +38,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val authIntent = Intent(this, BiometricActivity::class.java)
+
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            result.data?.extras?.get("authenticated").let {
+                if (it is Boolean && it) {
+                    Log.d("MAIN", "Success")
+                }
+            }
+        }.launch(authIntent)
+
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
