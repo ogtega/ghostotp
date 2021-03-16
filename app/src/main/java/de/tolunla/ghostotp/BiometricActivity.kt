@@ -3,6 +3,8 @@ package de.tolunla.ghostotp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -12,6 +14,19 @@ class BiometricActivity : AppCompatActivity() {
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
+
+    companion object {
+        fun bioCheck(context: AppCompatActivity, callback: (success: Boolean) -> Unit) {
+            val authIntent = Intent(context, BiometricActivity::class.java)
+
+            context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                result.data?.extras?.get("authenticated").let {
+                    if (it !is Boolean) callback.invoke(false)
+                    else callback.invoke(it)
+                }
+            }.launch(authIntent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +55,12 @@ class BiometricActivity : AppCompatActivity() {
                     result: BiometricPrompt.AuthenticationResult
                 ) {
                     super.onAuthenticationSucceeded(result)
-                    data.putExtra("authenticated", true)
                     Toast.makeText(
                         applicationContext,
                         "Authentication succeeded!", Toast.LENGTH_SHORT
                     )
                         .show()
+                    data.putExtra("authenticated", true)
                     setResult(RESULT_OK, data)
                     finish()
                 }
@@ -63,9 +78,9 @@ class BiometricActivity : AppCompatActivity() {
             })
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric login for my app")
+            .setTitle("Biometric login for ${getString(R.string.app_name)}")
             .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Use account password")
+            .setNegativeButtonText("Cancel")
             .build()
 
         biometricPrompt.authenticate(promptInfo)
