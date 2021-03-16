@@ -2,18 +2,32 @@ package de.tolunla.ghostotp
 
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import de.tolunla.ghostotp.db.AppDatabase
+import java.security.KeyStore
 import java.util.concurrent.Executor
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 
 class BiometricActivity : AppCompatActivity() {
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
+
+    private val KEY_SIZE = 256
+    private val ANDROID_KEYSTORE = "AndroidKeyStore"
+    private val ENCRYPTION_BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
+    private val ENCRYPTION_PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
+    private val ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
+    private val KEY_NAME: String = "ghostotp"
 
     companion object {
         fun bioCheck(context: AppCompatActivity, callback: (success: Boolean) -> Unit) {
@@ -60,8 +74,13 @@ class BiometricActivity : AppCompatActivity() {
                         "Authentication succeeded!", Toast.LENGTH_SHORT
                     )
                         .show()
-                    data.putExtra("authenticated", true)
-                    setResult(RESULT_OK, data)
+
+                    result.cryptoObject?.cipher?.let {
+                        data.putExtra("authenticated", true)
+                        AppDatabase.getInstance(applicationContext, it)
+                        setResult(RESULT_OK, data)
+                    }
+
                     finish()
                 }
 
@@ -78,11 +97,49 @@ class BiometricActivity : AppCompatActivity() {
             })
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric login for ${getString(R.string.app_name)}")
-            .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Cancel")
+            .setTitle(getString(R.string.app_name))
+            .setNegativeButtonText(getString(R.string.action_cancel))
             .build()
 
-        biometricPrompt.authenticate(promptInfo)
+        val cipher = getCipher()
+        val secretKey = getOrCreateSecretKey()
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+
+        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+    }
+
+    private fun getOrCreateSecretKey(): SecretKey {
+        // If Secretkey was previously created for that keyName, then grab and return it.
+        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
+        keyStore.load(null) // Keystore must be loaded before it can be accessed
+        keyStore.getKey(KEY_NAME, null)?.let { return it as SecretKey }
+
+        // if you reach here, then a new SecretKey must be generated for that keyName
+        val paramsBuilder = KeyGenParameterSpec.Builder(
+            KEY_NAME,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+        paramsBuilder.apply {
+            setBlockModes(ENCRYPTION_BLOCK_MODE)
+            setEncryptionPaddings(ENCRYPTION_PADDING)
+            setKeySize(KEY_SIZE)
+            setUserAuthenticationRequired(true)
+        }
+
+        val keyGenParams = paramsBuilder.build()
+        val keyGenerator = KeyGenerator.getInstance(
+            ENCRYPTION_ALGORITHM,
+            ANDROID_KEYSTORE
+        )
+        keyGenerator.init(keyGenParams)
+        return keyGenerator.generateKey()
+    }
+
+    private fun getCipher(): Cipher {
+        return Cipher.getInstance(
+            ENCRYPTION_ALGORITHM + "/"
+                + ENCRYPTION_BLOCK_MODE + "/"
+                + ENCRYPTION_PADDING
+        )
     }
 }
