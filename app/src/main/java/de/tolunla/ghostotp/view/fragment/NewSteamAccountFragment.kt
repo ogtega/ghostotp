@@ -34,19 +34,17 @@ class NewSteamAccountFragment : Fragment(), SteamLoginListener, SteamGuardListen
     private lateinit var binding: FragmentNewSteamAccountBinding
     private lateinit var account: SteamAccount
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        activity?.let {
-            mViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel = ViewModelProvider(requireActivity()).get(AccountViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         binding = FragmentNewSteamAccountBinding.inflate(inflater, container, false)
         return binding.root
     }

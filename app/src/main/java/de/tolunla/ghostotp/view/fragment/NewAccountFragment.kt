@@ -31,12 +31,10 @@ class NewAccountFragment : Fragment(), TextWatcher {
     private lateinit var accountViewModel: AccountViewModel
     private lateinit var binding: FragmentNewAccountBinding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
-        }
+        accountViewModel = ViewModelProvider(requireActivity()).get(AccountViewModel::class.java)
     }
 
     override fun onCreateView(

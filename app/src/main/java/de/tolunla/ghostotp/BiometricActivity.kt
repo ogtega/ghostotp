@@ -4,18 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import de.tolunla.ghostotp.db.AppDatabase
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.preference.PreferenceManager
+import de.tolunla.ghostotp.db.AppCipher
 import java.security.KeyStore
 import java.util.concurrent.Executor
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 class BiometricActivity : AppCompatActivity() {
     private lateinit var executor: Executor
@@ -30,15 +38,45 @@ class BiometricActivity : AppCompatActivity() {
     private val KEY_NAME: String = "ghostotp"
 
     companion object {
-        fun bioCheck(context: AppCompatActivity, callback: (success: Boolean) -> Unit) {
-            val authIntent = Intent(context, BiometricActivity::class.java)
+        class BioCheckObserver(private val registry: ActivityResultRegistry) :
+            DefaultLifecycleObserver {
+            lateinit var contract: ActivityResultLauncher<Intent>
+            lateinit var callback: (success: Boolean) -> Unit
 
-            context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                result.data?.extras?.get("authenticated").let {
-                    if (it !is Boolean) callback.invoke(false)
-                    else callback.invoke(it)
+            override fun onCreate(owner: LifecycleOwner) {
+                contract = registry.register(
+                    "biometrics",
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result: ActivityResult ->
+                    result.data?.extras?.get("authenticated").let {
+                        if (it !is Boolean) callback.invoke(false)
+                        else callback.invoke(it)
+                    }
                 }
-            }.launch(authIntent)
+            }
+
+            fun bioCheck(
+                context: ComponentActivity,
+                opmode: Int = Cipher.DECRYPT_MODE,
+                require: Boolean = false,
+                callback: (success: Boolean) -> Unit
+            ) {
+                this.callback = callback
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+                if ((!prefs.getBoolean(
+                        context.getString(R.string.preference_biometrics_key),
+                        false
+                    ) && !require) || (!require && AppCipher.getInstance().iv != null)
+                ) {
+                    callback.invoke(true)
+                    return
+                }
+
+                val authIntent = Intent(context, BiometricActivity::class.java)
+                authIntent.putExtra("opmode", opmode)
+                contract.launch(authIntent)
+            }
         }
     }
 
@@ -46,6 +84,8 @@ class BiometricActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val data = Intent()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
         data.putExtra("authenticated", false)
 
         executor = ContextCompat.getMainExecutor(this)
@@ -56,11 +96,6 @@ class BiometricActivity : AppCompatActivity() {
                     errString: CharSequence
                 ) {
                     super.onAuthenticationError(errorCode, errString)
-                    Toast.makeText(
-                        applicationContext,
-                        "Authentication error: $errString", Toast.LENGTH_SHORT
-                    )
-                        .show()
                     setResult(RESULT_CANCELED, data)
                     finish()
                 }
@@ -76,22 +111,11 @@ class BiometricActivity : AppCompatActivity() {
                         .show()
 
                     result.cryptoObject?.cipher?.let {
+                        AppCipher.setInstance(it)
                         data.putExtra("authenticated", true)
-                        AppDatabase.getInstance(applicationContext, it)
                         setResult(RESULT_OK, data)
                     }
 
-                    finish()
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    Toast.makeText(
-                        applicationContext, "Authentication failed",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    setResult(RESULT_CANCELED, data)
                     finish()
                 }
             })
@@ -101,11 +125,33 @@ class BiometricActivity : AppCompatActivity() {
             .setNegativeButtonText(getString(R.string.action_cancel))
             .build()
 
-        val cipher = getCipher()
-        val secretKey = getOrCreateSecretKey()
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+        val cipher = Cipher.getInstance(
+            KeyProperties.KEY_ALGORITHM_AES +
+                "/${KeyProperties.BLOCK_MODE_CBC}" +
+                "/${KeyProperties.ENCRYPTION_PADDING_PKCS7}"
+        )
 
-        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+        val secretKey = getOrCreateSecretKey()
+
+        when (intent.getIntExtra("opmode", Cipher.ENCRYPT_MODE)) {
+            Cipher.ENCRYPT_MODE -> cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+            else -> {
+                val iv = prefs.getString("CIPHER_IV", null)
+                Log.d("TAG", iv ?: "None")
+                cipher.init(
+                    Cipher.DECRYPT_MODE,
+                    secretKey,
+                    IvParameterSpec(
+                        iv?.toByteArray(Charsets.ISO_8859_1) ?: AppCipher.getInstance().iv
+                    )
+                )
+            }
+        }
+
+        biometricPrompt.authenticate(
+            promptInfo,
+            BiometricPrompt.CryptoObject(cipher)
+        )
     }
 
     private fun getOrCreateSecretKey(): SecretKey {
@@ -119,6 +165,7 @@ class BiometricActivity : AppCompatActivity() {
             KEY_NAME,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
+
         paramsBuilder.apply {
             setBlockModes(ENCRYPTION_BLOCK_MODE)
             setEncryptionPaddings(ENCRYPTION_PADDING)
@@ -133,13 +180,5 @@ class BiometricActivity : AppCompatActivity() {
         )
         keyGenerator.init(keyGenParams)
         return keyGenerator.generateKey()
-    }
-
-    private fun getCipher(): Cipher {
-        return Cipher.getInstance(
-            ENCRYPTION_ALGORITHM + "/"
-                + ENCRYPTION_BLOCK_MODE + "/"
-                + ENCRYPTION_PADDING
-        )
     }
 }

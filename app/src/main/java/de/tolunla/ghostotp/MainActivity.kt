@@ -12,7 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
-import de.tolunla.ghostotp.BiometricActivity.Companion.bioCheck
+import de.tolunla.ghostotp.BiometricActivity.Companion.BioCheckObserver
 import de.tolunla.ghostotp.databinding.ActivityMainBinding
 
 /**
@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    private lateinit var bioCheckObserver: BioCheckObserver
 
     // Called once the host fragment switches to a new destination
     private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
@@ -37,24 +39,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bioCheck(this) { success ->
+        bioCheckObserver = BioCheckObserver(activityResultRegistry)
+        lifecycle.addObserver(bioCheckObserver)
+        bioCheckObserver.onCreate(this)
+
+        bioCheckObserver.bioCheck(this) { success ->
             if (!success) finish()
-
-            binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-            val navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
-            navController = navHostFragment.navController
-
-            // Used to know when we are at a "top level" destination
-            appBarConfig = AppBarConfiguration.Builder(
-                R.id.account_list_dest,
-                R.id.new_account_sheet_dest
-            ).build()
-
-            setupNavigation()
         }
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+        navController = navHostFragment.navController
+
+        // Used to know when we are at a "top level" destination
+        appBarConfig = AppBarConfiguration.Builder(
+            R.id.account_list_dest,
+            R.id.new_account_sheet_dest
+        ).build()
+
+        setupNavigation()
     }
 
     private fun setupNavigation() {

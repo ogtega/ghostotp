@@ -10,8 +10,7 @@ object Dependencies {
 
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
 
-    val lifecycle_common = "androidx.lifecycle:lifecycle-common:${Versions.lifecycle}"
-    val lifecycle_ext = "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
     val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 
     val room = "androidx.room:room-ktx:${Versions.room}"

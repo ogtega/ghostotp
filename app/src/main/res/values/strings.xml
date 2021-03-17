@@ -53,4 +53,7 @@
     <string name="preference_night_mode_key">night_mode</string>
     <string name="preference_night_mode_title">Night mode</string>
     <string name="preference_night_mode_summary">Use a dark theme</string>
+    <string name="preference_biometrics_summary">Secure app data with biometric authentication</string>
+    <string name="title_biometrics">Biometrics</string>
+    <string name="preference_biometrics_key">biometrics</string>
 </resources>

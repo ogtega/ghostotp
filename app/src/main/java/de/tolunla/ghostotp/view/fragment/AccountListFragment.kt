@@ -32,34 +32,27 @@ class AccountListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.appbar_menu, menu)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        context?.let {
-            accountAdapter = AccountListAdapter(it)
-            binding.accountList.adapter = accountAdapter
-            accountAdapter.onAttachedToRecyclerView(binding.accountList)
-        }
+        accountAdapter = AccountListAdapter(requireContext())
+        binding.accountList.adapter = accountAdapter
+        accountAdapter.onAttachedToRecyclerView(binding.accountList)
 
-        activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
+        accountViewModel =
+            ViewModelProvider(requireActivity()).get(AccountViewModel::class.java)
 
-            accountAdapter.setViewModel(accountViewModel)
+        accountAdapter.setViewModel(accountViewModel)
 
-            accountViewModel.allAccounts.observe(
-                viewLifecycleOwner,
-                { accounts ->
-                    accounts?.let {
-                        accountAdapter.setAccounts(accounts)
-                    }
-                }
-            )
-        }
+        accountViewModel.allAccounts.observe(
+            viewLifecycleOwner,
+            { accounts -> accountAdapter.setAccounts(accounts ?: listOf()) }
+        )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.appbar_menu, menu)
     }
 
     override fun onResume() {

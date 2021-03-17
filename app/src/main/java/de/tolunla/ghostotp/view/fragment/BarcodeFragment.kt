@@ -50,9 +50,7 @@ class BarcodeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.let {
-            accountViewModel = ViewModelProvider(it).get(AccountViewModel::class.java)
-        }
+        accountViewModel = ViewModelProvider(requireActivity()).get(AccountViewModel::class.java)
 
         if (allPermissionsGranted()) {
             startCamera()

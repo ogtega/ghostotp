@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.tolunla.ghostotp.db.dao.AccountDao
 import de.tolunla.ghostotp.db.entity.AccountEntity
-import javax.crypto.Cipher
 
 /**
  * Singleton instance of the app's room database
@@ -31,24 +30,16 @@ abstract class AppDatabase : RoomDatabase() {
          * @param context the application context
          * @return a room database instance
          */
-        fun getInstance(context: Context, cipher: Cipher?): AppDatabase =
+        fun getInstance(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context, cipher)
+                INSTANCE ?: buildDatabase(context)
             }
 
-        private fun buildDatabase(context: Context, cipher: Cipher?): AppDatabase {
-
-            return if (cipher !is Cipher) {
-                Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java, "ghost.db"
-                ).build()
-            } else {
-                Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java, "ghost.db"
-                ).build()
-            }
+        private fun buildDatabase(context: Context): AppDatabase {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java, "ghost.db"
+            ).build()
         }
     }
 }

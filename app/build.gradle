@@ -81,8 +81,7 @@ dependencies {
     /**
      * Lifecycle Components (Lifecycle, LiveData & ViewModel)
      */
-    implementation Dependencies.lifecycle_common
-    implementation Dependencies.lifecycle_ext
+    implementation Dependencies.lifecycle
     implementation Dependencies.lifecycle_viewmodel
     /**
      * Room Persistence Library

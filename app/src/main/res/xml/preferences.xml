@@ -7,4 +7,9 @@
         app:key="@string/preference_night_mode_key"
         app:title="@string/preference_night_mode_title" />
 
+    <androidx.preference.SwitchPreference
+        android:key="@string/preference_biometrics_key"
+        android:summary="@string/preference_biometrics_summary"
+        android:title="@string/title_biometrics" />
+
 </androidx.preference.PreferenceScreen>

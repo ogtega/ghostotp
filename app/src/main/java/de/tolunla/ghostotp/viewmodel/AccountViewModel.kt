@@ -24,7 +24,7 @@ class AccountViewModel(context: Application) : AndroidViewModel(context) {
     val allAccounts: LiveData<List<AccountEntity>>
 
     init {
-        val database = AppDatabase.getInstance(context, null)
+        val database = AppDatabase.getInstance(context)
         repository = DataRepository.getInstance(database)
         allAccounts = repository.accounts
     }
