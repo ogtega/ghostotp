@@ -1,12 +1,12 @@
 object Dependencies {
-    val androidx = "androidx.core:core-ktx:1.3.2"
+    val androidx = "androidx.core:core-ktx:1.6.0"
 
-    val fragment = "androidx.fragment:fragment-ktx:1.3.1"
+    val fragment = "androidx.fragment:fragment-ktx:1.3.6"
     val preference = "androidx.preference:preference-ktx:1.1.1"
     val work = "androidx.work:work-runtime-ktx:${Versions.work}"
-    val appcompat = "androidx.appcompat:appcompat:1.2.0"
-    val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.4"
-    val material = "com.google.android.material:material:1.3.0"
+    val appcompat = "androidx.appcompat:appcompat:1.3.1"
+    val constraint_layout = "androidx.constraintlayout:constraintlayout:2.1.1"
+    val material = "com.google.android.material:material:1.4.0"
 
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
 
@@ -25,13 +25,13 @@ object Dependencies {
     val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val coroutines_android =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
-    val okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
+    val okhttp = "com.squareup.okhttp3:okhttp:4.9.2"
 
-    val mlkit_barcode = "com.google.mlkit:barcode-scanning:16.1.1"
+    val mlkit_barcode = "com.google.mlkit:barcode-scanning:17.0.0"
 
     val camerax_core = "androidx.camera:camera-camera2:${Versions.camerax}"
     val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
-    val camerax_view = "androidx.camera:camera-view:1.0.0-alpha22"
+    val camerax_view = "androidx.camera:camera-view:1.0.0-alpha30"
 
     val biometric = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
 }
