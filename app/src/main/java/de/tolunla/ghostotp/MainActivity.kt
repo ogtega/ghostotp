@@ -1,9 +1,14 @@
 package de.tolunla.ghostotp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.NavController.OnDestinationChangedListener
@@ -12,7 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
-import de.tolunla.ghostotp.BiometricActivity.Companion.BioCheckObserver
+import androidx.preference.PreferenceManager
 import de.tolunla.ghostotp.databinding.ActivityMainBinding
 
 /**
@@ -23,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    private lateinit var bioCheckObserver: BioCheckObserver
 
     // Called once the host fragment switches to a new destination
     private val onDestinationChanged = OnDestinationChangedListener { _, destination, _ ->
@@ -38,13 +41,38 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        bioCheckObserver = BioCheckObserver(activityResultRegistry)
-        lifecycle.addObserver(bioCheckObserver)
-        bioCheckObserver.onCreate(this)
+        if (prefs.getBoolean(getString(R.string.preference_biometrics_key), false)) {
+            when (BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG)) {
+                BiometricManager.BIOMETRIC_SUCCESS -> {
+                    val biometricPrompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                        object : BiometricPrompt.AuthenticationCallback() {
+                            override fun onAuthenticationError(
+                                errorCode: Int,
+                                errString: CharSequence
+                            ) {
+                                super.onAuthenticationError(errorCode, errString)
+                                finish()
+                            }
 
-        bioCheckObserver.bioCheck(this) { success ->
-            if (!success) finish()
+                            override fun onAuthenticationFailed() {
+                                super.onAuthenticationFailed()
+                                finish()
+                            }
+                        })
+
+                    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                        .setTitle("Biometric login for my app")
+                        .setSubtitle("Log in using your biometric credential")
+                        .setNegativeButtonText("Use account password")
+                        .build()
+
+                    biometricPrompt.authenticate(promptInfo)
+                    Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
+                }
+                else -> Log.d("MY_APP_TAG", "App can't authenticate using biometrics.")
+            }
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

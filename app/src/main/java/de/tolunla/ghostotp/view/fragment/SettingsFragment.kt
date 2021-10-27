@@ -2,26 +2,29 @@ package de.tolunla.ghostotp.view.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
-import de.tolunla.ghostotp.BiometricActivity.Companion.BioCheckObserver
 import de.tolunla.ghostotp.R
 import de.tolunla.ghostotp.db.AppCipher
-import javax.crypto.Cipher
 
 /**
  * Fragment for application settings screen
  */
 class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var prefs: SharedPreferences
+    private lateinit var biometricManager: BiometricManager
 
-    lateinit var bioCheckObserver: BioCheckObserver
     private var biometricsSwitchPreference: SwitchPreference? = null
 
     private val nightModeListener = Preference.OnPreferenceChangeListener { _, newVal ->
@@ -38,22 +41,52 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val biometricsListener = Preference.OnPreferenceChangeListener { _, newVal ->
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        if (newVal as Boolean) {
-            bioCheckObserver.bioCheck(requireActivity(), Cipher.ENCRYPT_MODE, true) { success ->
-                if (success)
-                    prefs.edit().putString(
-                        "CIPHER_IV",
-                        String(AppCipher.getInstance().iv, Charsets.ISO_8859_1)
-                    ).apply()
-                else
-                    biometricsSwitchPreference?.isChecked = !newVal
+        when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                val biometricPrompt =
+                    BiometricPrompt(this, ContextCompat.getMainExecutor(requireContext()),
+                        object : BiometricPrompt.AuthenticationCallback() {
+                            override fun onAuthenticationError(
+                                errorCode: Int,
+                                errString: CharSequence
+                            ) {
+                                super.onAuthenticationError(errorCode, errString)
+                                prefs.edit().remove("CIPHER_IV").apply()
+                                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
+                            }
+
+                            override fun onAuthenticationSucceeded(
+                                result: BiometricPrompt.AuthenticationResult
+                            ) {
+                                super.onAuthenticationSucceeded(result)
+                                if (newVal as Boolean) {
+                                    prefs.edit().putString(
+                                        "CIPHER_IV",
+                                        String(AppCipher.getInstance().iv, Charsets.ISO_8859_1)
+                                    ).apply()
+                                } else {
+                                    prefs.edit().remove("CIPHER_IV").apply()
+                                }
+                            }
+
+                            override fun onAuthenticationFailed() {
+                                super.onAuthenticationFailed()
+                                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
+                            }
+                        })
+
+                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Biometric login for my app")
+                    .setSubtitle("Log in using your biometric credential")
+                    .setNegativeButtonText("Use account password")
+                    .build()
+
+                biometricPrompt.authenticate(promptInfo)
+                Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
             }
-        } else {
-            bioCheckObserver.bioCheck(requireActivity(), require = true) { success ->
-                if (success)
-                    prefs.edit().remove("CIPHER_IV").apply()
-                else
-                    biometricsSwitchPreference?.isChecked = !newVal
+            else -> {
+                prefs.edit().remove("CIPHER_IV").apply()
+                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
             }
         }
 
@@ -63,8 +96,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        bioCheckObserver = BioCheckObserver(requireActivity().activityResultRegistry)
-        lifecycle.addObserver(bioCheckObserver)
+        biometricManager = BiometricManager.from(requireContext())
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -83,6 +115,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         nightMode?.onPreferenceChangeListener = nightModeListener
         biometricsSwitchPreference?.onPreferenceChangeListener = biometricsListener
+
+        biometricsSwitchPreference?.isEnabled =
+            biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
