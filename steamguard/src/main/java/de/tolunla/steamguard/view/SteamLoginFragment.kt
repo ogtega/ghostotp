@@ -39,7 +39,7 @@ class SteamLoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSteamLoginBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -21,7 +21,7 @@ class NewAccountSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         binding = SheetNewAccountBinding.inflate(inflater, container, false)
         return binding.root

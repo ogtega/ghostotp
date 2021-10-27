@@ -75,7 +75,7 @@ class SteamLogin(private val username: String, private val password: String) {
                         "sessionid"
                     )
                 ) {
-                    cookieMap.put(cookie.name, cookie.value)
+                    cookieMap[cookie.name] = cookie.value
                 }
             }
 

@@ -1,3 +1,3 @@
 object Annotations {
-    val room = "androidx.room:room-compiler:${Versions.room}"
+    const val room = "androidx.room:room-compiler:${Versions.room}"
 }
