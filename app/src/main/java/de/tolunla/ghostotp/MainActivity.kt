@@ -1,7 +1,6 @@
 package de.tolunla.ghostotp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -44,34 +43,32 @@ class MainActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         if (prefs.getBoolean(getString(R.string.preference_biometrics_key), false)) {
-            when (BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG)) {
-                BiometricManager.BIOMETRIC_SUCCESS -> {
-                    val biometricPrompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this),
-                        object : BiometricPrompt.AuthenticationCallback() {
-                            override fun onAuthenticationError(
-                                errorCode: Int,
-                                errString: CharSequence
-                            ) {
-                                super.onAuthenticationError(errorCode, errString)
-                                finish()
-                            }
+            if (BiometricManager.from(this)
+                    .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+            ) {
+                val biometricPrompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                    object : BiometricPrompt.AuthenticationCallback() {
+                        override fun onAuthenticationError(
+                            errorCode: Int,
+                            errString: CharSequence
+                        ) {
+                            super.onAuthenticationError(errorCode, errString)
+                            finish()
+                        }
 
-                            override fun onAuthenticationFailed() {
-                                super.onAuthenticationFailed()
-                                finish()
-                            }
-                        })
+                        override fun onAuthenticationFailed() {
+                            super.onAuthenticationFailed()
+                            finish()
+                        }
+                    })
 
-                    val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("Biometric login for my app")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setNegativeButtonText("Use account password")
-                        .build()
+                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(getString(R.string.biometric_prompt_title))
+                    .setSubtitle(getString(R.string.biometric_prompt_subtitle))
+                    .setNegativeButtonText(getString(R.string.action_cancel))
+                    .build()
 
-                    biometricPrompt.authenticate(promptInfo)
-                    Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
-                }
-                else -> Log.d("MY_APP_TAG", "App can't authenticate using biometrics.")
+                biometricPrompt.authenticate(promptInfo)
             }
         }
 

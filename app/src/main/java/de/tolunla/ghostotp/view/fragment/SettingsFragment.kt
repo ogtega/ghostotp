@@ -57,14 +57,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 })
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric login for my app")
-            .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Use account password")
+            .setTitle(getString(R.string.biometric_prompt_title))
+            .setSubtitle(getString(R.string.biometric_prompt_subtitle))
+            .setNegativeButtonText(getString(R.string.action_cancel))
             .build()
 
         biometricPrompt.authenticate(promptInfo)
-        Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
-
         true
     }
 

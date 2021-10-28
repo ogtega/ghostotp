@@ -56,4 +56,7 @@
     <string name="preference_biometrics_summary">Secure app data with biometric authentication</string>
     <string name="title_biometrics">Biometrics</string>
     <string name="preference_biometrics_key">biometrics</string>
+
+    <string name="biometric_prompt_title">Verify your identity</string>
+    <string name="biometric_prompt_subtitle">Use your biometric credential</string>
 </resources>
