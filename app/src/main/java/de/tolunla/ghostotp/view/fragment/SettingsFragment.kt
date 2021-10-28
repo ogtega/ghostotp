@@ -16,7 +16,6 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import de.tolunla.ghostotp.R
-import de.tolunla.ghostotp.db.AppCipher
 
 /**
  * Fragment for application settings screen
@@ -39,56 +38,32 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private val biometricsListener = Preference.OnPreferenceChangeListener { _, newVal ->
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> {
-                val biometricPrompt =
-                    BiometricPrompt(this, ContextCompat.getMainExecutor(requireContext()),
-                        object : BiometricPrompt.AuthenticationCallback() {
-                            override fun onAuthenticationError(
-                                errorCode: Int,
-                                errString: CharSequence
-                            ) {
-                                super.onAuthenticationError(errorCode, errString)
-                                prefs.edit().remove("CIPHER_IV").apply()
-                                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
-                            }
+        val biometricPrompt =
+            BiometricPrompt(this, ContextCompat.getMainExecutor(requireContext()),
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence
+                    ) {
+                        super.onAuthenticationError(errorCode, errString)
+                        biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
+                    }
 
-                            override fun onAuthenticationSucceeded(
-                                result: BiometricPrompt.AuthenticationResult
-                            ) {
-                                super.onAuthenticationSucceeded(result)
-                                if (newVal as Boolean) {
-                                    prefs.edit().putString(
-                                        "CIPHER_IV",
-                                        String(AppCipher.getInstance().iv, Charsets.ISO_8859_1)
-                                    ).apply()
-                                } else {
-                                    prefs.edit().remove("CIPHER_IV").apply()
-                                }
-                            }
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                        biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
+                    }
+                })
 
-                            override fun onAuthenticationFailed() {
-                                super.onAuthenticationFailed()
-                                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
-                            }
-                        })
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Biometric login for my app")
+            .setSubtitle("Log in using your biometric credential")
+            .setNegativeButtonText("Use account password")
+            .build()
 
-                val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Biometric login for my app")
-                    .setSubtitle("Log in using your biometric credential")
-                    .setNegativeButtonText("Use account password")
-                    .build()
-
-                biometricPrompt.authenticate(promptInfo)
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
-            }
-            else -> {
-                prefs.edit().remove("CIPHER_IV").apply()
-                biometricsSwitchPreference?.isChecked = !(newVal as Boolean)
-            }
-        }
+        biometricPrompt.authenticate(promptInfo)
+        Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
 
         true
     }
