@@ -60,6 +60,11 @@ class MainActivity : AppCompatActivity() {
                             super.onAuthenticationFailed()
                             finish()
                         }
+
+                        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                            super.onAuthenticationSucceeded(result)
+                            binding.content.visibility = View.VISIBLE
+                        }
                     })
 
                 val promptInfo = BiometricPrompt.PromptInfo.Builder()
@@ -73,6 +78,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        if (prefs.getBoolean(getString(R.string.preference_biometrics_key), false))
+            binding.content.visibility = View.INVISIBLE
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
