@@ -1,0 +1,136 @@
+Index: steamguard/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><manifest package=\"de.tolunla.steamguard\" />\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/steamguard/src/main/AndroidManifest.xml b/steamguard/src/main/AndroidManifest.xml
+--- a/steamguard/src/main/AndroidManifest.xml	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/steamguard/src/main/AndroidManifest.xml	(date 1671711107408)
+@@ -1,1 +1,1 @@
+-<manifest package="de.tolunla.steamguard" />
++<manifest />
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\n\napply plugin: 'kotlin-android'\napply plugin: 'kotlin-kapt'\n\napply plugin: \"androidx.navigation.safeargs.kotlin\"\n\ndef keystoreProperties = new Properties()\ndef keystorePropertiesFile = rootProject.file('key.properties')\n\nif (keystorePropertiesFile.exists()) {\n    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))\n}\n\nandroid {\n    compileSdkVersion 31\n    ndkVersion Versions.ndk\n    buildToolsVersion Versions.build_tools\n    kotlinOptions.useIR = true\n\n    defaultConfig {\n        applicationId \"de.tolunla.ghostotp\"\n        minSdkVersion 23\n        targetSdkVersion 31\n        versionCode 2\n        versionName \"0.4.0\"\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n\n        javaCompileOptions {\n            annotationProcessorOptions {\n                arguments = [\"room.incremental\": \"true\"]\n            }\n        }\n    }\n\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n\n    kotlinOptions {\n        jvmTarget = JavaVersion.VERSION_1_8\n    }\n\n    signingConfigs {\n        release {\n            keyAlias keystoreProperties['keyAlias']\n            keyPassword keystoreProperties['keyPassword']\n            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null\n            storePassword keystoreProperties['storePassword']\n        }\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled true\n            signingConfig signingConfigs.release\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n    buildFeatures {\n        dataBinding true\n        viewBinding true\n    }\n}\n\ndependencies {\n    implementation project(path: ':steamguard')\n    implementation fileTree(include: ['*.jar'], dir: 'libs')\n    /**\n     * Kotlin Standard Library JDK 8 extension\n     */\n    implementation Dependencies.kotlin_stdlib\n    /**\n     * Support Library Packages\n     */\n    implementation Dependencies.appcompat\n    implementation Dependencies.constraint_layout\n    implementation Dependencies.material\n    /**\n     * Lifecycle Components (Lifecycle, LiveData & ViewModel)\n     */\n    implementation Dependencies.lifecycle\n    implementation Dependencies.lifecycle_viewmodel\n    /**\n     * Room Persistence Library\n     */\n    kapt Annotations.room\n    implementation Dependencies.room\n    implementation Dependencies.room_runtime\n    /**\n     * Navigation Components\n     */\n    implementation Dependencies.navigation_fragment\n    implementation Dependencies.navigation_ui\n    /**\n     * Barcode Library\n     */\n    implementation Dependencies.camerax_core\n    implementation Dependencies.camerax_lifecycle\n    implementation Dependencies.camerax_view\n    implementation Dependencies.mlkit_barcode\n    /**\n     * Miscellaneous Libraries\n     */\n    implementation Dependencies.androidx\n    implementation Dependencies.fragment\n    implementation Dependencies.preference\n    implementation Dependencies.work\n    implementation Dependencies.apache_codec\n    implementation Dependencies.biometric\n    /**\n     * Test Dependencies\n     */\n    testImplementation Testing.junit\n    testImplementation Testing.room\n\n    androidTestImplementation Testing.android_junit\n    androidTestImplementation Testing.android_espresso\n    androidTestImplementation Testing.android_work\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/app/build.gradle	(date 1671711107404)
+@@ -63,6 +63,7 @@
+         dataBinding true
+         viewBinding true
+     }
++    namespace 'de.tolunla.ghostotp'
+ }
+ 
+ dependencies {
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"testRunner\" value=\"GRADLE\" />\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n            <option value=\"$PROJECT_DIR$/buildSrc\" />\n            <option value=\"$PROJECT_DIR$/steamguard\" />\n          </set>\n        </option>\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/.idea/gradle.xml	(date 1671710771073)
+@@ -15,7 +15,6 @@
+             <option value="$PROJECT_DIR$/steamguard" />
+           </set>
+         </option>
+-        <option name="resolveModulePerSourceSet" value="false" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Sat Oct 17 05:26:41 EDT 2020\ndistributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-7.0.2-all.zip\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/gradle/wrapper/gradle-wrapper.properties	(date 1671711020950)
+@@ -3,4 +3,4 @@
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-7.0.2-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-all.zip
+Index: steamguard/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.library'\napply plugin: 'kotlin-android'\napply plugin: 'kotlin-kapt'\n\nandroid {\n    compileSdkVersion 31\n    buildToolsVersion Versions.build_tools\n\n    defaultConfig {\n        minSdkVersion 23\n        targetSdkVersion 31\n\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n        consumerProguardFiles 'consumer-rules.pro'\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled true\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n    buildFeatures {\n        dataBinding true\n        viewBinding true\n    }\n}\n\ndependencies {\n    implementation fileTree(include: ['*.jar'], dir: 'libs')\n\n    implementation Dependencies.kotlin_stdlib\n    implementation Dependencies.coroutines_core\n    implementation Dependencies.coroutines_android\n    implementation Dependencies.okhttp\n    implementation Dependencies.fragment\n    implementation Dependencies.navigation_fragment\n    implementation Dependencies.constraint_layout\n    implementation Dependencies.appcompat\n    implementation Dependencies.androidx\n    implementation Dependencies.material\n    implementation Dependencies.apache_codec\n    implementation Dependencies.picasso\n\n    testImplementation Testing.junit\n\n    androidTestImplementation Testing.android_junit\n    androidTestImplementation Testing.android_espresso\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/steamguard/build.gradle b/steamguard/build.gradle
+--- a/steamguard/build.gradle	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/steamguard/build.gradle	(date 1671711107328)
+@@ -25,6 +25,7 @@
+         dataBinding true
+         viewBinding true
+     }
++    namespace 'de.tolunla.steamguard'
+ }
+ 
+ dependencies {
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>buildscript {\n    repositories {\n        google()\n        mavenCentral()\n    }\n\n    dependencies {\n        classpath 'com.android.tools.build:gradle:7.0.3'\n        classpath \"org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}\"\n        classpath \"androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}\"\n    }\n}\n\nallprojects {\n    repositories {\n        google()\n        mavenCentral()\n    }\n}\n\ntasks.register(\"clean\", Delete) {\n    delete(rootProject.buildDir)\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/build.gradle	(date 1671711020946)
+@@ -5,7 +5,7 @@
+     }
+ 
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:7.0.3'
++        classpath 'com.android.tools.build:gradle:7.3.1'
+         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+     }
+Index: .github/FUNDING.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># These are supported funding model platforms\n\ngithub: [ogtega]\ncustom: ['https://paypal.me/tolunlade','https://nano.to/ogtega/account']\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/FUNDING.yml b/.github/FUNDING.yml
+--- a/.github/FUNDING.yml	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/.github/FUNDING.yml	(date 1671710721316)
+@@ -1,4 +1,4 @@
+ # These are supported funding model platforms
+ 
+ github: [ogtega]
+-custom: ['https://paypal.me/tolunlade','https://nano.to/ogtega/account']
++custom: ['https://paypal.me/tolunlade','https://nano.to/ogtega']
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    package=\"de.tolunla.ghostotp\">\n\n    <uses-feature android:name=\"android.hardware.camera.any\" />\n\n    <uses-permission android:name=\"android.permission.CAMERA\" />\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n\n    <application\n        android:name=\".AppContext\"\n        android:allowBackup=\"false\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/AppTheme.DayNight\"\n        android:windowSoftInputMode=\"stateVisible|adjustResize\">\n        <activity android:name=\".MainActivity\"\n            android:exported=\"true\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <action android:name=\"android.intent.action.VIEW\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision cce5ed862544e5643c30d72ab38cc5d9e0d112c2)
++++ b/app/src/main/AndroidManifest.xml	(date 1671711107408)
+@@ -1,6 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="de.tolunla.ghostotp">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+     <uses-feature android:name="android.hardware.camera.any" />
+ 

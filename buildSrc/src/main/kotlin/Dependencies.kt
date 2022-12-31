@@ -34,4 +34,9 @@ object Dependencies {
     const val camerax_view = "androidx.camera:camera-view:1.0.0-alpha30"
 
     const val biometric = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
+
+    const val compose_material = "androidx.compose.material:material"
+    const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
+    const val compose_ui_tooling = "androidx.compose.ui:ui-tooling"
+    const val compose_bom = "androidx.compose:compose-bom:${Versions.compose}"
 }

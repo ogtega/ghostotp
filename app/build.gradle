@@ -13,15 +13,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     ndkVersion Versions.ndk
     buildToolsVersion Versions.build_tools
-    kotlinOptions.useIR = true
 
     defaultConfig {
         applicationId "de.tolunla.ghostotp"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 2
         versionName "0.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,12 +61,26 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        compose true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
+    }
+    namespace 'de.tolunla.ghostotp'
 }
 
 dependencies {
     implementation project(path: ':steamguard')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    def composeBom = platform(Dependencies.compose_bom)
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    implementation Dependencies.compose_material
+    implementation Dependencies.compose_preview
+    debugImplementation Dependencies.compose_ui_tooling
     /**
      * Kotlin Standard Library JDK 8 extension
      */
@@ -119,4 +132,7 @@ dependencies {
     androidTestImplementation Testing.android_junit
     androidTestImplementation Testing.android_espresso
     androidTestImplementation Testing.android_work
+    androidTestImplementation Testing.compose_junit
+
+    debugImplementation Testing.compose_ui_test
 }
